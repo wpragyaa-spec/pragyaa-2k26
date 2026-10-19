@@ -381,4 +381,3 @@ symbol#hud .led   { fill: #00ff88; animation: cornerPulse 2.4s ease-in-out infin
 /* right rail: mirror the button, flip the text back */
 .rail.right .sec{ transform: scaleX(-1); }
 .rail.right .sec-label, .rail.right .sec-code{ transform: scaleX(-1); }
-

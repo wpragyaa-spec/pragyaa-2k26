@@ -1,0 +1,1083 @@
+/* ==========================================================================
+       SCHEDULE DOSSIER REFERENCE STYLING (#lit) - dz2- scoped architecture
+       ========================================================================== */
+    #lit {
+      --obsidian: #07090b;
+      --panel: #0c0f13;
+      --surface: #12161d;
+      --slate-border: #1e2633;
+      --metallic: #343f50;
+      --neon: #00ff88;
+      --neon-glow: #00cc6a;
+      --silver: #c4d1db;
+      --black: #000;
+      --slate-800: #1e293b;
+      --slate-700: #334155;
+      --slate-600: #475569;
+      --slate-400: #94a3b8;
+      --slate-300: #cbd5e1;
+      --white: #fff;
+      font-family: 'JetBrains Mono', 'Space Grotesk', monospace;
+      color: var(--white);
+    }
+
+    #lit * {
+      box-sizing: border-box;
+    }
+
+    #lit ::selection {
+      background: var(--neon);
+      color: var(--black);
+    }
+
+    /* Modal Overlay */
+    #lit {
+      position: fixed;
+      inset: 0;
+      z-index: 1000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity 0.32s ease;
+    }
+
+    body.lit #lit {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    #lit .scrim {
+      position: absolute;
+      inset: 0;
+      background: rgba(4, 6, 8, 0.88);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      cursor: pointer;
+    }
+
+    /* #litPlate: Single-column Schedule Dossier reference container with FLIP */
+    #litPlate.dz2-plate {
+      position: relative;
+      z-index: 10;
+      width: min(96vw, 1200px);
+      max-height: 100dvh;
+      height: min(94vh, 920px);
+      background: #000000;
+      border: 1px solid var(--slate-border);
+      box-shadow: 0 0 40px rgba(0, 0, 0, 0.98), 0 0 24px rgba(0, 255, 136, 0.16), inset 0 0 15px rgba(0, 255, 136, 0.05);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      will-change: transform, opacity;
+      transform-origin: center center;
+    }
+
+    /* Scanlines & Tech Grid background effects inside #lit */
+    .dz2-scanlines {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      z-index: 2;
+      background-image: 
+        linear-gradient(rgba(18, 22, 29, 0) 50%, rgba(0, 0, 0, 0.35) 50%),
+        linear-gradient(90deg, rgba(255, 0, 0, 0.02), rgba(0, 255, 136, 0.015), rgba(0, 0, 255, 0.02));
+      background-size: 100% 3px, 6px 100%;
+      opacity: 0.8;
+    }
+
+    .dz2-tech-grid {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      z-index: 1;
+      background-image: radial-gradient(circle, rgba(0, 255, 136, 0.18) 1.2px, transparent 1.2px);
+      background-size: 24px 24px;
+      background-position: 0 0;
+    }
+
+    /* 4 Corner brackets */
+    #lit .dz-corner {
+      position: absolute;
+      width: 14px;
+      height: 14px;
+      pointer-events: none;
+      z-index: 15;
+    }
+    #lit .dz-corner.tl { top: -1px; left: -1px; border-top: 2px solid var(--neon); border-left: 2px solid var(--neon); }
+    #lit .dz-corner.tr { top: -1px; right: -1px; border-top: 2px solid var(--neon); border-right: 2px solid var(--neon); }
+    #lit .dz-corner.bl { bottom: -1px; left: -1px; border-bottom: 2px solid var(--neon); border-left: 2px solid var(--neon); }
+    #lit .dz-corner.br { bottom: -1px; right: -1px; border-bottom: 2px solid var(--neon); border-right: 2px solid var(--neon); }
+
+    /* 1. Header (pinned at top) */
+    .dz2-header {
+      flex-shrink: 0;
+      position: sticky;
+      top: 0;
+      z-index: 25;
+      background: #000000;
+      border-bottom: 1px solid rgba(30, 38, 51, 0.85);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 12px 24px;
+      gap: 16px;
+    }
+
+    .dz2-header-left {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .dz2-brand {
+      font-family: 'JetBrains Mono', monospace;
+      font-weight: 900;
+      font-size: 15px;
+      letter-spacing: 0.25em;
+      color: var(--white);
+      text-transform: uppercase;
+    }
+
+    .dz2-neon {
+      color: var(--neon);
+      text-shadow: 0 0 10px rgba(0, 255, 136, 0.55), 0 0 20px rgba(0, 255, 136, 0.2);
+    }
+
+    .dz2-divider {
+      width: 1px;
+      height: 18px;
+      background: var(--slate-border);
+    }
+
+    .dz2-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: #0f1311;
+      border: 1px solid var(--slate-700);
+      border-radius: 2px;
+      padding: 4px 10px;
+      font-size: 11px;
+    }
+
+    .dz2-pulse-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--neon);
+      box-shadow: 0 0 8px var(--neon);
+      animation: dz2Pulse 2s ease-in-out infinite;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+
+    .dz2-dot-sm {
+      width: 4px;
+      height: 4px;
+      border-radius: 50%;
+      background: var(--neon);
+      display: inline-block;
+      flex-shrink: 0;
+    }
+
+    @keyframes dz2Pulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.45; transform: scale(0.85); }
+    }
+
+    .dz2-badge-text {
+      font-weight: 600;
+      color: var(--slate-200, #cbd5e1);
+      letter-spacing: 0.05em;
+    }
+
+    .dz2-badge-status {
+      color: var(--slate-400);
+      font-weight: 500;
+    }
+
+    .dz2-header-right {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .dz2-os-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 10px;
+      letter-spacing: 0.15em;
+      color: var(--slate-400);
+    }
+
+    @media (max-width: 1024px) {
+      .dz2-os-badge { display: none; }
+    }
+
+    .dz2-close-btn {
+      background: #0f1311;
+      border: 1px solid var(--slate-600);
+      border-radius: 2px;
+      padding: 6px 12px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      color: var(--white);
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      transition: border-color 0.2s ease, color 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .dz2-close-btn:hover {
+      border-color: var(--neon);
+      box-shadow: 0 0 10px rgba(0, 255, 136, 0.25);
+    }
+
+    .dz2-close-x {
+      color: var(--neon);
+      display: inline-block;
+      transition: transform 0.25s ease;
+    }
+
+    .dz2-close-btn:hover .dz2-close-x {
+      transform: rotate(90deg);
+    }
+
+    /* 2. Scrollable Body: ONE Column */
+    .dz2-body {
+      flex: 1 1 auto;
+      overflow-y: auto;
+      overflow-x: hidden;
+      padding: 24px 28px 36px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      scrollbar-width: thin;
+      scrollbar-color: #1e2633 #090c10;
+      position: relative;
+      z-index: 5;
+      background: transparent;
+    }
+
+    .dz2-body::-webkit-scrollbar {
+      width: 5px;
+    }
+    .dz2-body::-webkit-scrollbar-track {
+      background: #090c10;
+    }
+    .dz2-body::-webkit-scrollbar-thumb {
+      background: #1e2633;
+      border-radius: 2px;
+    }
+    .dz2-body::-webkit-scrollbar-thumb:hover {
+      background: var(--neon);
+    }
+
+    /* 2. Hero Title Section */
+    .dz2-hero-section {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      padding-bottom: 16px;
+      border-bottom: 1px solid var(--slate-800);
+    }
+
+    .dz2-hero-meta {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .dz2-meta-bar {
+      width: 24px;
+      height: 2px;
+      background: var(--slate-600);
+      display: inline-block;
+    }
+
+    .dz2-meta-text {
+      font-size: 11px;
+      letter-spacing: 0.35em;
+      color: var(--slate-400);
+      text-transform: uppercase;
+    }
+
+    .dz2-hero-title-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    .dz2-hero-title {
+      margin: 0;
+      font-family: 'JetBrains Mono', monospace;
+      font-weight: 900;
+      text-transform: uppercase;
+      color: var(--white);
+      font-size: clamp(26px, 3.4vw, 44px);
+      letter-spacing: -0.02em;
+      line-height: 1.1;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .dz2-pulsing-diamond {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 24px;
+      height: 24px;
+      background: #000000;
+      border: 1.5px solid var(--neon);
+      border-radius: 3px;
+      color: var(--neon);
+      font-size: 11px;
+      line-height: 1;
+      text-shadow: 0 0 10px rgba(0, 255, 136, 0.9);
+      box-shadow: 0 0 12px rgba(0, 255, 136, 0.35), inset 0 0 6px rgba(0, 255, 136, 0.2);
+      margin-left: 8px;
+      vertical-align: middle;
+      animation: dz2Pulse 2s ease-in-out infinite;
+    }
+
+    .dz2-incursion-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: #0f1311;
+      border: 1px solid var(--slate-700);
+      border-radius: 2px;
+      padding: 6px 12px;
+      font-size: 11px;
+      letter-spacing: 0.1em;
+      color: var(--white);
+    }
+
+    .dz2-incursion-pill strong,
+    .dz2-incursion-pill .dz2-status-word {
+      color: var(--neon);
+      font-weight: 700;
+    }
+
+    /* 3. Directive Banner */
+    .dz2-directive-banner {
+      background: var(--black);
+      border: 1px solid var(--slate-700);
+      padding: 16px 18px;
+      border-radius: 2px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .dz2-directive-row1 {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .dz2-directive-tag {
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--white);
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+    }
+
+    .dz2-directive-chips {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .dz2-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: var(--black);
+      border: 1px solid var(--slate-700);
+      border-radius: 2px;
+      padding: 3px 8px;
+      font-size: 10px;
+      letter-spacing: 0.08em;
+      color: var(--white);
+    }
+
+    .dz2-threat-readout {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .dz2-threat-lbl {
+      font-size: 10px;
+      color: var(--slate-300);
+      letter-spacing: 0.06em;
+    }
+
+    .dz2-threat-bar-track {
+      width: 60px;
+      height: 4px;
+      background: var(--slate-800);
+      border-radius: 2px;
+      overflow: hidden;
+    }
+
+    .dz2-threat-bar-fill {
+      height: 100%;
+      width: 0%;
+      background: var(--neon);
+      box-shadow: 0 0 6px var(--neon);
+      transition: width 0.45s ease-out, background 0.3s ease;
+    }
+
+    .dz2-threat-bar-fill.high {
+      background: #ff2a51;
+      box-shadow: 0 0 6px #ff2a51;
+    }
+
+    .dz2-directive-desc {
+      margin: 0;
+      font-size: clamp(12px, 1.05vw, 14px);
+      line-height: 1.6;
+      color: var(--white);
+    }
+
+    /* 4. Vector Selector */
+    .dz2-vector-selector {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .dz2-selector-hdr {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .dz2-selector-lbl {
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--slate-400);
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+    }
+
+    .dz2-phase-count {
+      font-size: 10px;
+      color: var(--slate-400);
+      letter-spacing: 0.1em;
+    }
+
+    .dz2-sub-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 10px;
+    }
+
+    .dz2-sub-grid.cols-3 {
+      grid-template-columns: repeat(3, 1fr);
+    }
+
+    @media (max-width: 640px) {
+      .dz2-sub-grid,
+      .dz2-sub-grid.cols-3 {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .dz2-sub-tab {
+      background: var(--black);
+      border: 1px solid var(--slate-800);
+      text-align: left;
+      padding: 14px;
+      position: relative;
+      overflow: hidden;
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      transition: border-color 0.2s ease, box-shadow 0.2s ease;
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    .dz2-sub-tab:hover {
+      border-color: var(--slate-600);
+    }
+
+    .dz2-sub-tab.active {
+      border: 2px solid rgba(0, 255, 136, 0.8);
+      box-shadow: 0 0 12px rgba(0, 255, 136, 0.12);
+    }
+
+    .dz2-tab-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+    }
+
+    .dz2-tab-status {
+      font-size: 10px;
+      color: var(--slate-400);
+      letter-spacing: 0.1em;
+      font-weight: 600;
+    }
+
+    .dz2-sub-tab:hover .dz2-tab-status {
+      color: var(--white);
+    }
+
+    .dz2-sub-tab.active .dz2-tab-status {
+      color: var(--neon);
+      font-weight: 700;
+    }
+
+    .dz2-tab-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--slate-600);
+      display: inline-block;
+    }
+
+    .dz2-sub-tab.active .dz2-tab-dot {
+      width: 8px;
+      height: 8px;
+      background: var(--neon);
+      box-shadow: 0 0 8px var(--neon);
+    }
+
+    .dz2-tab-title {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--slate-300);
+      letter-spacing: 0.04em;
+      transition: color 0.15s ease;
+    }
+
+    .dz2-sub-tab:hover .dz2-tab-title,
+    .dz2-sub-tab.active .dz2-tab-title {
+      color: var(--white);
+    }
+
+    .dz2-tab-sub {
+      font-size: 11px;
+      color: var(--white);
+      line-height: 1.4;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .dz2-tab-bar {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: var(--slate-800);
+      transition: background 0.2s ease, height 0.2s ease;
+    }
+
+    .dz2-sub-tab:hover .dz2-tab-bar {
+      background: var(--slate-600);
+    }
+
+    .dz2-sub-tab.active .dz2-tab-bar {
+      height: 4px;
+      background: var(--neon);
+      box-shadow: 0 0 8px var(--neon);
+    }
+
+    /* 5. Scrubber */
+    .dz2-scrubber-wrap {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .dz2-scrubber-track {
+      height: 8px;
+      background: #080b09;
+      border: 1px solid var(--slate-800);
+      padding: 2px;
+      border-radius: 2px;
+    }
+
+    .dz2-scrubber-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--slate-600), var(--neon), var(--slate-400));
+      border-radius: 1px;
+      transition: width 0.5s ease-out;
+    }
+
+    .dz2-scrubber-status {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      font-size: 10px;
+      color: var(--white);
+      letter-spacing: 0.08em;
+      flex-wrap: wrap;
+    }
+
+    .dz2-slate-300 {
+      color: var(--slate-300);
+      font-weight: 700;
+    }
+
+    /* 6. Intel Specification Header */
+    .dz2-intel-hdr {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid var(--slate-800);
+    }
+
+    .dz2-intel-hdr-left {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .dz2-intel-hdr-title {
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--white);
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+    }
+
+    .dz2-intel-hdr-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: #0f1311;
+      border: 1px solid var(--slate-700);
+      border-radius: 2px;
+      padding: 3px 8px;
+      font-size: 10px;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--white);
+    }
+
+    /* 7. Sub Headline & Spec Pill */
+    .dz2-sub-headline-wrap {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .dz2-sub-title {
+      margin: 0;
+      font-family: 'JetBrains Mono', monospace;
+      font-weight: 900;
+      text-transform: uppercase;
+      color: var(--white);
+      font-size: clamp(20px, 2.4vw, 30px);
+      letter-spacing: -0.01em;
+      line-height: 1.2;
+    }
+
+    .dz2-spec-pill {
+      align-self: flex-start;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: #0f1311;
+      border: 1px solid var(--slate-700);
+      border-radius: 2px;
+      padding: 5px 12px;
+      font-size: 12px;
+      color: var(--white);
+      flex-wrap: wrap;
+    }
+
+    .dz2-spec-lead {
+      color: var(--neon);
+      font-weight: 700;
+    }
+
+    .dz2-spec-val {
+      font-weight: 600;
+      color: var(--white);
+    }
+
+    .dz2-spec-sep {
+      color: var(--slate-600);
+    }
+
+    .dz2-spec-sec {
+      color: var(--slate-300);
+    }
+
+    /* 8. Info Cards Stack */
+    .dz2-cards-stack {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      transition: opacity 0.2s ease, transform 0.2s ease;
+    }
+
+    .dz2-glitch-fade {
+      opacity: 0;
+      transform: translateY(6px);
+    }
+
+    .dz2-card {
+      background: var(--black);
+      border: 1px solid var(--slate-800);
+      border-radius: 2px;
+      padding: 14px 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .dz2-card:hover {
+      border-color: var(--slate-600);
+    }
+
+    .dz2-card.featured {
+      border: 1.5px solid var(--neon);
+      box-shadow: 0 0 16px rgba(0, 255, 136, 0.16), inset 0 0 12px rgba(0, 255, 136, 0.04);
+    }
+
+    .dz2-card-row1 {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .dz2-card-left {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .dz2-spec-badge {
+      background: var(--black);
+      border: 1px solid var(--slate-700);
+      padding: 3px 8px;
+      border-radius: 2px;
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--white);
+      letter-spacing: 0.05em;
+    }
+
+    .dz2-card.featured .dz2-spec-badge {
+      background: var(--neon);
+      color: var(--black);
+      border-color: var(--neon);
+      font-weight: 800;
+    }
+
+    .dz2-tag-chip {
+      background: var(--black);
+      border: 1px solid rgba(0, 255, 136, 0.6);
+      color: var(--neon);
+      padding: 2px 6px;
+      border-radius: 2px;
+      font-size: 9px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .dz2-card-meta {
+      font-size: 11px;
+      color: var(--white);
+      letter-spacing: 0.05em;
+    }
+
+    .dz2-card-right {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 3px;
+      font-size: 10px;
+      text-align: right;
+      flex-shrink: 0;
+    }
+
+    .dz2-access-lvl {
+      font-weight: 600;
+      color: var(--white);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .dz2-card-status {
+      font-weight: 700;
+      color: var(--neon);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .dz2-card-status.restricted {
+      color: var(--slate-300);
+    }
+
+    .dz2-green-bullet {
+      color: var(--neon);
+      font-size: 8px;
+      vertical-align: middle;
+      text-shadow: 0 0 6px var(--neon);
+      margin-right: 5px;
+      display: inline-block;
+    }
+
+    .dz2-card-title {
+      margin: 0;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: clamp(14px, 1.2vw, 16px);
+      font-weight: 700;
+      color: var(--white);
+      letter-spacing: 0.02em;
+      transition: color 0.15s ease;
+    }
+
+    .dz2-card:hover .dz2-card-title {
+      color: var(--neon);
+    }
+
+    .dz2-card-desc {
+      margin: 0;
+      font-size: 12px;
+      line-height: 1.6;
+      color: var(--white);
+      max-width: 900px;
+    }
+
+    /* Accordion FAQ in Info Card */
+    .dz2-accordion-item {
+      border-bottom: 1px solid var(--slate-800);
+      padding: 10px 0;
+    }
+    .dz2-accordion-item:last-child {
+      border-bottom: none;
+    }
+    .dz2-accordion-hdr {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      cursor: pointer;
+      gap: 12px;
+    }
+    .dz2-accordion-hdr:hover .dz2-card-title {
+      color: var(--neon);
+    }
+    .dz2-accordion-marker {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--neon);
+      transition: transform 0.2s ease;
+    }
+    .dz2-accordion-body {
+      margin-top: 8px;
+      font-size: 12px;
+      line-height: 1.6;
+      color: var(--white);
+      display: none;
+    }
+    .dz2-accordion-item.open .dz2-accordion-body {
+      display: block;
+    }
+
+    /* 9. Utilities Row */
+    .dz2-utilities-row {
+      border-top: 1px solid var(--slate-800);
+      padding-top: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      flex-wrap: wrap;
+      font-size: 12px;
+    }
+
+    .dz2-util-links {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .dz2-util-btn {
+      background: transparent;
+      border: none;
+      padding: 0;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--white);
+      text-decoration: underline;
+      text-decoration-color: var(--slate-600);
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: color 0.15s ease, text-decoration-color 0.15s ease;
+    }
+
+    .dz2-util-btn:hover,
+    .dz2-util-link:hover {
+      color: var(--neon);
+      text-decoration-color: var(--neon);
+    }
+
+    .dz2-util-link {
+      color: var(--white);
+      text-decoration: underline;
+      text-decoration-color: var(--slate-600);
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: color 0.15s ease, text-decoration-color 0.15s ease;
+    }
+
+    .dz2-neon-icon {
+      color: var(--neon);
+    }
+
+    .dz2-util-sep {
+      color: var(--slate-700);
+    }
+
+    .dz2-util-note {
+      font-size: 11px;
+      color: var(--white);
+      letter-spacing: 0.05em;
+    }
+
+    /* 10. Footer HUD */
+    .dz2-footer-hud {
+      border-top: 1px solid rgba(30, 38, 51, 0.8);
+      padding-top: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      font-size: 10px;
+      flex-wrap: wrap;
+    }
+
+    .dz2-hud-left {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      color: var(--white);
+      font-weight: 700;
+      flex-wrap: wrap;
+    }
+
+    .dz2-hud-sep {
+      color: var(--slate-700);
+    }
+
+    .dz2-hud-right {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--white);
+      font-weight: 700;
+    }
+
+    .dz2-hud-stream {
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+    }
+
+    /* Staggered entrance animation */
+    .dz2-enter {
+      opacity: 0;
+      transform: translateY(12px);
+      filter: blur(4px);
+      animation: dz2RiseIn 0.35s ease-out forwards;
+    }
+
+    @keyframes dz2RiseIn {
+      to {
+        opacity: 1;
+        transform: translateY(0);
+        filter: blur(0);
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .dz2-enter,
+      .dz2-glitch-fade {
+        animation: none !important;
+        transition: none !important;
+        filter: none !important;
+        transform: none !important;
+        opacity: 1 !important;
+      }
+    }
+
+    @media (max-width: 640px) {
+      #litPlate.dz2-plate {
+        width: 100vw;
+        height: 100dvh;
+        max-height: 100dvh;
+        border-radius: 0;
+      }
+      .dz2-header {
+        padding: 10px 14px;
+      }
+      .dz2-body {
+        padding: 16px 14px 28px;
+        gap: 16px;
+      }
+      .dz2-hero-title {
+        font-size: 24px;
+      }
+      .dz2-card-right {
+        width: 100%;
+        justify-content: space-between;
+      }
+      .dz2-utilities-row {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+      .dz2-footer-hud {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+    }
+  
+/* Use the original border.jpg */
+#stage::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  background: url("/border.png") center / 100% 100% no-repeat;
+  filter: grayscale(1) brightness(1.15) contrast(1.2);
+  pointer-events: none;
+  z-index: 9999;
+}

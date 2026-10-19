@@ -910,7 +910,7 @@ export function initDoomsdayPortal() {
                 }
                 catch (err) { }
             }
-            if (dist < clickSlop && pointerDownCard) {
+            if (e.type === 'pointerup' && dist < clickSlop && pointerDownCard) {
                 const idx = parseInt(pointerDownCard.dataset.idx || '', 10);
                 if (!isNaN(idx)) {
                     openLightbox(idx, pointerDownCard);
@@ -929,35 +929,9 @@ export function initDoomsdayPortal() {
     // Lightbox & FLIP Transition
     let currentOpenToken = 0;
     let sourceCardElement = null;
+    let plateTimer = null;
     const decodedBlobUrls = {};
-    let dossierTypeTimer = null;
     let threatAnimId = null;
-    function typeInDossier(text) {
-        if (dossierTypeTimer) {
-            clearInterval(dossierTypeTimer);
-            dossierTypeTimer = null;
-        }
-        if (!litDetailDossier)
-            return;
-        if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-            litDetailDossier.textContent = text;
-            return;
-        }
-        litDetailDossier.textContent = '';
-        let charIndex = 0;
-        const step = text.length > 130 ? 3 : (text.length > 60 ? 2 : 1);
-        dossierTypeTimer = setInterval(() => {
-            charIndex += step;
-            if (charIndex >= text.length) {
-                litDetailDossier.textContent = text;
-                clearInterval(dossierTypeTimer);
-                dossierTypeTimer = null;
-            }
-            else {
-                litDetailDossier.textContent = text.slice(0, charIndex) + '_';
-            }
-        }, 11);
-    }
     function animateThreatBar(targetPercent) {
         if (threatAnimId)
             cancelAnimationFrame(threatAnimId);
@@ -1014,7 +988,6 @@ export function initDoomsdayPortal() {
             void litDetailCard.offsetWidth;
             litDetailCard.classList.add('scanning');
         }
-        typeInDossier(sub.details);
         const targetThreat = 28 + ((cardIdx * 17 + subIdx * 23) % 68);
         animateThreatBar(targetThreat);
         if (litActionBtnText)
@@ -1048,6 +1021,7 @@ export function initDoomsdayPortal() {
             return;
         focusedIndex = idx;
         sourceCardElement = sourceElem || (cardsData[idx] && cardsData[idx].dom);
+        clearTimeout(plateTimer);
         const token = ++currentOpenToken;
         if (litHeroCode)
             litHeroCode.textContent = item.code;
@@ -1096,6 +1070,7 @@ export function initDoomsdayPortal() {
             }
         };
         highResImg.src = fullPngUrl;
+        document.body.dataset.litIdx = String(idx);
         document.body.classList.add('lit');
         document.documentElement.style.overflow = 'hidden';
         const cardRect = sourceCardElement ? sourceCardElement.getBoundingClientRect() : null;
@@ -1118,7 +1093,8 @@ export function initDoomsdayPortal() {
                 litPlateEl.style.transition = '';
                 litPlateEl.style.transform = '';
                 litPlateEl.style.opacity = '';
-                setTimeout(() => {
+                clearTimeout(plateTimer);
+                plateTimer = setTimeout(() => {
                     litPlateEl.classList.remove('flipping');
                 }, 360);
             }
@@ -1130,10 +1106,6 @@ export function initDoomsdayPortal() {
     function closeLightbox() {
         if (!document.body.classList.contains('lit'))
             return;
-        if (dossierTypeTimer) {
-            clearInterval(dossierTypeTimer);
-            dossierTypeTimer = null;
-        }
         if (threatAnimId) {
             cancelAnimationFrame(threatAnimId);
             threatAnimId = null;
@@ -1153,7 +1125,8 @@ export function initDoomsdayPortal() {
             const scale = Math.max(0.04, cardRect.width / plateRect.width);
             litPlateEl.style.transform = `translate(${dx.toFixed(2)}px, ${dy.toFixed(2)}px) scale(${scale.toFixed(4)})`;
             litPlateEl.style.opacity = '0';
-            setTimeout(() => {
+            clearTimeout(plateTimer);
+            plateTimer = setTimeout(() => {
                 litPlateEl.style.transition = 'none';
                 litPlateEl.style.transform = '';
                 litPlateEl.style.opacity = '';
@@ -2361,24 +2334,30 @@ export function initDoomsdayPortal() {
         document.documentElement.style.overflow = '';
         layoutSphere();
         requestAnimationFrame(() => layoutSphere());
-        setTimeout(() => {
+        tickTimeouts.push(setTimeout(() => {
             layoutSphere();
             document.body.classList.add('revealed');
             if (introEl)
                 introEl.classList.add('closing');
-        }, 1150);
-        setTimeout(() => {
+        }, 1150));
+        tickTimeouts.push(setTimeout(() => {
             if (introEl) {
                 introEl.classList.add('gone');
                 introEl.classList.remove('shattering', 'closing');
             }
-        }, 1750);
+            if (timerInterval) {
+                clearInterval(timerInterval);
+                timerInterval = null;
+            }
+        }, 1750));
     }
     function startCountdownScene() {
         if (sceneStarted)
             return;
         sceneStarted = true;
         if (smokeCanvas) {
+            if (smokeCtrl)
+                smokeCtrl.destroy();
             smokeCtrl = initBilateralSmokeSimulation(smokeCanvas);
         }
         startCountdownTimer();
@@ -2444,6 +2423,7 @@ export function initDoomsdayPortal() {
     window.openTeaserCountdown = function () {
         revealTriggered = false;
         sceneStarted = false;
+        audioActivated = false;
         if (shardAnimId) {
             cancelAnimationFrame(shardAnimId);
             shardAnimId = null;
@@ -2458,7 +2438,7 @@ export function initDoomsdayPortal() {
         if (introEl) {
             introEl.classList.remove('gone', 'closing', 'shattering');
             introEl.style.display = 'grid';
-            introEl.style.opacity = '1';
+            introEl.style.opacity = '';
         }
         const introCam = document.getElementById('introCamera');
         if (introCam)

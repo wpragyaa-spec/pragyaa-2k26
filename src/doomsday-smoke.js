@@ -195,9 +195,13 @@ export function initBilateralSmokeSimulation(canvas) {
             return;
         ctx.clearRect(0, 0, width, height);
         ctx.globalCompositeOperation = 'screen';
-        for (let i = 0; i < smokeParticles.length; i++) {
+        for (let i = smokeParticles.length - 1; i >= 0; i--) {
             const p = smokeParticles[i];
             p.update();
+            if (p.dead) {
+                smokeParticles.splice(i, 1);
+                continue;
+            }
             p.draw(ctx);
         }
         animId = requestAnimationFrame(renderLoop);

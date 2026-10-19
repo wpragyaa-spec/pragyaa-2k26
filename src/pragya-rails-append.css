@@ -1,0 +1,384 @@
+/* ==========================================================================
+   PRAGYA 2027 — section buttons + side rails + HUD corners
+   PASTE THIS BLOCK AT THE VERY END of your stylesheet
+   (after the last line: body.lit .wrist-hud, body.gridview .wrist-hud { ... })
+   Your :root already has the --btn-* tokens, so they are not repeated here.
+   ========================================================================== */
+
+/* 1. Sizing tokens --------------------------------------------------------- */
+:root {
+  --bw: clamp(168px, 14.5vw, 236px);    /* side button width  */
+  --bh: clamp(54px, 8.2vh, 70px);       /* side button height */
+  --gap: clamp(10px, 1.9vh, 18px);      /* space between buttons */
+  --cornerW: clamp(150px, 21vw, 380px); /* HUD corner width */
+}
+/* headline gets narrower on desktop so it sits between the rails.
+   Wrapped in a media query so your 640px and 380px --hw values still win on phones */
+@media (min-width: 901px) {
+  :root { --hw: min(46vw, 560px); }
+}
+
+/* 2. Page background lifts when a button is hovered (JS toggles body.hover) */
+body { transition: background-color 2s var(--btn-ease); }
+body.hover { background-color: var(--body-lift); }
+
+/* 3. HUD corners (top and bottom corners stay free for design) ------------- */
+.corner {
+  position: absolute;
+  z-index: 1;
+  width: var(--cornerW);
+  aspect-ratio: 300 / 190;
+  pointer-events: none;
+  transition: opacity 0.6s var(--btn-ease);
+}
+.corner svg { width: 100%; height: 100%; display: block; overflow: visible; }
+.corner.tl { top: 0; left: 0; }
+.corner.tr { top: 0; right: 0; transform: scaleX(-1); }
+.corner.bl { bottom: 0; left: 0; transform: scaleY(-1); }
+.corner.br { bottom: 0; right: 0; transform: scale(-1, -1); }
+
+.corner .plate { fill: rgba(21, 26, 32, 0.92); stroke: var(--steel); stroke-width: 1; }
+.corner .edge  { fill: none; stroke: var(--emerald); stroke-width: 3; filter: drop-shadow(0 0 4px rgba(0, 255, 136, 0.7)); }
+.corner .thin  { fill: none; stroke: rgba(138, 153, 168, 0.6); stroke-width: 1; }
+.corner .chip  { fill: #050607; stroke: var(--emerald); stroke-width: 1.5; }
+.corner .led   { fill: var(--emerald); animation: cornerPulse 2.4s ease-in-out infinite; }
+@keyframes cornerPulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
+
+/* 4. Rails: 5 buttons each side, vertically centred ------------------------ */
+.rail {
+  position: absolute;
+  top: 50%;
+  translate: none;
+  transform: translateY(-50%);
+  z-index: 3;
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap);
+  transition: opacity 0.6s var(--btn-ease);
+}
+.rail.left  { left:  calc(var(--pad) + var(--safe-left)); }
+.rail.right { right: calc(var(--pad) + var(--safe-right)); }
+
+/* 5. Section button -------------------------------------------------------- */
+/* wrapper carries the glow, because a filter on a clipped element gets cut off */
+.sec-wrap { transition: filter 0.6s var(--btn-ease); }
+.sec-wrap:hover        { filter: drop-shadow(0 0 5px rgba(255, 255, 255, 0.55)); }
+.sec-wrap:focus-within { filter: drop-shadow(0 0 6px rgba(0, 255, 136, 0.8)); }
+
+.sec {
+  --cut: 14px; --mx: 50%; --my: 50%;
+  position: relative;
+  display: block;
+  width: var(--bw);
+  height: var(--bh);
+  padding: 1px;                 /* this 1px becomes the border */
+  border: 0;
+  cursor: pointer;
+  color: inherit;
+  font: inherit;
+  background: var(--btn-border);
+  transition: background-color 1s var(--btn-ease);
+  -webkit-tap-highlight-color: transparent;
+  clip-path: polygon(0 0, calc(100% - var(--cut)) 0, 100% var(--cut), 100% 100%, var(--cut) 100%, 0 calc(100% - var(--cut)));
+}
+/* right rail mirrors the angled corners */
+.rail.right .sec {
+  clip-path: polygon(var(--cut) 0, 100% 0, 100% calc(100% - var(--cut)), calc(100% - var(--cut)) 100%, 0 100%, 0 var(--cut));
+}
+.sec:focus-visible { outline: none; }
+
+.sec-in {
+  position: relative;
+  display: flex; align-items: center; justify-content: center;
+  width: 100%; height: 100%;
+  overflow: hidden;
+  background: var(--ink);
+  clip-path: inherit;
+  transition: background-color 0.3s var(--btn-ease);
+}
+
+/* hex noise: faint at rest, emerald under the pointer on hover */
+.glyph {
+  position: absolute; inset: 4px 6px auto; height: 30px; overflow: hidden;
+  font: 9px/1.3 var(--mono); word-break: break-all;
+  color: rgba(210, 218, 226, 0.12);
+  pointer-events: none;
+}
+.glyph.lit {
+  color: rgba(0, 255, 136, 0.9);
+  opacity: 0;
+  transition: opacity 0.4s var(--btn-ease);
+  -webkit-mask-image: radial-gradient(circle 55px at var(--mx) var(--my), #000, transparent);
+          mask-image: radial-gradient(circle 55px at var(--mx) var(--my), #000, transparent);
+}
+
+.sec-code {
+  position: absolute; left: 10px; top: 6px; z-index: 2;
+  display: flex; align-items: center; gap: 6px;
+  font: 9px var(--mono); letter-spacing: 0.12em; color: var(--steel);
+  transition: color 0.6s var(--btn-ease);
+}
+.sec-code i { width: 5px; height: 5px; border-radius: 50%; background: var(--emerald); box-shadow: 0 0 6px var(--emerald); }
+
+.sec-label {
+  position: relative; z-index: 2;
+  margin-top: 8px; padding: 0 12px;
+  text-align: center; line-height: 1.25;
+  font: 700 clamp(0.62rem, 0.75vw, 0.78rem) var(--display);
+  letter-spacing: 0.14rem; text-transform: uppercase;
+  color: var(--btn-text);
+  transition: color 0.6s var(--btn-ease);
+}
+.sec .shift {
+  display: inline-block; margin-left: 0.2rem; vertical-align: text-top;
+  transition: all 1.1s var(--btn-ease);
+}
+
+.sec .mask {
+  position: absolute; left: 0; top: 50%; z-index: 1;
+  width: 8rem; height: 9rem; margin-top: -4.5rem;
+  background: var(--btn-mask);
+  transform: translate3d(-120%, -0.5rem, 0) rotate3d(0, 0, 1, 45deg);
+  transition: all 1.1s var(--btn-ease);
+}
+
+/* hover + keyboard focus */
+.sec:hover, .sec:focus-visible { background: var(--btn-border-hover); }
+.sec:hover .sec-in, .sec:focus-visible .sec-in { background: #12161b; }
+.sec:hover .sec-label, .sec:focus-visible .sec-label { color: #fff; }
+.sec:hover .sec-code, .sec:focus-visible .sec-code { color: var(--chrome); }
+.sec:hover .glyph.lit, .sec:focus-visible .glyph.lit { opacity: 1; }
+.sec:hover .mask, .sec:focus-visible .mask {
+  background: var(--btn-mask-hover);
+  transform: translate3d(240%, -4rem, 0) rotate3d(0, 0, 1, 90deg);
+}
+.sec:hover .shift, .sec:focus-visible .shift { transform: translateX(0.3125rem); }
+
+/* press */
+.sec:active .sec-in { background: var(--btn-bg-active); }
+.sec:active .sec-label, .sec:active .sec-code { color: var(--btn-text-active); }
+
+/* touch devices have no hover: a tap plays a quick sweep */
+@media (hover: none) {
+  .sec:active .mask {
+    background: var(--btn-mask-hover);
+    transform: translate3d(240%, -4rem, 0) rotate3d(0, 0, 1, 90deg);
+    transition-duration: 0.5s;
+  }
+}
+
+/* 6. Grid view (#grid): same button, one column, larger ------------------- */
+#grid .rows { grid-template-columns: 1fr; max-width: 520px; gap: 1.1rem; }
+#grid .sec  { --bw: 100%; --bh: 92px; --cut: 20px; }
+#grid .sec-label { font-size: 0.95rem; letter-spacing: 0.2125rem; }
+#grid .sec .mask { width: 12.5rem; height: 12rem; margin-top: -6rem; transform: translate3d(-120%, -1rem, 0) rotate3d(0, 0, 1, 45deg); }
+#grid .sec:hover .mask, #grid .sec:focus-visible .mask { transform: translate3d(180%, -6rem, 0) rotate3d(0, 0, 1, 90deg); }
+
+/* 7. Hide with the other overlays ------------------------------------------ */
+body.lit .rail, body.lit .corner,
+body.gridview .rail, body.gridview .corner {
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* bottom corner frames use the space .bio and .colophon occupy on desktop */
+@media (min-width: 901px) {
+  .bio, .colophon { display: none; }
+  .rails-m { display: contents; }
+}
+
+/* 8. Narrow screens: rails sit under the sphere as two columns ------------- */
+@media (max-width: 900px) {
+  :root { --bh: 54px; --cornerW: 110px; }
+  .rail { position: static; translate: none; transform: none; }
+  .rail .sec { --bw: 100%; }
+  .rails-m {
+    position: absolute; left: 0; right: 0;
+    bottom: calc(var(--pad) + var(--safe-bottom) + 70px);
+    z-index: 3;
+    display: grid; grid-template-columns: 1fr 1fr; gap: var(--gap);
+    padding: 0 var(--pad);
+  }
+}
+
+/* 9. Reduced motion -------------------------------------------------------- */
+@media (prefers-reduced-motion: reduce) {
+  .sec .mask, .sec .shift { transition: none; }
+  .corner .led { animation: none; }
+}
+/* keep labels readable while the sweep bar passes behind them */
+:root { --btn-mask-hover: rgba(255, 255, 255, 0.28); }
+
+.sec-label,
+.sec-code {
+  text-shadow: 0 0 6px rgba(0, 0, 0, 0.85), 0 0 2px rgba(0, 0, 0, 0.9);
+}
+/* ===== METALLIC OVERRIDE: paste at the very end ===== */
+:root {
+  --metal: linear-gradient(135deg, #f4f7fa 0%, #8a99a8 20%, #d2dae2 42%, #4a5563 66%, #cfd8e0 84%, #8a99a8 100%);
+  --btn-text: #c3ccd6;
+  --btn-mask-hover: rgba(255, 255, 255, 0.22);
+}
+
+/* HUD corners.
+   NOTE: your old ".corner .plate" etc. never matched, because <use> styles are matched
+   against the <symbol> itself, which is not inside .corner. Target symbol#hud instead. */
+symbol#hud .plate { fill: #141a21; stroke: #8a99a8; stroke-width: 1; }
+symbol#hud .edge  { fill: none; stroke: #d2dae2; stroke-width: 3; }
+symbol#hud .thin  { fill: none; stroke: rgba(138, 153, 168, 0.55); stroke-width: 1; }
+symbol#hud .chip  { fill: #080a0d; stroke: #d2dae2; stroke-width: 1.5; }
+symbol#hud .led   { fill: #00ff88; animation: cornerPulse 2.4s ease-in-out infinite; }
+.corner { filter: drop-shadow(0 0 4px rgba(210, 218, 226, 0.35)); }
+
+/* Button frame: brushed-steel border that shimmers on hover */
+.sec {
+  background: var(--metal) 0% 0% / 220% 220% no-repeat;
+  transition: background-position 1.1s var(--btn-ease);
+}
+.sec:hover,
+.sec:focus-visible {
+  background: var(--metal) 100% 100% / 220% 220% no-repeat;
+}
+
+/* Button face: gunmetal with fine brushed lines */
+.sec-in {
+  background:
+    repeating-linear-gradient(90deg, rgba(255, 255, 255, 0.035) 0 1px, transparent 1px 3px),
+    linear-gradient(180deg, #232c36 0%, #12171d 55%, #0a0d11 100%);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.2),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.7),
+    inset 0 0 16px rgba(0, 0, 0, 0.45);
+}
+.sec:hover .sec-in,
+.sec:focus-visible .sec-in {
+  background:
+    repeating-linear-gradient(90deg, rgba(255, 255, 255, 0.05) 0 1px, transparent 1px 3px),
+    linear-gradient(180deg, #2e3946 0%, #171d25 55%, #0d1115 100%);
+}
+.sec:active .sec-in { background: linear-gradient(180deg, #ffffff, #cfd8e0); }
+
+/* Text, code tag and hex noise in silver / chrome */
+.sec-code { color: #8a99a8; }
+.sec-code i { background: #00ff88; box-shadow: 0 0 6px #00ff88; } /* tiny emerald status dot; change to #d2dae2 to remove */
+.sec:hover .sec-code, .sec:focus-visible .sec-code { color: #d2dae2; }
+.glyph { color: rgba(210, 218, 226, 0.1); }
+.glyph.lit { color: rgba(244, 247, 250, 0.85); }
+
+/* Glow around the button: silver instead of green */
+.sec-wrap:hover        { filter: drop-shadow(0 0 6px rgba(210, 218, 226, 0.5)); }
+.sec-wrap:focus-within { filter: drop-shadow(0 0 6px rgba(244, 247, 250, 0.75)); }
+
+/* REMOVE EXTRA HUD CORNER DESIGNS */
+.corner {
+  display: none !important;
+}
+
+/* Keep metallic section buttons */
+.sec {
+  background: var(--metal) 0% 0% / 220% 220% no-repeat;
+}
+
+.sec:hover,
+.sec:focus-visible {
+  background: var(--metal) 100% 100% / 220% 220% no-repeat;
+}
+:root{
+  --bw: clamp(240px, 19vw, 300px);   /* button width  */
+  --bh: clamp(58px, 8.4vh, 74px);    /* button height */
+  --cl: 10px;                        /* left chamfer  */
+  --cr: 22px;                        /* right chamfer */
+  --pocket: calc(var(--bh) * .95);   /* arrow tab width */
+  --em: #00ff88;
+}
+
+/* frame */
+.sec{
+  --poly: polygon(var(--cl) 0, calc(100% - var(--cr)) 0, 100% var(--cr), 100% calc(100% - var(--cr)),
+                  calc(100% - var(--cr)) 100%, var(--cl) 100%, 0 calc(100% - var(--cl)), 0 var(--cl));
+  width: var(--bw); height: var(--bh); padding: 3px;
+  clip-path: var(--poly);
+  background: linear-gradient(180deg,#f2f6f9 0%,#9aa6b1 15%,#4b5560 44%,#2b323a 62%,#8f9ba6 86%,#e3e9ee 100%);
+  transition: filter .3s var(--btn-ease);
+}
+.rail.right .sec{ clip-path: var(--poly); }
+.sec::before{
+  content:""; position:absolute; z-index:4; top:0; left:24%; width:44%; height:3px; pointer-events:none;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,.95), transparent);
+}
+
+/* face */
+.sec-in{
+  display:flex; align-items:center; justify-content:center;
+  position:relative; overflow:hidden;
+  clip-path: var(--poly);
+  background:#07090c; box-shadow:none;
+}
+.sec-in::before{
+  content:""; position:absolute; inset:2px; clip-path: var(--poly);
+  background:
+    linear-gradient(115deg, transparent 0 36%, rgba(255,255,255,.08) 46%, transparent 58%),
+    repeating-linear-gradient(100deg, rgba(255,255,255,.03) 0 1px, transparent 1px 3px),
+    linear-gradient(180deg,#2c3540 0%,#182028 50%,#0c1015 100%);
+}
+
+/* emerald light strips */
+.sec-in::after{
+  content:""; position:absolute; inset:2px; pointer-events:none; opacity:.8;
+  background:
+    linear-gradient(var(--em),var(--em)) left 14px top 3px / 26% 2px no-repeat,
+    linear-gradient(var(--em),var(--em)) right calc(var(--pocket) + 22px) top 3px / 12% 2px no-repeat,
+    linear-gradient(var(--em),var(--em)) left 14px bottom 3px / 22% 2px no-repeat,
+    linear-gradient(var(--em),var(--em)) left 3px top 20% / 2px 60% no-repeat;
+  filter: drop-shadow(0 0 4px rgba(0,255,136,.9));
+  transition: opacity .3s var(--btn-ease), filter .3s var(--btn-ease);
+}
+
+/* arrow tab */
+.sec::after{
+  content:""; position:absolute; z-index:3; top:3px; bottom:3px; right:3px; width:var(--pocket); pointer-events:none;
+  clip-path: polygon(10px 0, calc(100% - var(--cr) + 4px) 0, 100% calc(var(--cr) - 4px), 100% calc(100% - var(--cr) + 4px),
+                     calc(100% - var(--cr) + 4px) 100%, 10px 100%, 0 calc(100% - 10px), 0 10px);
+  background:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M8 4l9 8-9 8' fill='none' stroke='%2300ff88' stroke-width='3.2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") 54% 50% / 36% no-repeat,
+    radial-gradient(circle at 54% 50%, rgba(0,255,136,.30), transparent 62%),
+    linear-gradient(180deg,#242d37,#0a0d11);
+  box-shadow: inset 0 0 0 1px rgba(200,210,220,.38);
+  transition: filter .3s var(--btn-ease);
+}
+
+/* code tag + label */
+.sec-code{
+  left:22px; top:8px; gap:0; z-index:2;
+  font:600 10px var(--mono); letter-spacing:.16em;
+  color:var(--em); text-shadow:0 0 6px rgba(0,255,136,.7);
+}
+.sec-code i{ display:none; }
+.sec-code::after{ content:""; width:1px; height:14px; margin-left:10px; background:var(--em); box-shadow:0 0 5px var(--em); }
+.sec-label{
+  z-index:2; margin:10px var(--pocket) 0 0; padding:0 8px 0 24px; white-space:nowrap;
+  font:700 clamp(.62rem,.82vw,.9rem) var(--display); letter-spacing:.14em;
+  color:#d3dbe3; text-shadow:0 1px 0 #000, 0 0 8px rgba(255,255,255,.12);
+}
+.sec .shift, .glyph{ display:none; }
+.sec .mask{ opacity:.55; }
+
+/* hover / focus / press */
+.sec-wrap{ transition: transform .35s var(--btn-ease), filter .35s var(--btn-ease); }
+.rail.left  .sec-wrap:hover, .rail.left  .sec-wrap:focus-within{ transform: translateX(8px); }
+.rail.right .sec-wrap:hover, .rail.right .sec-wrap:focus-within{ transform: translateX(-8px); }
+.sec-wrap:hover, .sec-wrap:focus-within{ filter: drop-shadow(0 0 8px rgba(0,255,136,.45)); }
+.sec:hover, .sec:focus-visible{ filter: brightness(1.12); }
+.sec:hover .sec-in::after, .sec:focus-visible .sec-in::after,
+.sec.is-active .sec-in::after, .sec[aria-current="true"] .sec-in::after{ opacity:1; filter: drop-shadow(0 0 7px #00ff88); }
+.sec:hover::after, .sec:focus-visible::after{ filter: brightness(1.3) saturate(1.2); }
+.sec:hover .sec-label, .sec:focus-visible .sec-label{ color:#fff; text-shadow:0 1px 0 #000, 0 0 10px rgba(255,255,255,.35); }
+.sec:active .sec-in{ background:#07090c; }
+.sec:active .sec-in::before{ filter: brightness(1.35); }
+.sec:active .sec-label{ color:#fff; }
+.sec:active .sec-code{ color:var(--em); }
+
+/* right rail: mirror the button, flip the text back */
+.rail.right .sec{ transform: scaleX(-1); }
+.rail.right .sec-label, .rail.right .sec-code{ transform: scaleX(-1); }
+

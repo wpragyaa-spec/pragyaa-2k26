@@ -174,14 +174,297 @@ export const ITEMS = [
             { name: "AI Research Fellow", tag: "TALK", timeOrSpecs: "FRONTIER NEURAL ARCHITECTURES", details: "Deep dive into sub-billion parameter reasoning models and neuromorphic silicon architectures.", actionText: "SEAT RESERVATION" },
             { name: "Industrial Robotics Pioneer", tag: "SYMPOSIUM", timeOrSpecs: "AUTOMOTIVE MEGACONSORTIUM", details: "Masterclass on high-speed kinetic kinematics, servo feedback loops, and human-collaborative assembly lines.", actionText: "SESSION PASS" }
         ]
+    },
+    {
+        code: "SEC-11",
+        title: "Flagship Events",
+        subtitle: "INC-011 // PRIME DIRECTIVES",
+        desc: "The signature battlegrounds of PRAGYA 2027. Three premier experiences engineered to challenge intelligence, creativity, and the limits of emerging technology.",
+        id: "flagship-events",
+        threat: "CAT-5 // PRIORITY",
+        tip: "The main event. The ultimate challenge.",
+        blurb: "Innovers, Vision Edge and AI Bootcamp.",
+        chips: ["INNOVATION", "VISION", "ARTIFICIAL INTELLIGENCE"],
+        subs: [
+            {
+                name: "Innovers",
+                tag: "INNOVATION",
+                timeOrSpecs: "FLAGSHIP EVENT // DETAILS TO BE ANNOUNCED",
+                details: "A premier platform for innovative ideas, technical excellence, and next-generation engineering solutions.",
+                actionText: "EXPLORE INNOVERS"
+            },
+            {
+                name: "Vision Edge",
+                tag: "VISION",
+                timeOrSpecs: "FLAGSHIP EVENT // DETAILS TO BE ANNOUNCED",
+                details: "An experience focused on forward-thinking ideas, emerging technologies, and the next frontier of innovation.",
+                actionText: "EXPLORE VISION EDGE"
+            },
+            {
+                name: "AI Bootcamp",
+                tag: "ARTIFICIAL INTELLIGENCE",
+                timeOrSpecs: "LEARN // BUILD // DEPLOY",
+                details: "A hands-on learning experience introducing participants to artificial intelligence concepts, tools, and practical applications.",
+                actionText: "ENTER AI BOOTCAMP"
+            }
+        ]
+    },
+    {
+        code: "SEC-12",
+        title: "Departmental Events",
+        subtitle: "INC-012 // DEPARTMENTAL OPERATIONS",
+        desc: "Every department opens its own competitive zone, bringing specialized challenges, technical showcases, and creative engineering experiences to the PRAGYA arena.",
+        id: "departmental-events",
+        threat: "CAT-4 // MULTI-SECTOR",
+        tip: "Ten events. Multiple disciplines. One arena.",
+        blurb: "Explore competitions organized by the different departments.",
+        chips: ["TECHNICAL", "ENGINEERING", "DEPARTMENTAL"],
+        subs: [
+            {
+                name: "Chemtrek",
+                tag: "CHEMICAL",
+                timeOrSpecs: "DEPARTMENTAL EVENT // DETAILS TBA",
+                details: "Explore chemical engineering challenges, scientific experimentation, and problem-solving.",
+                actionText: "EXPLORE CHEMTREK"
+            },
+            {
+                name: "Mechaverse",
+                tag: "MECHANICAL",
+                timeOrSpecs: "DEPARTMENTAL EVENT // DETAILS TBA",
+                details: "Enter a mechanical engineering zone built around design, mechanisms, and engineering challenges.",
+                actionText: "EXPLORE MECHAVERSE"
+            },
+            {
+                name: "Pesa",
+                tag: "DEPARTMENTAL",
+                timeOrSpecs: "DEPARTMENTAL EVENT // DETAILS TBA",
+                details: "Discover the competitions and activities organized under Pesa.",
+                actionText: "EXPLORE PESA"
+            },
+            {
+                name: "Tessa Texplorer",
+                tag: "TEXTILE",
+                timeOrSpecs: "DEPARTMENTAL EVENT // DETAILS TBA",
+                details: "Discover textile-focused innovation, exploration, and creative technical challenges.",
+                actionText: "EXPLORE TESSA"
+            },
+            {
+                name: "Sessa",
+                tag: "DEPARTMENTAL",
+                timeOrSpecs: "DEPARTMENTAL EVENT // DETAILS TBA",
+                details: "Explore Sessa's featured activities, competitions, and departmental experiences.",
+                actionText: "EXPLORE SESSA"
+            },
+            {
+                name: "Senfest",
+                tag: "DEPARTMENTAL",
+                timeOrSpecs: "DEPARTMENTAL EVENT // DETAILS TBA",
+                details: "Participate in an engaging mix of departmental activities and competitive experiences.",
+                actionText: "EXPLORE SENFEST"
+            },
+            {
+                name: "Essa",
+                tag: "DEPARTMENTAL",
+                timeOrSpecs: "DEPARTMENTAL EVENT // DETAILS TBA",
+                details: "Discover the activities, challenges, and experiences presented by Essa.",
+                actionText: "EXPLORE ESSA"
+            },
+            {
+                name: "Extrospark",
+                tag: "INNOVATION",
+                timeOrSpecs: "DEPARTMENTAL EVENT // DETAILS TBA",
+                details: "Spark new ideas through interactive challenges and innovative departmental experiences.",
+                actionText: "EXPLORE EXTROSPARK"
+            },
+            {
+                name: "Itza",
+                tag: "DEPARTMENTAL",
+                timeOrSpecs: "DEPARTMENTAL EVENT // DETAILS TBA",
+                details: "Enter Itza's event zone to discover its featured activities and competitions.",
+                actionText: "EXPLORE ITZA"
+            },
+            {
+                name: "Hackit",
+                tag: "HACKATHON",
+                timeOrSpecs: "CODE // CREATE // COMPETE",
+                details: "Put your programming, logical reasoning, and rapid prototyping skills to the test in a competitive technical environment.",
+                actionText: "ENTER HACKIT"
+            }
+        ]
+    },
+    {
+        code: "SEC-13",
+        title: "Creative Events",
+        subtitle: "INC-013 // CREATIVE PROTOCOLS",
+        desc: "A creative sector where imagination meets expression. Discover artistic challenges, interactive experiences, and unconventional ideas beyond traditional engineering.",
+        id: "creative-events",
+        threat: "CAT-3 // CREATIVE",
+        tip: "Think differently. Create boldly.",
+        blurb: "Math, E-Magic, FAR, Auth 6.0, Pragya Movie Night and more.",
+        chips: ["CREATIVITY", "ART", "ENTERTAINMENT"],
+        subs: [
+            {
+                name: "Math",
+                tag: "LOGIC",
+                timeOrSpecs: "CREATIVE EVENT // DETAILS TBA",
+                details: "Challenge your mathematical thinking, logical reasoning, and problem-solving abilities.",
+                actionText: "EXPLORE MATH"
+            },
+            {
+                name: "E-Magic",
+                tag: "ELECTRONICS",
+                timeOrSpecs: "CREATIVE EVENT // DETAILS TBA",
+                details: "Discover an engaging experience blending creativity, technology, and interactive challenges.",
+                actionText: "EXPLORE E-MAGIC"
+            },
+            {
+                name: "FAR",
+                tag: "CREATIVE",
+                timeOrSpecs: "CREATIVE EVENT // DETAILS TBA",
+                details: "Explore the activities and creative challenges featured under FAR.",
+                actionText: "EXPLORE FAR"
+            },
+            {
+                name: "Auth 6.0",
+                tag: "INNOVATION",
+                timeOrSpecs: "CREATIVE EVENT // DETAILS TBA",
+                details: "Discover Auth 6.0, a platform for creative participation and engaging festival experiences.",
+                actionText: "EXPLORE AUTH 6.0"
+            },
+            {
+                name: "Pragya Movie Night",
+                tag: "ENTERTAINMENT",
+                timeOrSpecs: "CAMPUS SCREENING // TIMINGS TBA",
+                details: "Take a break from the competition and enjoy a shared movie-night experience with the PRAGYA community.",
+                actionText: "VIEW MOVIE NIGHT"
+            }
+        ]
+    },
+    {
+        code: "SEC-14",
+        title: "Startup Expo",
+        subtitle: "INC-014 // STARTUP ECOSYSTEM",
+        desc: "A showcase of emerging ventures, ambitious founders, innovative products, and student-led businesses connecting ideas with real-world opportunities.",
+        id: "startup-expo",
+        threat: "CAT-4 // VENTURE",
+        tip: "Ideas become ventures here.",
+        blurb: "Discover startups, products, founders and emerging innovations.",
+        chips: ["STARTUPS", "INNOVATION", "NETWORKING"],
+        subs: [
+            {
+                name: "Startup Showcase",
+                tag: "EXHIBITION",
+                timeOrSpecs: "STARTUP EXHIBITION // DETAILS TBA",
+                details: "Explore startup booths showcasing products, prototypes, business ideas, and emerging technologies.",
+                actionText: "EXPLORE STARTUPS"
+            },
+            {
+                name: "Founder Connect",
+                tag: "NETWORKING",
+                timeOrSpecs: "FOUNDER INTERACTIONS // DETAILS TBA",
+                details: "Connect with founders, exchange ideas, and discover the journeys behind emerging ventures.",
+                actionText: "MEET THE FOUNDERS"
+            },
+            {
+                name: "Innovation Showcase",
+                tag: "PRODUCTS",
+                timeOrSpecs: "LIVE DEMONSTRATIONS // DETAILS TBA",
+                details: "Experience product demonstrations, prototypes, and innovative solutions designed to solve real-world problems.",
+                actionText: "VIEW INNOVATIONS"
+            }
+        ]
+    },
+    {
+        code: "SEC-15",
+        title: "Lightning Pitch",
+        subtitle: "INC-015 // RAPID-FIRE VENTURES",
+        desc: "A high-energy pitching arena where founders transform bold ideas into compelling opportunities through concise presentations and sharp thinking.",
+        id: "lightning-pitch",
+        threat: "CAT-4 // HIGH VELOCITY",
+        tip: "One idea. One pitch. Make it count.",
+        blurb: "Present your idea, impress the panel and stand out.",
+        chips: ["PITCHING", "STARTUPS", "INVESTORS"],
+        subs: [
+            {
+                name: "Pitch Arena",
+                tag: "PRESENTATION",
+                timeOrSpecs: "PITCH FORMAT // DURATION TBA",
+                details: "Present your startup concept, explain the problem you solve, and communicate your proposed solution in a concise pitch.",
+                actionText: "ENTER PITCH ARENA"
+            },
+            {
+                name: "Jury Evaluation",
+                tag: "EVALUATION",
+                timeOrSpecs: "JUDGING CRITERIA // DETAILS TBA",
+                details: "Ideas are evaluated on clarity, originality, feasibility, market potential, and presentation.",
+                actionText: "VIEW EVALUATION"
+            },
+            {
+                name: "Pitch Finale",
+                tag: "FINALE",
+                timeOrSpecs: "FINAL ROUND // DETAILS TBA",
+                details: "Finalists present their ideas and compete for recognition in the Lightning Pitch arena.",
+                actionText: "EXPLORE THE FINALE"
+            }
+        ]
+    },
+    {
+        code: "SEC-16",
+        title: "IPL Auction",
+        subtitle: "INC-016 // CRICKET WAR ROOM",
+        desc: "Enter the ultimate cricket strategy arena. Build your dream squad, evaluate player value, manage your virtual purse, and outsmart competing bidders in the IPL auction experience.",
+        id: "ipl-auction",
+        threat: "CAT-4 // STRATEGIC",
+        tip: "Bid smart. Build your team. Own the auction.",
+        blurb: "Strategy, cricket knowledge, bidding wars and team building.",
+        chips: ["CRICKET", "AUCTION", "STRATEGY"],
+        subs: [
+            {
+                name: "Team Registration",
+                tag: "REGISTRATION",
+                timeOrSpecs: "TEAM ENTRY // DETAILS TBA",
+                details: "Register to participate in the IPL auction simulation and prepare your strategy before bidding begins.",
+                actionText: "REGISTER TEAM"
+            },
+            {
+                name: "Player Auction",
+                tag: "LIVE BIDDING",
+                timeOrSpecs: "AUCTION FORMAT // DETAILS TBA",
+                details: "Compete with other participants to acquire players while managing your available budget and building a balanced squad.",
+                actionText: "ENTER AUCTION"
+            },
+            {
+                name: "Squad Evaluation",
+                tag: "STRATEGY",
+                timeOrSpecs: "TEAM COMPOSITION // RULES TBA",
+                details: "Evaluate your final squad based on the competition's rules, budget constraints, and team-building strategy.",
+                actionText: "VIEW SQUAD"
+            }
+        ]
     }
 ];
+
+// Navigation buttons ONLY — independent of sphere cards
+const NAV_ITEMS = [
+    { code: "SEC-01", title: "Junior Scientist", cardIdx: 0 },
+    { code: "SEC-02", title: "About",            cardIdx: 1 },
+    { code: "SEC-03", title: "Events",           cardIdx: 2 },
+    { code: "SEC-04", title: "Team",             cardIdx: 3 },
+    { code: "SEC-05", title: "Schedule",         cardIdx: 4 },
+    { code: "SEC-06", title: "Gallery",          cardIdx: 5 },
+    { code: "SEC-07", title: "eVenture",         cardIdx: 6 },
+    { code: "SEC-08", title: "FAQ",              cardIdx: 7 },
+    { code: "SEC-09", title: "Sponsors",         cardIdx: 8 },
+    { code: "SEC-10", title: "Guests",           cardIdx: 9 }
+];
+
 export function initDoomsdayPortal() {
-    const N = 10;
+          const SPHERE_IDX = ITEMS.map((_, i) => i);
+    const M = SPHERE_IDX.length;
     const GA = Math.PI * (3 - Math.sqrt(5));
     const cardsData = [];
-    for (let i = 0; i < N; i++) {
-        const y = 1 - (i / (N - 1)) * 2;
+    SPHERE_IDX.forEach((itemIdx, i) => {
+        const y = 1 - (2 * i + 1) / M;
         const rad = Math.sqrt(Math.max(0, 1 - y * y));
         const theta = i * GA;
         const x = Math.cos(theta) * rad;
@@ -189,8 +472,8 @@ export function initDoomsdayPortal() {
         const lat = Math.asin(y) * (180 / Math.PI);
         const lon = Math.atan2(x, z) * (180 / Math.PI);
         cardsData.push({
-            index: i,
-            item: ITEMS[i],
+            index: itemIdx,
+            item: ITEMS[itemIdx],
             ux: x,
             uy: -y,
             uz: z,
@@ -202,8 +485,10 @@ export function initDoomsdayPortal() {
             lastDim: null,
             lastInteractive: null
         });
-    }
-    function getItemImgSrc(item, highRes = false) {
+    });
+    const getCard = (idx) => cardsData.find(c => c.index === idx);
+        function getItemImgSrc(item, highRes = false) {
+        if (item.img) return item.img;
         if (highRes)
             return `${CDN}${item.id}.png`;
         return `${CDN}${item.id}_min.webp`;
@@ -479,10 +764,12 @@ export function initDoomsdayPortal() {
         </div>
       </figure>
     `;
-        c.dom = cardDiv;
-        c.imgDom = cardDiv.querySelector('img');
-        if (orbEl)
-            orbEl.appendChild(cardDiv);
+       c.dom = cardDiv;
+c.imgDom = cardDiv.querySelector('img');
+
+if (orbEl) {
+    orbEl.appendChild(cardDiv);
+}
         cardDiv.addEventListener('pointerenter', (e) => {
             if (e.pointerType === 'touch')
                 return;
@@ -498,16 +785,20 @@ export function initDoomsdayPortal() {
     // Section buttons: used in grid view and on the side rails
     const HEX_CHARS = "ABCDEF0123456789#$%@/;:=+*";
     const hexNoise = (n) => Array.from({ length: n }, () => HEX_CHARS[Math.floor(Math.random() * HEX_CHARS.length)]).join('');
-    function createSecButton(item, idx) {
-        const wrap = document.createElement('div');
-        wrap.className = 'sec-wrap';
-        const btn = document.createElement('button');
-        btn.type = 'button';
-        btn.className = 'sec';
-        btn.dataset.cardIdx = String(idx); // your dossier script in index.html reads this
-        btn.setAttribute('aria-label', item.title);
-        const txt = hexNoise(110);
-        btn.innerHTML = `
+    
+function createSecButton(item, idx) {
+    const wrap = document.createElement('div');
+    wrap.className = 'sec-wrap';
+
+    const btn = document.createElement('button');
+    btn.type = 'button';
+    btn.className = 'sec';
+    btn.dataset.cardIdx = String(idx);
+    btn.setAttribute('aria-label', item.title);
+
+    const txt = hexNoise(110);
+
+    btn.innerHTML = `
       <span class="sec-in">
         <span class="glyph" aria-hidden="true">${txt}</span>
         <span class="glyph lit" aria-hidden="true">${txt}</span>
@@ -515,40 +806,71 @@ export function initDoomsdayPortal() {
         <span class="sec-label">${item.title}<span class="shift">›</span></span>
         <span class="mask"></span>
       </span>`;
-        btn.addEventListener('mouseenter', () => document.body.classList.add('hover'));
-        btn.addEventListener('mouseleave', () => document.body.classList.remove('hover'));
-        btn.addEventListener('pointermove', (e) => {
-            const r = btn.getBoundingClientRect();
-            btn.style.setProperty('--mx', `${e.clientX - r.left}px`);
-            btn.style.setProperty('--my', `${e.clientY - r.top}px`);
-        });
-        btn.addEventListener('click', () => {
-            document.body.classList.remove('hover');
-            openLightbox(idx, btn);
-        });
-        wrap.appendChild(btn);
-        return wrap;
-    }
+
+    btn.addEventListener('mouseenter', () =>
+        document.body.classList.add('hover')
+    );
+
+    btn.addEventListener('mouseleave', () =>
+        document.body.classList.remove('hover')
+    );
+
+    btn.addEventListener('pointermove', (e) => {
+        const r = btn.getBoundingClientRect();
+        btn.style.setProperty('--mx', `${e.clientX - r.left}px`);
+        btn.style.setProperty('--my', `${e.clientY - r.top}px`);
+    });
+
+    btn.addEventListener('click', () => {
+        document.body.classList.remove('hover');
+        openLightbox(idx, btn, 'rail');
+    });
+
+    wrap.appendChild(btn);
+    return wrap;
+}
+
     // Grid view: all 10 in order
+    
+    // Grid: always display the 10 navigation buttons only
     if (gridRowsEl) {
         gridRowsEl.innerHTML = '';
-        ITEMS.forEach((item, i) => gridRowsEl.appendChild(createSecButton(item, i)));
+
+        NAV_ITEMS.forEach((item) => {
+            gridRowsEl.appendChild(
+                createSecButton(item, item.cardIdx)
+            );
+        });
     }
-    // Side rails: 5 left, 5 right (numbers are positions in ITEMS)
+
+    // Side rails: fixed 5 buttons on each side
     const railL = document.getElementById('railL');
     const railR = document.getElementById('railR');
-    const LEFT = [0, 5, 6, 7, 8]; // Junior Scientist, Gallery, eVenture, FAQ, Sponsors
-    const RIGHT = [1, 2, 3, 9, 4]; // About, Events, Team, Guests, Schedule
-    LEFT.forEach((i, n) => {
-        const el = createSecButton(ITEMS[i], i);
-        el.style.setProperty('--i', String(n));
-        railL?.appendChild(el);
+
+    const LEFT = [0, 5, 6, 7, 8];
+    const RIGHT = [1, 2, 3, 9, 4];
+
+    if (railL) railL.innerHTML = '';
+    if (railR) railR.innerHTML = '';
+
+    LEFT.forEach((navIndex, position) => {
+        const item = NAV_ITEMS[navIndex];
+        if (!item || !railL) return;
+
+        const el = createSecButton(item, item.cardIdx);
+        el.style.setProperty('--i', String(position));
+        railL.appendChild(el);
     });
-    RIGHT.forEach((i, n) => {
-        const el = createSecButton(ITEMS[i], i);
-        el.style.setProperty('--i', String(n));
-        railR?.appendChild(el);
+
+    RIGHT.forEach((navIndex, position) => {
+        const item = NAV_ITEMS[navIndex];
+        if (!item || !railR) return;
+
+        const el = createSecButton(item, item.cardIdx);
+        el.style.setProperty('--i', String(position));
+        railR.appendChild(el);
     });
+
     // live hex-noise refresh behind the labels
     const noiseReduce = window.matchMedia('(prefers-reduced-motion: reduce)');
     setInterval(() => {
@@ -565,19 +887,40 @@ export function initDoomsdayPortal() {
     let lastLayoutW = window.innerWidth;
     let lastLayoutH = window.innerHeight;
     function computeLayoutDimensions() {
-        const width = window.innerWidth;
-        const height = window.innerHeight;
-        const hr = width <= 380 ? 0.32 : (width <= 640 ? 0.38 : 0.42);
-        const wr = width <= 380 ? 0.46 : (width <= 640 ? 0.52 : 0.56);
-        const floor = width <= 380 ? 155 : (width <= 640 ? 190 : 235);
-        R = Math.max(floor, Math.min(460, height * hr, width * wr));
-        const scale = width <= 380 ? 0.98 : (width <= 640 ? 1.02 : 1.08);
-        const cw = Math.round(Math.max(115, R * scale));
-        currentPerspective = width <= 380 ? 640 : (width <= 640 ? 780 : (width <= 900 ? 940 : 1150));
-        document.documentElement.style.setProperty('--persp', `${currentPerspective}px`);
-        document.documentElement.style.setProperty('--cw', `${cw}px`);
-        return { R, cw };
-    }
+    const width = window.innerWidth;
+    const height = window.innerHeight;
+
+    // Give the sphere more room
+    const hr = width <= 380 ? 0.36 : (width <= 640 ? 0.43 : 0.48);
+    const wr = width <= 380 ? 0.50 : (width <= 640 ? 0.58 : 0.64);
+    const floor = width <= 380 ? 155 : (width <= 640 ? 190 : 235);
+
+    R = Math.max(
+        floor,
+        Math.min(520, height * hr, width * wr)
+    );
+
+    // Smaller cards = less overlap
+    const scale = width <= 380 ? 0.52
+                : width <= 640 ? 0.58
+                : 0.64;
+
+    const cw = Math.round(Math.max(76, R * scale));
+
+    currentPerspective = width <= 380 ? 640
+                      : width <= 640 ? 780
+                      : width <= 900 ? 940
+                      : 1150;
+
+    document.documentElement.style.setProperty(
+        '--persp',
+        `${currentPerspective}px`
+    );
+
+    document.documentElement.style.setProperty('--cw', `${cw}px`);
+
+    return { R, cw };
+}
     function updateDoomHandAndSphereRig() {
         const vw = window.innerWidth;
         const vh = window.innerHeight;
@@ -765,7 +1108,7 @@ export function initDoomsdayPortal() {
         const sinY = Math.sin(radY);
         const shade = 1 - Math.min(1, p * 1.6);
         const near = currentPerspective * 0.66;
-        for (let i = 0; i < N; i++) {
+             for (let i = 0; i < cardsData.length; i++) {
             const c = cardsData[i];
             if (!c.dom)
                 continue;
@@ -782,7 +1125,7 @@ export function initDoomsdayPortal() {
             }
             if (focusedIndex >= 0) {
                 dim = Math.min(1, dim + 0.78);
-                if (i === focusedIndex) {
+                 if (c.index === focusedIndex) {
                     fade = 0;
                 }
             }
@@ -1014,13 +1357,13 @@ export function initDoomsdayPortal() {
             }, 2000);
         });
     }
-    function openLightbox(idx, sourceElem) {
+    function openLightbox(idx, sourceElem , from) {
         hideCallout();
         const item = ITEMS[idx];
         if (!item)
             return;
-        focusedIndex = idx;
-        sourceCardElement = sourceElem || (cardsData[idx] && cardsData[idx].dom);
+                focusedIndex = from === 'rail' ? -1 : idx;
+                sourceCardElement = sourceElem || getCard(idx)?.dom || null;
         clearTimeout(plateTimer);
         const token = ++currentOpenToken;
         if (litHeroCode)
@@ -1186,10 +1529,10 @@ export function initDoomsdayPortal() {
             else if (a.hasAttribute('data-teaser')) {
                 window.openTeaserCountdown?.();
             }
-            else if (a.hasAttribute('data-card-idx')) {
+                        else if (a.hasAttribute('data-card-idx')) {
                 const idx = parseInt(a.getAttribute('data-card-idx') || '', 10);
-                if (!isNaN(idx) && cardsData[idx]) {
-                    openLightbox(idx, cardsData[idx].dom);
+                if (!isNaN(idx) && ITEMS[idx]) {
+                    openLightbox(idx, getCard(idx)?.dom || null);
                 }
             }
         });
@@ -1312,8 +1655,9 @@ export function initDoomsdayPortal() {
     ITEMS.forEach((item, index) => {
         const thumbUrl = getItemImgSrc(item);
         decodedBlobUrls[index] = thumbUrl;
-        const cardImg = cardsData[index] && cardsData[index].imgDom;
+                const cardImg = getCard(index)?.imgDom;
         if (cardImg) {
+            cardImg.onerror = () => { cardImg.src = '/doom/doom_sphere_bg.jpg'; };
             cardImg.src = thumbUrl;
             cardImg.onload = () => cardImg.classList.add('in');
             if (cardImg.complete)

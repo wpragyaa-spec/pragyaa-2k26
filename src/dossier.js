@@ -1047,17 +1047,15 @@ export function initDossier() {
       }
 
       // Hook into card clicks and modal openings
-      document.addEventListener('click', (e) => {
-        const card = e.target.closest('.card, [data-card-idx]');
-        if (card) {
-          const idxStr = card.dataset.idx || card.dataset.cardIdx;
-          if (idxStr !== undefined) {
-            const idx = parseInt(idxStr, 10);
-            if (!isNaN(idx)) {
-              requestAnimationFrame(() => {
-                renderScheduleDossier(idx);
-              });
-            }
+            document.addEventListener('click', (e) => {
+        const rail = e.target.closest('.sec[data-card-idx]');
+        window.__railOpen = !!rail;
+        if (rail) {
+          const idx = parseInt(rail.dataset.cardIdx, 10);
+          if (!isNaN(idx)) {
+            requestAnimationFrame(() => {
+              renderScheduleDossier(idx);
+            });
           }
         }
       }, true);
@@ -1076,9 +1074,9 @@ export function initDossier() {
 
       // Keyboard navigation: ArrowUp, ArrowDown, Escape
       window.addEventListener('keydown', (e) => {
-        if (!document.body.classList.contains('lit')) return;
+                   if (document.body.classList.contains('lit') && window.__railOpen) return;
         if (e.target.closest && e.target.closest('input, textarea, select, [contenteditable="true"]')) return;
-
+        if (!window.__railOpen) return;
         const item = DOSSIER_ITEMS[activeSectionIdx];
         if (!item || !item.subs || item.subs.length <= 1) return;
 

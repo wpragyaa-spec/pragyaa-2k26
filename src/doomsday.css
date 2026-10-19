@@ -303,6 +303,10 @@ body.revealed #headline .inner span {
   filter: blur(0);
 }
 
+/* ========================================
+   PRAGYA2027 — PREMIUM SCI-FI CARDS
+   ======================================== */
+
 .card {
   position: absolute;
   top: 0;
@@ -318,130 +322,293 @@ body.revealed #headline .inner span {
   will-change: transform, opacity;
 }
 
+/* Main metallic frame */
 .card figure {
   position: absolute;
   inset: 0;
   margin: 0;
   overflow: hidden;
-  border-radius: 3px;
-  background: var(--gunmetal-2);
-  border: 1px solid rgba(138, 153, 168, 0.25);
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.85);
+  border-radius: 2px;
+
+  background:
+    linear-gradient(135deg,
+      rgba(220, 240, 240, 0.12),
+      transparent 18%,
+      transparent 80%,
+      rgba(0, 255, 170, 0.08)),
+    #071013;
+
+  border: 1px solid rgba(190, 220, 225, 0.7);
+
+  clip-path: polygon(
+    4% 0,
+    96% 0,
+    100% 12%,
+    100% 88%,
+    96% 100%,
+    4% 100%,
+    0 88%,
+    0 12%
+  );
+
+  box-shadow:
+    inset 0 0 0 2px rgba(5, 12, 15, 0.9),
+    inset 0 0 22px rgba(0, 255, 170, 0.08),
+    0 12px 32px rgba(0, 0, 0, 0.8);
+
   transform: scale(1);
-  transition: transform .45s var(--ease), border-color .3s var(--ease), box-shadow .3s var(--ease);
+  transition:
+    transform 0.4s ease,
+    filter 0.4s ease,
+    box-shadow 0.4s ease;
 }
 
+/* Neon frame glow on hover */
 .card:hover figure {
-  transform: scale(1.06);
-  border-color: var(--white);
-  box-shadow: 0 16px 42px rgba(0, 0, 0, 0.95), 0 0 20px rgba(0, 255, 136, 0.22);
+  transform: scale(1.035);
+  filter: brightness(1.12);
+
+  box-shadow:
+    inset 0 0 0 2px rgba(5, 12, 15, 0.9),
+    inset 0 0 25px rgba(0, 255, 170, 0.18),
+    0 0 5px rgba(0, 255, 170, 0.65),
+    0 15px 38px rgba(0, 0, 0, 0.9);
 }
 
+/* Card image */
 .card figure img {
+  position: absolute;
+  inset: 0;
   width: 100%;
   height: 100%;
   object-fit: cover;
+
   opacity: 0;
-  filter: contrast(108%) brightness(0.92);
+  filter: contrast(1.12) brightness(0.9) saturate(0.9);
   pointer-events: none;
+
+  transition:
+    opacity 0.8s ease,
+    transform 0.7s ease,
+    filter 0.4s ease;
 }
 
 .card figure img.in {
-  opacity: 0.92;
+  opacity: 0.94;
+}
+
+.card:hover figure img {
+  transform: scale(1.035);
+  filter: contrast(1.12) brightness(1) saturate(1.05);
 }
 
 body.revealed .card figure img {
-  transition: opacity .8s ease-out;
+  transition:
+    opacity 0.8s ease-out,
+    transform 0.7s ease,
+    filter 0.4s ease;
 }
 
-/* Card Doomsday Overlay */
+/* Dark cinematic overlay */
 .card-overlay {
   position: absolute;
   inset: 0;
+  z-index: 1;
   pointer-events: none;
-  background: linear-gradient(180deg, rgba(11, 13, 16, 0.15) 0%, rgba(11, 13, 16, 0.72) 100%);
+
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  padding: 8px 10px;
+
+  padding: 9px 12px;
   overflow: hidden;
+
+  background:
+    linear-gradient(
+      180deg,
+      rgba(2, 12, 16, 0.28) 0%,
+      transparent 30%,
+      transparent 52%,
+      rgba(2, 9, 12, 0.88) 100%
+    ),
+    linear-gradient(
+      90deg,
+      rgba(0, 12, 15, 0.42),
+      transparent 48%,
+      rgba(0, 20, 20, 0.12)
+    );
 }
 
+/* Fine CRT scanlines */
 .card-overlay::before {
   content: "";
   position: absolute;
   inset: 0;
-  background: repeating-linear-gradient(0deg, rgba(0, 0, 0, 0.18), rgba(0, 0, 0, 0.18) 1px, transparent 1px, transparent 3px);
   pointer-events: none;
+
+  background:
+    repeating-linear-gradient(
+      0deg,
+      rgba(0, 0, 0, 0.19) 0px,
+      rgba(0, 0, 0, 0.19) 1px,
+      transparent 1px,
+      transparent 4px
+    );
+
+  opacity: 0.65;
+}
+
+/* Subtle holographic grid */
+.card-overlay::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+
+  background:
+    linear-gradient(
+      90deg,
+      transparent 49.8%,
+      rgba(0, 255, 170, 0.09) 50%,
+      transparent 50.2%
+    ),
+    linear-gradient(
+      0deg,
+      transparent 49.8%,
+      rgba(0, 255, 170, 0.07) 50%,
+      transparent 50.2%
+    );
+
+  background-size: 42px 42px;
+  opacity: 0.3;
 }
 
 /* HUD corner brackets */
 .hud-corner {
   position: absolute;
-  width: 7px;
-  height: 7px;
-  border-color: var(--emerald-dim);
+  z-index: 3;
+  width: 11px;
+  height: 11px;
   pointer-events: none;
+  border-color: var(--emerald-dim);
+  filter: drop-shadow(0 0 3px rgba(0, 255, 170, 0.6));
 }
-.hud-corner.top-left { top: 3px; left: 3px; border-top: 1.5px solid var(--emerald-dim); border-left: 1.5px solid var(--emerald-dim); }
-.hud-corner.top-right { top: 3px; right: 3px; border-top: 1.5px solid var(--emerald-dim); border-right: 1.5px solid var(--emerald-dim); }
-.hud-corner.bottom-left { bottom: 3px; left: 3px; border-bottom: 1.5px solid var(--emerald-dim); border-left: 1.5px solid var(--emerald-dim); }
-.hud-corner.bottom-right { bottom: 3px; right: 3px; border-bottom: 1.5px solid var(--emerald-dim); border-right: 1.5px solid var(--emerald-dim); }
 
+.hud-corner.top-left {
+  top: 5px;
+  left: 5px;
+  border-top: 1.5px solid var(--emerald-dim);
+  border-left: 1.5px solid var(--emerald-dim);
+}
+
+.hud-corner.top-right {
+  top: 5px;
+  right: 5px;
+  border-top: 1.5px solid var(--emerald-dim);
+  border-right: 1.5px solid var(--emerald-dim);
+}
+
+.hud-corner.bottom-left {
+  bottom: 5px;
+  left: 5px;
+  border-bottom: 1.5px solid var(--emerald-dim);
+  border-left: 1.5px solid var(--emerald-dim);
+}
+
+.hud-corner.bottom-right {
+  bottom: 5px;
+  right: 5px;
+  border-bottom: 1.5px solid var(--emerald-dim);
+  border-right: 1.5px solid var(--emerald-dim);
+}
+
+/* Section code badge */
 .card-badge {
+  position: relative;
+  z-index: 3;
+  align-self: flex-start;
+
   font-family: var(--mono);
   font-size: 10px;
-  letter-spacing: .12em;
-  color: var(--emerald-dim);
-  background: rgba(11, 13, 16, 0.88);
-  padding: 2px 5px;
-  border-radius: 2px;
-  border: 1px solid rgba(138, 153, 168, 0.3);
-  align-self: flex-start;
-  z-index: 2;
+  letter-spacing: 0.16em;
+  color: #00ffc3;
+
+  background: rgba(2, 12, 14, 0.9);
+  border: 1px solid rgba(0, 255, 170, 0.48);
+  border-radius: 1px;
+
+  padding: 4px 7px;
+  text-shadow: 0 0 8px rgba(0, 255, 170, 0.55);
+
+  box-shadow: inset 0 0 12px rgba(0, 255, 170, 0.06);
 }
 
+/* Small neon status indicator */
 .card-threat {
-  width: 32px;
+  position: relative;
+  z-index: 3;
+
+  width: 36px;
   height: 3px;
-  background: rgba(138, 153, 168, 0.22);
-  border-radius: 1px;
-  overflow: hidden;
-  align-self: flex-end;
   margin-top: -16px;
-  z-index: 2;
+  align-self: flex-end;
+
+  overflow: hidden;
+  border-radius: 0;
+  background: rgba(180, 220, 220, 0.2);
 }
 
 .card-threat .bar-fill {
   display: block;
   width: 70%;
   height: 100%;
-  background: var(--emerald);
-  box-shadow: 0 0 5px rgba(0, 255, 136, 0.4);
+
+  background: #00ffc3;
+  box-shadow: 0 0 9px rgba(0, 255, 195, 0.9);
 }
 
+/* Bottom title panel */
 .card-info {
-  z-index: 2;
+  position: relative;
+  z-index: 3;
+  padding: 7px 8px 5px;
+
+  border-left: 2px solid #00ffc3;
+
+  background: linear-gradient(
+    90deg,
+    rgba(1, 12, 15, 0.76),
+    rgba(1, 12, 15, 0.35) 72%,
+    transparent
+  );
 }
 
+/* Technical subtitle */
 .card-subtitle {
   font-family: var(--mono);
   font-size: 8.5px;
-  letter-spacing: .14em;
+  letter-spacing: 0.15em;
   text-transform: uppercase;
-  color: var(--steel);
-  line-height: 1.2;
+
+  color: rgba(195, 220, 222, 0.8);
+  line-height: 1.4;
 }
 
+/* Main card title */
 .card-title {
   font-family: var(--display);
-  font-weight: 700;
-  font-size: clamp(12px, 1.4vw, 15px);
-  letter-spacing: .06em;
+  font-weight: 800;
+  font-size: clamp(12px, 1.4vw, 16px);
+  letter-spacing: 0.09em;
   text-transform: uppercase;
-  color: var(--white);
+
+  color: #f2ffff;
   line-height: 1.15;
-  margin-top: 2px;
+  margin-top: 3px;
+
+  text-shadow:
+    0 0 8px rgba(200, 255, 245, 0.15),
+    0 2px 3px rgba(0, 0, 0, 0.8);
 }
 
 /* Hover RGB-split flash & scanline sweep */

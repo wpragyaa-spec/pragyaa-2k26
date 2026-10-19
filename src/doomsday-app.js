@@ -930,7 +930,34 @@ export function initDoomsdayPortal() {
     let currentOpenToken = 0;
     let sourceCardElement = null;
     const decodedBlobUrls = {};
+    let dossierTypeTimer = null;
     let threatAnimId = null;
+    function typeInDossier(text) {
+        if (dossierTypeTimer) {
+            clearInterval(dossierTypeTimer);
+            dossierTypeTimer = null;
+        }
+        if (!litDetailDossier)
+            return;
+        if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+            litDetailDossier.textContent = text;
+            return;
+        }
+        litDetailDossier.textContent = '';
+        let charIndex = 0;
+        const step = text.length > 130 ? 3 : (text.length > 60 ? 2 : 1);
+        dossierTypeTimer = setInterval(() => {
+            charIndex += step;
+            if (charIndex >= text.length) {
+                litDetailDossier.textContent = text;
+                clearInterval(dossierTypeTimer);
+                dossierTypeTimer = null;
+            }
+            else {
+                litDetailDossier.textContent = text.slice(0, charIndex) + '_';
+            }
+        }, 11);
+    }
     function animateThreatBar(targetPercent) {
         if (threatAnimId)
             cancelAnimationFrame(threatAnimId);
@@ -987,6 +1014,7 @@ export function initDoomsdayPortal() {
             void litDetailCard.offsetWidth;
             litDetailCard.classList.add('scanning');
         }
+        typeInDossier(sub.details);
         const targetThreat = 28 + ((cardIdx * 17 + subIdx * 23) % 68);
         animateThreatBar(targetThreat);
         if (litActionBtnText)
@@ -1068,7 +1096,6 @@ export function initDoomsdayPortal() {
             }
         };
         highResImg.src = fullPngUrl;
-        document.body.dataset.litIdx = String(idx);
         document.body.classList.add('lit');
         document.documentElement.style.overflow = 'hidden';
         const cardRect = sourceCardElement ? sourceCardElement.getBoundingClientRect() : null;
@@ -1103,6 +1130,10 @@ export function initDoomsdayPortal() {
     function closeLightbox() {
         if (!document.body.classList.contains('lit'))
             return;
+        if (dossierTypeTimer) {
+            clearInterval(dossierTypeTimer);
+            dossierTypeTimer = null;
+        }
         if (threatAnimId) {
             cancelAnimationFrame(threatAnimId);
             threatAnimId = null;
@@ -2348,8 +2379,6 @@ export function initDoomsdayPortal() {
             return;
         sceneStarted = true;
         if (smokeCanvas) {
-            if (smokeCtrl)
-                smokeCtrl.destroy();
             smokeCtrl = initBilateralSmokeSimulation(smokeCanvas);
         }
         startCountdownTimer();
@@ -2429,7 +2458,7 @@ export function initDoomsdayPortal() {
         if (introEl) {
             introEl.classList.remove('gone', 'closing', 'shattering');
             introEl.style.display = 'grid';
-            introEl.style.opacity = '';
+            introEl.style.opacity = '1';
         }
         const introCam = document.getElementById('introCamera');
         if (introCam)

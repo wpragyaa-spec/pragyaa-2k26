@@ -910,7 +910,7 @@ export function initDoomsdayPortal() {
                 }
                 catch (err) { }
             }
-            if (dist < clickSlop && pointerDownCard) {
+            if (e.type === 'pointerup' && dist < clickSlop && pointerDownCard) {
                 const idx = parseInt(pointerDownCard.dataset.idx || '', 10);
                 if (!isNaN(idx)) {
                     openLightbox(idx, pointerDownCard);
@@ -929,6 +929,7 @@ export function initDoomsdayPortal() {
     // Lightbox & FLIP Transition
     let currentOpenToken = 0;
     let sourceCardElement = null;
+    let plateTimer = null;
     const decodedBlobUrls = {};
     let threatAnimId = null;
     function animateThreatBar(targetPercent) {
@@ -1020,6 +1021,7 @@ export function initDoomsdayPortal() {
             return;
         focusedIndex = idx;
         sourceCardElement = sourceElem || (cardsData[idx] && cardsData[idx].dom);
+        clearTimeout(plateTimer);
         const token = ++currentOpenToken;
         if (litHeroCode)
             litHeroCode.textContent = item.code;
@@ -1091,7 +1093,8 @@ export function initDoomsdayPortal() {
                 litPlateEl.style.transition = '';
                 litPlateEl.style.transform = '';
                 litPlateEl.style.opacity = '';
-                setTimeout(() => {
+                clearTimeout(plateTimer);
+                plateTimer = setTimeout(() => {
                     litPlateEl.classList.remove('flipping');
                 }, 360);
             }
@@ -1122,7 +1125,8 @@ export function initDoomsdayPortal() {
             const scale = Math.max(0.04, cardRect.width / plateRect.width);
             litPlateEl.style.transform = `translate(${dx.toFixed(2)}px, ${dy.toFixed(2)}px) scale(${scale.toFixed(4)})`;
             litPlateEl.style.opacity = '0';
-            setTimeout(() => {
+            clearTimeout(plateTimer);
+            plateTimer = setTimeout(() => {
                 litPlateEl.style.transition = 'none';
                 litPlateEl.style.transform = '';
                 litPlateEl.style.opacity = '';
@@ -2330,18 +2334,22 @@ export function initDoomsdayPortal() {
         document.documentElement.style.overflow = '';
         layoutSphere();
         requestAnimationFrame(() => layoutSphere());
-        setTimeout(() => {
+        tickTimeouts.push(setTimeout(() => {
             layoutSphere();
             document.body.classList.add('revealed');
             if (introEl)
                 introEl.classList.add('closing');
-        }, 1150);
-        setTimeout(() => {
+        }, 1150));
+        tickTimeouts.push(setTimeout(() => {
             if (introEl) {
                 introEl.classList.add('gone');
                 introEl.classList.remove('shattering', 'closing');
             }
-        }, 1750);
+            if (timerInterval) {
+                clearInterval(timerInterval);
+                timerInterval = null;
+            }
+        }, 1750));
     }
     function startCountdownScene() {
         if (sceneStarted)
@@ -2415,6 +2423,7 @@ export function initDoomsdayPortal() {
     window.openTeaserCountdown = function () {
         revealTriggered = false;
         sceneStarted = false;
+        audioActivated = false;
         if (shardAnimId) {
             cancelAnimationFrame(shardAnimId);
             shardAnimId = null;

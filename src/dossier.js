@@ -1063,21 +1063,21 @@ export function initDossier() {
       }, true);
 
       // Listen for body.lit mutations (when opened by FLIP engine)
-      const observer = new MutationObserver((mutations) => {
-        for (const m of mutations) {
-          if (m.type === 'attributes' && m.attributeName === 'class') {
-            if (document.body.classList.contains('lit')) {
-              const litIdx = parseInt(document.body.dataset.litIdx, 10);
-              renderScheduleDossier(isNaN(litIdx) ? activeSectionIdx : litIdx);
-            }
-          }
+      let wasLit = document.body.classList.contains('lit');
+      const observer = new MutationObserver(() => {
+        const isLit = document.body.classList.contains('lit');
+        if (isLit && !wasLit) {
+          const litIdx = parseInt(document.body.dataset.litIdx, 10);
+          renderScheduleDossier(isNaN(litIdx) ? activeSectionIdx : litIdx);
         }
+        wasLit = isLit;
       });
-      observer.observe(document.body, { attributes: true });
+      observer.observe(document.body, { attributes: true, attributeFilter: ['class'] });
 
       // Keyboard navigation: ArrowUp, ArrowDown, Escape
       window.addEventListener('keydown', (e) => {
         if (!document.body.classList.contains('lit')) return;
+        if (e.target.closest && e.target.closest('input, textarea, select, [contenteditable="true"]')) return;
 
         const item = DOSSIER_ITEMS[activeSectionIdx];
         if (!item || !item.subs || item.subs.length <= 1) return;

@@ -4,12 +4,22 @@ function Chrome() {
   return (
     <>
 <header className="chrome" id="mainHeader">
-    <a className="wordmark" href="#" aria-label="PRAGYA 2027" id="wordmarkLink">PRAGYA<em>2027</em></a>
-    <button id="menuBtn" className="menu-btn" aria-expanded="false" aria-controls="menu" aria-label="Open menu">
-      <span className="menu-label">Menu</span>
-      <span className="bars"><i className="b1"></i><i className="b2"></i></span>
-    </button>
   </header>
+
+  <button type="button" className="navbtn" id="navBtn" aria-label="Open sections" aria-expanded="false">
+    <i></i><i></i><i></i>
+  </button>
+
+  <section className="hero" id="hero" aria-label="PRAGYA 2027">
+    <p className="hero-eyebrow" style={{'--d': 0}}><span className="hero-dot"></span>SGGS CAMPUS // NANDED</p>
+    <h1 className="hero-title" style={{'--d': 1}}>PRAGYA</h1>
+    <p className="hero-year" style={{'--d': 2}}>2027</p>
+    <p className="hero-tag" style={{'--d': 3}}>Technical Festival</p>
+    <button type="button" className="hero-scroll" id="heroScroll" style={{'--d': 4}}>
+      <span>Scroll</span>
+      <i aria-hidden="true"></i>
+    </button>
+  </section>
 
   <div className="bio chrome">
     <div className="who">

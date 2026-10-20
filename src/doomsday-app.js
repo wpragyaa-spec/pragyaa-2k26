@@ -504,8 +504,6 @@ export function initDoomsdayPortal() {
     const orbEl = document.getElementById('orb');
     const headlineEl = document.getElementById('headline');
     const gridRowsEl = document.getElementById('gridRows');
-    const menuBtn = document.getElementById('menuBtn');
-    const menuEl = document.getElementById('menu');
     const headerEl = document.getElementById('mainHeader');
     const gridBtn = document.getElementById('gridBtn');
     const litEl = document.getElementById('lit');
@@ -542,7 +540,6 @@ export function initDoomsdayPortal() {
     const litThreatVal = document.getElementById('litThreatVal');
     const litThreatBar = document.getElementById('litThreatBar');
     const litDetailCard = document.getElementById('litDetailCard');
-    const wordmarkLink = document.getElementById('wordmarkLink');
     const dzToast = document.getElementById('dzToast');
     // Anatomy Callouts
     const calloutEl = document.getElementById('callout');
@@ -560,7 +557,7 @@ export function initDoomsdayPortal() {
     function showCallout(cardData, cardElem) {
         if (!calloutEl || !calloutLineEl)
             return;
-        if (document.body.classList.contains('lit') || document.body.classList.contains('gridview') || isDragging)
+        if (document.body.classList.contains('lit') || document.body.classList.contains('gridview') || !document.body.classList.contains('deep') || isDragging)
             return;
         if (window.matchMedia('(hover: none)').matches)
             return;
@@ -604,7 +601,7 @@ export function initDoomsdayPortal() {
     function updateCalloutPosition() {
         if (!activeCalloutCard || !calloutEl || !calloutLineEl)
             return;
-        if (document.body.classList.contains('lit') || document.body.classList.contains('gridview') || isDragging) {
+        if (document.body.classList.contains('lit') || document.body.classList.contains('gridview') || !document.body.classList.contains('deep') || isDragging) {
             hideCallout();
             return;
         }
@@ -676,6 +673,25 @@ export function initDoomsdayPortal() {
             anchorY = cardCy;
             boxX = rect.right + gap;
             boxY = cardCy - boxH / 2;
+        }
+        const railLRect = railL ? railL.getBoundingClientRect() : null;
+        const railRRect = railR ? railR.getBoundingClientRect() : null;
+        if (window.innerWidth > 900 && railLRect && railRRect && railLRect.width > 0 && railRRect.width > 0) {
+            const minX = railLRect.right + margin;
+            const maxX = railRRect.left - boxW - margin;
+            if (maxX > minX) {
+                if (dir === 'left' && boxX < minX && rect.right + gap <= maxX) {
+                    dir = 'right';
+                    anchorX = rect.right;
+                    boxX = rect.right + gap;
+                }
+                else if (dir === 'right' && boxX > maxX && rect.left - gap - boxW >= minX) {
+                    dir = 'left';
+                    anchorX = rect.left;
+                    boxX = rect.left - gap - boxW;
+                }
+                boxX = Math.max(minX, Math.min(maxX, boxX));
+            }
         }
         boxX = Math.max(margin, Math.min(window.innerWidth - boxW - margin, boxX));
         boxY = Math.max(margin + 48, Math.min(window.innerHeight - boxH - margin - 24, boxY));
@@ -789,6 +805,7 @@ if (orbEl) {
 function createSecButton(item, idx) {
     const wrap = document.createElement('div');
     wrap.className = 'sec-wrap';
+    wrap.style.setProperty('--o', String(idx));
 
     const btn = document.createElement('button');
     btn.type = 'button';
@@ -807,11 +824,12 @@ function createSecButton(item, idx) {
         <span class="mask"></span>
       </span>`;
 
-    btn.addEventListener('mouseenter', () =>
-        document.body.classList.add('hover')
-    );
+    btn.addEventListener('pointerenter', (e) => {
+        if (e.pointerType === 'mouse')
+            document.body.classList.add('hover');
+    });
 
-    btn.addEventListener('mouseleave', () =>
+    btn.addEventListener('pointerleave', () =>
         document.body.classList.remove('hover')
     );
 
@@ -843,7 +861,6 @@ function createSecButton(item, idx) {
         });
     }
 
-    // Side rails: fixed 5 buttons on each side
     const railL = document.getElementById('railL');
     const railR = document.getElementById('railR');
 
@@ -1056,7 +1073,7 @@ function createSecButton(item, idx) {
     // Camera Render Loop
     const spin = 0;
     const tilt = -4;
-    let camZ = 0;
+    const camZ = 0;
     let dragX = 0;
     let dragY = 0;
     let velX = 0;
@@ -1090,8 +1107,6 @@ function createSecButton(item, idx) {
         }
         const p = maxScroll > 0 ? Math.min(1, Math.max(0, window.scrollY / maxScroll)) : 0;
         document.body.classList.toggle('deep', p > 0.06);
-        const camZTarget = p * Math.min(64, R * 0.12);
-        camZ += (camZTarget - camZ) * 0.075;
         const sx = tilt + dragY;
         const sy = spin + dragX;
         if (worldEl)
@@ -1163,7 +1178,7 @@ function createSecButton(item, idx) {
         stageEl.addEventListener('pointerdown', (e) => {
             if (document.body.classList.contains('lit') || document.body.classList.contains('gridview'))
                 return;
-            if (e.target.closest('.sec'))
+            if (e.target.closest('.sec, .rails-m'))
                 return;
             const card = e.target.closest('.card');
             pointerDownCard = card;
@@ -1486,77 +1501,59 @@ function createSecButton(item, idx) {
     document.querySelectorAll('[data-close]').forEach(el => {
         el.addEventListener('click', closeLightbox);
     });
+    const heroScrollBtn = document.getElementById('heroScroll');
+    if (heroScrollBtn) {
+        heroScrollBtn.addEventListener('click', () => {
+            window.scrollTo({ top: window.innerHeight * 0.16, behavior: 'smooth' });
+        });
+    }
     if (gridBtn) {
         gridBtn.addEventListener('click', () => {
             hideCallout();
             document.body.classList.toggle('gridview');
         });
     }
-    function openMenu() {
-        hideCallout();
-        if (menuEl)
-            menuEl.classList.add('open');
-        if (menuBtn)
-            menuBtn.setAttribute('aria-expanded', 'true');
-        if (headerEl)
-            headerEl.classList.add('menu-open');
+    const navBtn = document.getElementById('navBtn');
+    const railsM = document.querySelector('.rails-m');
+    function setNavOpen(open) {
+        document.body.classList.toggle('navopen', open);
+        if (navBtn) {
+            navBtn.setAttribute('aria-expanded', String(open));
+            navBtn.setAttribute('aria-label', open ? 'Close sections' : 'Open sections');
+        }
+        if (open)
+            hideCallout();
     }
-    function closeMenu() {
-        if (menuEl)
-            menuEl.classList.remove('open');
-        if (menuBtn)
-            menuBtn.setAttribute('aria-expanded', 'false');
-        if (headerEl)
-            headerEl.classList.remove('menu-open');
-    }
-    if (menuBtn) {
-        menuBtn.addEventListener('click', () => {
-            if (menuEl && menuEl.classList.contains('open')) {
-                closeMenu();
-            }
-            else {
-                openMenu();
-            }
+    if (navBtn) {
+        navBtn.addEventListener('click', () => {
+            setNavOpen(!document.body.classList.contains('navopen'));
         });
     }
-    document.querySelectorAll('#menu nav a').forEach(a => {
-        a.addEventListener('click', (e) => {
-            e.preventDefault();
-            closeMenu();
-            if (a.hasAttribute('data-grid')) {
-                document.body.classList.add('gridview');
-            }
-            else if (a.hasAttribute('data-teaser')) {
-                window.openTeaserCountdown?.();
-            }
-                        else if (a.hasAttribute('data-card-idx')) {
-                const idx = parseInt(a.getAttribute('data-card-idx') || '', 10);
-                if (!isNaN(idx) && ITEMS[idx]) {
-                    openLightbox(idx, getCard(idx)?.dom || null);
-                }
-            }
+    if (railsM) {
+        railsM.addEventListener('click', (e) => {
+            if (e.target.closest('.sec'))
+                setNavOpen(false);
         });
+    }
+    if (stageEl) {
+        stageEl.addEventListener('click', (e) => {
+            if (document.body.classList.contains('navopen') && !e.target.closest('.rails-m .rail'))
+                setNavOpen(false);
+        });
+    }
+    window.matchMedia('(min-width: 901px)').addEventListener('change', (e) => {
+        if (e.matches)
+            setNavOpen(false);
     });
-    if (wordmarkLink) {
-        wordmarkLink.addEventListener('click', (e) => {
-            e.preventDefault();
-            if (document.body.classList.contains('lit'))
-                closeLightbox();
-            if (menuEl && menuEl.classList.contains('open'))
-                closeMenu();
-            if (document.body.classList.contains('gridview'))
-                document.body.classList.remove('gridview');
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-        });
-    }
     window.addEventListener('keydown', (e) => {
         if (e.key === 'Escape') {
+            if (document.body.classList.contains('navopen')) {
+                setNavOpen(false);
+                return;
+            }
             if (document.body.classList.contains('lit')) {
                 closeLightbox();
                 return;
-            }
-            if (menuEl && menuEl.classList.contains('open')) {
-                closeMenu();
             }
             if (document.body.classList.contains('gridview')) {
                 document.body.classList.remove('gridview');

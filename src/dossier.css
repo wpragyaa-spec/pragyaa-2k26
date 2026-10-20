@@ -1071,13 +1071,83 @@
       }
     }
   
-/* Use the original border.jpg */
-#stage::after {
-  content: "";
-  position: fixed;
-  inset: 0;
-  background: url("/border.png") center / 100% 100% no-repeat;
-  filter: grayscale(1) brightness(1.15) contrast(1.2);
-  pointer-events: none;
-  z-index: 9999;
+#lit .dz2-close-btn {
+  white-space: nowrap;
+  min-height: 36px;
+  transition: border-color 0.2s ease, color 0.2s ease, box-shadow 0.2s ease, transform 0.12s ease;
+}
+
+#lit .dz2-close-btn:active {
+  transform: scale(0.96);
+}
+
+#lit .dz2-util-links {
+  gap: 10px;
+}
+
+#lit .dz2-util-sep {
+  display: none;
+}
+
+#lit .dz2-util-link,
+#lit .dz2-util-btn {
+  min-height: 36px;
+  padding: 8px 14px;
+  border: 1px solid var(--slate-700);
+  background: rgba(0, 255, 136, 0.03);
+  color: var(--white);
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  text-decoration: none;
+  white-space: nowrap;
+  transition: color 0.18s ease, border-color 0.18s ease, background-color 0.18s ease, box-shadow 0.18s ease, transform 0.12s ease;
+}
+
+#lit .dz2-util-link:hover,
+#lit .dz2-util-btn:hover {
+  color: var(--neon);
+  border-color: var(--neon);
+  background: rgba(0, 255, 136, 0.08);
+  box-shadow: 0 0 12px rgba(0, 255, 136, 0.18);
+}
+
+#lit .dz2-util-link:active,
+#lit .dz2-util-btn:active {
+  transform: scale(0.97);
+  background: rgba(0, 255, 136, 0.16);
+}
+
+#lit .dz2-sub-tab:active {
+  transform: translateY(1px);
+}
+
+#lit .dz2-close-btn:focus-visible,
+#lit .dz2-sub-tab:focus-visible,
+#lit .dz2-util-link:focus-visible,
+#lit .dz2-util-btn:focus-visible {
+  outline: none;
+  border-color: var(--neon);
+  box-shadow: 0 0 0 2px var(--black), 0 0 0 4px var(--neon);
+}
+
+@media (max-width: 640px) {
+  #lit .dz2-close-btn {
+    min-height: 44px;
+    padding: 6px 14px;
+  }
+
+  #lit .dz2-util-links {
+    width: 100%;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 8px;
+  }
+
+  #lit .dz2-util-link,
+  #lit .dz2-util-btn {
+    min-height: 44px;
+    width: 100%;
+    justify-content: flex-start;
+    white-space: normal;
+  }
 }

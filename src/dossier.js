@@ -1101,11 +1101,13 @@ export function initDossier() {
             setTimeout(() => toast.classList.remove('show'), 2400);
           }
           const textEl = document.getElementById('litActionBtnText');
-          if (textEl) {
+          if (textEl && !btn.dataset.busy) {
+            btn.dataset.busy = '1';
             const orig = textEl.textContent;
             textEl.textContent = 'ACCESS GRANTED // TRANSMISSION SENT';
             setTimeout(() => {
               textEl.textContent = orig;
+              delete btn.dataset.busy;
             }, 2000);
           }
         }

@@ -38,6 +38,7 @@ function Stage() {
       <nav className="rail left"  id="railL" aria-label="Sections left"></nav>
       <nav className="rail right" id="railR" aria-label="Sections right"></nav>
     </div>
+
     
     <div id="doomHandFront" className="doom-hand-front" aria-hidden="true">
       <div className="dh-crop">

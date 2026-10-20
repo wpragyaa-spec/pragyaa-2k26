@@ -3,7 +3,6 @@ import SvgDefs from './components/SvgDefs';
 import Stage from './components/Stage';
 import Chrome from './components/Chrome';
 import Callout from './components/Callout';
-import Menu from './components/Menu';
 import Dossier from './components/Dossier';
 import Intro from './components/Intro';
 import Cursor from './components/Cursor';
@@ -27,7 +26,6 @@ export default function App() {
       <Stage />
       <Chrome />
       <Callout />
-      <Menu />
       <Dossier />
       <Intro />
       <Cursor />

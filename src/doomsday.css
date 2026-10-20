@@ -3109,10 +3109,9 @@ body.gridview .doom-hand-front {
 }
 /* Wrist Countdown (timeline) */
 .wrist-hud {
-  position: relative !important;
-  top: 690px !important;        /* increase to go lower, negative to go higher */
-  transform: none !important;
-  left: 690px !important;        /* increase to go right, negative to go left */
+  position: absolute;
+  top: 0;
+  left: 0;
   z-index: 5;
   width: var(--wh-w, 300px);
   pointer-events: none;
@@ -3266,20 +3265,6 @@ body.revealed .rail.right .sec{--bx:60px}
   .corner{width:clamp(110px,30vw,170px)}
 }
 
-/* Metallic border — separate from the 3D stage */
-body::after {
-  content: "";
-  position: fixed;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  background-image: url("/border.png");
-  background-position: center;
-  background-size: 100% 100%;
-  background-repeat: no-repeat;
-  pointer-events: none;
-  z-index: 40;
-}
 
 /* Preserve the existing navigation */
 header.chrome {
@@ -3288,4 +3273,23 @@ header.chrome {
 
 header.chrome.menu-open {
   z-index: 90;
+}
+
+#intro.skippable {
+  cursor: pointer;
+}
+
+#intro.skippable .intro-controls span {
+  color: rgba(235, 240, 232, 0.9);
+  animation: introSkipPulse 1.8s ease-in-out infinite;
+}
+
+@keyframes introSkipPulse {
+  50% { opacity: 0.45; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  #intro.skippable .intro-controls span {
+    animation: none;
+  }
 }

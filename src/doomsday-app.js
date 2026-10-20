@@ -1027,7 +1027,13 @@ function createSecButton(item, idx) {
             layoutSphere();
         }, 100);
     }
-    window.addEventListener('resize', () => handleResize(false));
+    let resizingTimer = null;
+    window.addEventListener('resize', () => {
+        document.body.classList.add('resizing');
+        clearTimeout(resizingTimer);
+        resizingTimer = setTimeout(() => document.body.classList.remove('resizing'), 250);
+        handleResize(false);
+    });
     window.addEventListener('orientationchange', () => {
         setTimeout(() => handleResize(true), 120);
     });

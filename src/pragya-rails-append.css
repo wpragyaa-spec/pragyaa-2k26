@@ -881,6 +881,11 @@ body.revealed:not(.deep) .doom-hand-front {
   translate: 0 14%;
 }
 
+body:not(.deep) .wrist-hud {
+  opacity: 0 !important;
+  visibility: hidden;
+}
+
 body.revealed:not(.deep) .cue {
   opacity: 0 !important;
 }

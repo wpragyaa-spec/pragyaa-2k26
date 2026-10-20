@@ -2626,6 +2626,9 @@ function createSecButton(item, idx) {
     // Reveal & Transition Timing
     let countdownAutoTimer = null;
     let tickTimeouts = [];
+    if ('scrollRestoration' in history)
+        history.scrollRestoration = 'manual';
+    window.scrollTo(0, 0);
     const INTRO_SEEN_KEY = 'pragya_intro_seen';
     const introControlsText = document.querySelector('.intro-controls span');
     const introDefaultText = introControlsText ? introControlsText.textContent : '';
@@ -2688,6 +2691,8 @@ function createSecButton(item, idx) {
         }
         document.body.classList.remove('locked');
         document.documentElement.style.overflow = '';
+        window.scrollTo(0, 0);
+        document.body.classList.remove('deep');
         layoutSphere();
         requestAnimationFrame(() => layoutSphere());
         tickTimeouts.push(setTimeout(() => {

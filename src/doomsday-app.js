@@ -34,7 +34,7 @@ export const ITEMS = [
         code: "SEC-02",
         title: "About",
         subtitle: "INC-002 // CODEX LATVERIA",
-        desc: "PRAGYA 2027 is SGGS IE&T's flagship national technical symposium, re-engineered as an incursion battleground where code, steel, and intellect forge the future of the multiverse.",
+        desc: "PRAGYAA 2027 is SGGS IE&T's flagship national technical symposium, re-engineered as an incursion battleground where code, steel, and intellect forge the future of the multiverse.",
         id: "hf_20260922_194350_5546ea3d-6336-42c7-a59f-06165c5802be",
         threat: "CAT-1 // ARCHIVE",
         tip: "The mission behind Pragya",

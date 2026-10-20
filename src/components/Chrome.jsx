@@ -1,4 +1,5 @@
 import { memo } from 'react';
+import Countdown from './Countdown';
 
 function Chrome() {
   return (
@@ -11,10 +12,18 @@ function Chrome() {
   </button>
 
   <section className="hero" id="hero" aria-label="PRAGYA 2027">
-    <p className="hero-eyebrow" style={{'--d': 0}}><span className="hero-dot"></span>SGGS CAMPUS // NANDED</p>
+    <p className="hero-eyebrow" style={{'--d': 0}}>
+      <span className="he-line" aria-hidden="true"></span>
+      <span className="hero-dot"></span>
+      <b>SGGS Campus</b>
+      <span className="he-sep" aria-hidden="true">//</span>
+      <span>Nanded</span>
+      <span className="hero-dot"></span>
+      <span className="he-line" aria-hidden="true"></span>
+    </p>
     <h1 className="hero-title" style={{'--d': 1}}>PRAGYA</h1>
     <p className="hero-year" style={{'--d': 2}}>2027</p>
-    <p className="hero-tag" style={{'--d': 3}}>Technical Festival</p>
+    <Countdown style={{'--d': 3}} />
     <button type="button" className="hero-scroll" id="heroScroll" style={{'--d': 4}}>
       <span>Scroll</span>
       <i aria-hidden="true"></i>
@@ -45,7 +54,6 @@ function Chrome() {
   </button>
 
   <div className="cue chrome">
-    <s></s>
     <span>Drag to rotate the multiverse</span>
   </div>
     </>

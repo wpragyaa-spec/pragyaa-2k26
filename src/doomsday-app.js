@@ -2654,10 +2654,53 @@ function createSecButton(item, idx) {
     // Reveal & Transition Timing
     let countdownAutoTimer = null;
     let tickTimeouts = [];
+    const INTRO_SEEN_KEY = 'pragya_intro_seen';
+    const introControlsText = document.querySelector('.intro-controls span');
+    const introDefaultText = introControlsText ? introControlsText.textContent : '';
+    function hasSeenIntro() {
+        try {
+            return localStorage.getItem(INTRO_SEEN_KEY) === '1';
+        }
+        catch {
+            return false;
+        }
+    }
+    function markIntroSeen() {
+        try {
+            localStorage.setItem(INTRO_SEEN_KEY, '1');
+        }
+        catch {
+        }
+    }
+    function skipIntro(e) {
+        if (revealTriggered || !sceneStarted)
+            return;
+        if (e && e.type === 'keydown' && !['Enter', ' ', 'Escape'].includes(e.key))
+            return;
+        triggerReveal();
+    }
+    function enableIntroSkip() {
+        if (introEl)
+            introEl.classList.add('skippable');
+        if (introControlsText)
+            introControlsText.textContent = 'TAP ANYWHERE TO SKIP';
+        window.addEventListener('pointerdown', skipIntro);
+        window.addEventListener('keydown', skipIntro);
+    }
+    function disableIntroSkip() {
+        if (introEl)
+            introEl.classList.remove('skippable');
+        if (introControlsText)
+            introControlsText.textContent = introDefaultText;
+        window.removeEventListener('pointerdown', skipIntro);
+        window.removeEventListener('keydown', skipIntro);
+    }
     function triggerReveal() {
         if (revealTriggered)
             return;
         revealTriggered = true;
+        disableIntroSkip();
+        markIntroSeen();
         if (countdownAutoTimer)
             clearTimeout(countdownAutoTimer);
         tickTimeouts.forEach(clearTimeout);
@@ -2731,6 +2774,8 @@ function createSecButton(item, idx) {
                 triggerReveal();
             }
         }, 6500);
+        if (hasSeenIntro())
+            enableIntroSkip();
     }
     function resumeAudioContext(context) {
         return context.resume().then(() => {

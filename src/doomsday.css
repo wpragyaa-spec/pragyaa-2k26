@@ -3225,3 +3225,22 @@ header.chrome {
 header.chrome.menu-open {
   z-index: 90;
 }
+
+#intro.skippable {
+  cursor: pointer;
+}
+
+#intro.skippable .intro-controls span {
+  color: rgba(235, 240, 232, 0.9);
+  animation: introSkipPulse 1.8s ease-in-out infinite;
+}
+
+@keyframes introSkipPulse {
+  50% { opacity: 0.45; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  #intro.skippable .intro-controls span {
+    animation: none;
+  }
+}

@@ -3109,10 +3109,9 @@ body.gridview .doom-hand-front {
 }
 /* Wrist Countdown (timeline) */
 .wrist-hud {
-  position: relative !important;
-  top: 690px !important;        /* increase to go lower, negative to go higher */
-  transform: none !important;
-  left: 690px !important;        /* increase to go right, negative to go left */
+  position: absolute;
+  top: 0;
+  left: 0;
   z-index: 5;
   width: var(--wh-w, 300px);
   pointer-events: none;

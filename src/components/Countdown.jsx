@@ -1,16 +1,17 @@
 import { memo, useEffect, useState } from 'react';
 
-const TARGET = new Date('2027-02-26T09:00:00+05:30').getTime();
+const TARGET = new Date('2026-12-29T00:00:00+05:30').getTime();
 
 function remaining() {
   const diff = Math.max(0, TARGET - Date.now());
   return {
     done: diff === 0,
     units: [
-      ['Days', Math.floor(diff / 86400000)],
-      ['Hrs', Math.floor(diff / 3600000) % 24],
-      ['Min', Math.floor(diff / 60000) % 60],
-      ['Sec', Math.floor(diff / 1000) % 60],
+      ['Months', Math.floor(diff / 86400000 / 30)],
+      ['Days', Math.floor(diff / 86400000) % 30],
+      ['Hours', Math.floor(diff / 3600000) % 24],
+      ['Minutes', Math.floor(diff / 60000) % 60],
+      ['Seconds', Math.floor(diff / 1000) % 60],
     ],
   };
 }

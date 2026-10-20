@@ -942,7 +942,7 @@ function createSecButton(item, idx) {
         const vw = window.innerWidth;
         const vh = window.innerHeight;
         const isMobile = vw < 640;
-        const D = isMobile ? (0.86 * vw) : Math.min(0.50 * vh, 0.85 * vw);
+        const D = isMobile ? Math.min(0.86 * vw, 0.52 * vh) : Math.min(0.50 * vh, 0.85 * vw);
         let imgH = D / (HAND.REST_Y - HAND.EYES_Y - 0.04);
         if (!isMobile && imgH < vh * 1.02) {
             imgH = vh * 1.02;
@@ -1839,7 +1839,7 @@ function createSecButton(item, idx) {
     avengersBgProbe.src = '/avengers_bg.jpg';
     // Live Countdown calculation
     // Live Countdown calculation with true Avengers: Doomsday release date
-    const RELEASE = new Date('2026-12-18T00:00:00');
+    const RELEASE = new Date('2026-12-29T00:00:00+05:30');
     let timerInterval = null;
     function updateCountdown() {
         const now = Date.now();

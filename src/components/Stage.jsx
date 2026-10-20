@@ -44,6 +44,20 @@ function Stage() {
         <img className="dh-art" src="/doom/doom-hand.jpg" alt="" />
       </div>
     </div>
+
+    <div id="wristHud" className="wrist-hud" aria-label="Countdown to Avengers: Doomsday">
+  <div className="wh-timer">
+    <div className="wh-seg"><b id="wMonths">00</b><span>Months</span></div>
+    <i className="wh-colon">:</i>
+    <div className="wh-seg"><b id="wDays">00</b><span>Days</span></div>
+    <i className="wh-colon">:</i>
+    <div className="wh-seg"><b id="wHours">00</b><span>Hours</span></div>
+    <i className="wh-colon">:</i>
+    <div className="wh-seg"><b id="wMinutes">00</b><span>Minutes</span></div>
+    <i className="wh-colon">:</i>
+    <div className="wh-seg"><b id="wSeconds">00</b><span>Seconds</span></div>
+  </div>
+</div>
   </div>
 
   

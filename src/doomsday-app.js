@@ -12,7 +12,7 @@ export const HAND = {
     FRONT_FROM: 0.62,
 };
 // Wrist countdown anchor (fractions of the gauntlet image). Tune x/y/w/rot to move it.
-export const WRIST = { x: 0.487, y: 0.86, w: 0.21, rot: 0 };
+export const WRIST = { x: 0.487, y: 0.86, w: 0.24, rot: 0 };
 export const ITEMS = [
     {
         code: "SEC-01",
@@ -980,7 +980,7 @@ function createSecButton(item, idx) {
             dhGlowEl.style.top = `${glowY.toFixed(2)}px`;
         }
         if (wristHudEl) {
-            const whW = Math.max(190, Math.min(WRIST.w * imgW, isMobile ? vw * 0.86 : 290));
+            const whW = Math.max(240, Math.min(WRIST.w * imgW, isMobile ? vw * 0.86 : 340));
             wristHudEl.style.setProperty('--wh-w', `${whW.toFixed(1)}px`);
             wristHudEl.style.setProperty('--wh-x', `${(imgLeft + WRIST.x * imgW).toFixed(1)}px`);
             wristHudEl.style.setProperty('--wh-y', `${Math.min(imgTop + WRIST.y * imgH, vh - 140).toFixed(1)}px`);
@@ -1877,71 +1877,37 @@ function createSecButton(item, idx) {
         timerInterval = setInterval(updateCountdown, 1000);
     }
     function initWristCountdown() {
-        if (!wristHudEl)
-            return;
-        const hud = wristHudEl;
-        const SPEC = {
-            days: { n: 30, r: v => Math.min(v, 90) / 90 },
-            hours: { n: 12, r: v => v / 24 },
-            minutes: { n: 36, r: v => v / 60 },
-            seconds: { n: 36, r: v => v / 60 },
-        };
-        const NS = 'http://www.w3.org/2000/svg';
-        const pad = (n) => String(n).padStart(2, '0');
-        const dials = {};
-        Object.keys(SPEC).forEach(u => {
-            const root = wristHudEl.querySelector(`.wh-dial[data-unit="${u}"]`);
-            if (!root)
-                return;
-            const svg = root.querySelector('svg');
-            const num = root.querySelector('b');
-            const dots = [];
-            for (let i = 0; i < SPEC[u].n; i++) {
-                const a = (i / SPEC[u].n) * 2 * Math.PI;
-                const c = document.createElementNS(NS, 'circle');
-                c.setAttribute('cx', (60 + 48 * Math.cos(a)).toFixed(2));
-                c.setAttribute('cy', (60 + 48 * Math.sin(a)).toFixed(2));
-                c.setAttribute('r', '3.4');
-                svg.appendChild(c);
-                dots.push(c);
-            }
-            dials[u] = { num, dots, active: -1 };
-        });
-        const foot = wristHudEl.querySelector('.wh-foot');
-        function setDial(u, v) {
-            const d = dials[u];
-            if (!d)
-                return;
-            d.num.textContent = pad(v);
-            const act = Math.round(SPEC[u].n * SPEC[u].r(v));
-            if (act !== d.active) {
-                d.dots.forEach((c, i) => {
-                    const on = i < act;
-                    c.classList.toggle('on', on);
-                    c.setAttribute('r', on ? '4.4' : '3.4');
-                });
-                d.active = act;
-            }
-        }
-        function tick() {
-            if (document.hidden)
-                return;
-            const diff = Math.max(0, Math.floor((RELEASE.getTime() - Date.now()) / 1000));
-            const s = diff % 60, tm = Math.floor(diff / 60), m = tm % 60;
-            const th = Math.floor(tm / 60), h = th % 24, d = Math.floor(th / 24);
-            setDial('days', d);
-            setDial('hours', h);
-            setDial('minutes', m);
-            setDial('seconds', s);
-            if (diff === 0 && foot) {
-                hud.classList.add('done');
-                foot.textContent = 'DOOMSDAY IS HERE // NOW IN THEATERS';
-            }
-        }
-        tick();
-        setInterval(tick, 1000);
-        document.addEventListener('visibilitychange', tick);
+    if (!wristHudEl) return;
+    const w = {
+        m: document.getElementById('wMonths'),
+        d: document.getElementById('wDays'),
+        h: document.getElementById('wHours'),
+        n: document.getElementById('wMinutes'),
+        s: document.getElementById('wSeconds'),
+    };
+    const pad = (n) => String(n).padStart(2, '0');
+    function tick() {
+        if (document.hidden) return;
+        const diff = Math.max(0, Math.floor((RELEASE.getTime() - Date.now()) / 1000));
+        const sec = diff % 60;
+        const totalMin = Math.floor(diff / 60);
+        const min = totalMin % 60;
+        const totalHr = Math.floor(totalMin / 60);
+        const hr = totalHr % 24;
+        const totalDays = Math.floor(totalHr / 24);
+        const days = totalDays % 30;
+        const months = Math.floor(totalDays / 30);
+        if (w.m) w.m.textContent = pad(months);
+        if (w.d) w.d.textContent = pad(days);
+        if (w.h) w.h.textContent = pad(hr);
+        if (w.n) w.n.textContent = pad(min);
+        if (w.s) w.s.textContent = pad(sec);
+        wristHudEl.classList.toggle('done', diff === 0);
     }
+    tick();
+    setInterval(tick, 1000);
+    document.addEventListener('visibilitychange', tick);
+}
     initWristCountdown();
     // Web Audio Synthesizer: Preserved Realistic Timer Tick & Glass Break Sound
     let audioCtx = null;

@@ -1257,3 +1257,46 @@ body.revealed .bio.chrome {
     transition: opacity .3s ease;
   }
 }
+
+.sec {
+  --pocket: 0px;
+  --cr: var(--cl);
+}
+
+.sec::after {
+  display: none;
+}
+
+.sec .sec-label {
+  margin: 0;
+  padding: 0 16px;
+  text-shadow: 0 1px 0 #000, 0 0 10px rgba(0, 255, 136, .28);
+}
+
+.rail .sec {
+  background: linear-gradient(180deg, #b9ffe0 0%, #3fae7d 16%, #1c3b30 48%, #183028 66%, #2f9a6a 86%, #a8f5d3 100%);
+}
+
+.rail .sec-in::before {
+  background:
+    radial-gradient(ellipse 70% 120% at 50% 130%, rgba(0, 255, 136, .22), transparent 70%),
+    linear-gradient(115deg, transparent 0 40%, rgba(0, 255, 136, .07) 50%, transparent 60%),
+    linear-gradient(180deg, #16211d 0%, #0e1613 55%, #080c0a 100%);
+}
+
+.rail .sec-in::after {
+  opacity: .9;
+  background:
+    linear-gradient(180deg, transparent, var(--em), transparent) left 7px center / 2px 58% no-repeat,
+    linear-gradient(180deg, transparent, var(--em), transparent) right 7px center / 2px 58% no-repeat,
+    linear-gradient(90deg, transparent, rgba(0, 255, 136, .55), transparent) center bottom 5px / 60% 1px no-repeat;
+}
+
+.rail .sec-wrap {
+  filter: drop-shadow(0 0 6px rgba(0, 255, 136, .22));
+}
+
+.rail .sec-wrap:hover,
+.rail .sec-wrap:focus-within {
+  filter: drop-shadow(0 0 12px rgba(0, 255, 136, .55));
+}

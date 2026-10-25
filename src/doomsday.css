@@ -54,6 +54,10 @@ html {
   -moz-osx-font-smoothing: grayscale;
 }
 
+html {
+  overscroll-behavior: none;
+}
+
 body {
   margin: 0;
   background: radial-gradient(ellipse 100% 100% at 50% 50%, var(--ink) 0%, var(--black) 100%);

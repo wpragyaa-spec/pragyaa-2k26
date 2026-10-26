@@ -3,7 +3,11 @@ import { memo } from 'react';
 function Stage() {
   return (
     <>
-<div id="scrolltrack"></div>
+<div id="scrolltrack">
+      <i className="snap-pt" aria-hidden="true"></i>
+      <i className="snap-pt" aria-hidden="true"></i>
+      <i className="snap-pt" aria-hidden="true"></i>
+    </div>
 
   
   <div id="stage">

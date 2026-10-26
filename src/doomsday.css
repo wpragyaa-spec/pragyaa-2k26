@@ -46,7 +46,7 @@
 
 html {
   background: var(--black);
-  scrollbar-gutter: stable;
+  scrollbar-gutter: auto;
   color: var(--white);
   font-family: var(--body);
   font-weight: 400;
@@ -3296,4 +3296,25 @@ header.chrome.menu-open {
   #intro.skippable .intro-controls span {
     animation: none;
   }
+}
+
+/* Returning visitors: never show the countdown / glass-break intro */
+html.intro-seen #intro {
+  display: none !important;
+}
+
+/* Hide the page scrollbar but keep scrolling working (wheel, touch, keys, trackpad) */
+html,
+body {
+  scrollbar-width: none !important;      /* Firefox */
+  -ms-overflow-style: none !important;   /* old Edge / IE */
+  scrollbar-gutter: auto !important;     /* don't reserve an empty strip on the right */
+}
+
+html::-webkit-scrollbar,
+body::-webkit-scrollbar {
+  width: 0 !important;
+  height: 0 !important;
+  display: none !important;              /* Chrome, Edge, Safari, Opera */
+  background: transparent !important;
 }

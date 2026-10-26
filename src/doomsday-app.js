@@ -1036,6 +1036,31 @@ function createSecButton(item, idx) {
     window.addEventListener('orientationchange', () => {
         setTimeout(() => handleResize(true), 120);
     });
+    // Shared parallax pointer listener
+    let parallaxTicking = false;
+    let targetPx = 0;
+    let targetPy = 0;
+    const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)');
+    if (!prefersReduced.matches) {
+        window.addEventListener('pointermove', (e) => {
+            if (document.body.classList.contains('lit') || document.body.classList.contains('gridview'))
+                return;
+            const vw = window.innerWidth;
+            const vh = window.innerHeight;
+            targetPx = Math.max(-8, Math.min(8, ((e.clientX / vw) - 0.5) * 16));
+            targetPy = Math.max(-8, Math.min(8, ((e.clientY / vh) - 0.5) * 16));
+            if (!parallaxTicking) {
+                parallaxTicking = true;
+                requestAnimationFrame(() => {
+                    if (stageEl) {
+                        stageEl.style.setProperty('--px', `${targetPx.toFixed(2)}px`);
+                        stageEl.style.setProperty('--py', `${targetPy.toFixed(2)}px`);
+                    }
+                    parallaxTicking = false;
+                });
+            }
+        }, { passive: true });
+    }
     // Graceful fallback if hand image is not present
     document.querySelectorAll('.dh-art').forEach((imgEl) => {
         imgEl.addEventListener('error', () => {

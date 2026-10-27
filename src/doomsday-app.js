@@ -496,6 +496,7 @@ export function initDoomsdayPortal() {
     // DOM Elements
     const stageEl = document.getElementById('stage');
     const worldEl = document.getElementById('world');
+    const incursionConeEl = document.getElementById('incursionCone');
     const doomHandEl = document.getElementById('doomHand');
     const doomHandFrontEl = document.getElementById('doomHandFront');
     const dhShadowEl = doomHandEl ? doomHandEl.querySelector('.dh-shadow') : null;
@@ -814,13 +815,19 @@ function createSecButton(item, idx) {
     btn.setAttribute('aria-label', item.title);
 
     const txt = hexNoise(110);
+    const fullItem = (typeof ITEMS !== 'undefined' && ITEMS[idx]) ? ITEMS[idx] : item;
+    const sub = (fullItem && fullItem.subtitle) ? fullItem.subtitle : `SEC-0${idx + 1} // LATVERIA`;
 
     btn.innerHTML = `
       <span class="sec-in">
         <span class="glyph" aria-hidden="true">${txt}</span>
         <span class="glyph lit" aria-hidden="true">${txt}</span>
-        <span class="sec-code"><i></i>${item.code}</span>
-        <span class="sec-label">${item.title}<span class="shift">›</span></span>
+        <span class="sec-meta">
+          <span class="sec-code"><i></i>${item.code}</span>
+          <span class="sec-sub">${sub}</span>
+        </span>
+        <span class="sec-label">${item.title}</span>
+        <span class="sec-arrow" aria-hidden="true"></span>
         <span class="mask"></span>
       </span>`;
 
@@ -849,8 +856,6 @@ function createSecButton(item, idx) {
 }
 
     // Grid view: all 10 in order
-    
-    // Grid: always display the 10 navigation buttons only
     if (gridRowsEl) {
         gridRowsEl.innerHTML = '';
 
@@ -867,26 +872,61 @@ function createSecButton(item, idx) {
     const LEFT = [0, 5, 6, 7, 8];
     const RIGHT = [1, 2, 3, 9, 4];
 
-    if (railL) railL.innerHTML = '';
-    if (railR) railR.innerHTML = '';
+    function buildRailWing(railEl, indices, isRight) {
+        if (!railEl) return;
+        railEl.innerHTML = '';
 
-    LEFT.forEach((navIndex, position) => {
-        const item = NAV_ITEMS[navIndex];
-        if (!item || !railL) return;
+        // HUD Panel Header
+        const header = document.createElement('div');
+        header.className = 'rail-header';
+        header.setAttribute('aria-hidden', 'true');
+        header.innerHTML = isRight ? `
+          <div class="rh-top">
+            <span class="rh-status"><i class="rh-led"></i>ONLINE</span>
+            <span class="rh-tag">// WING-R //</span>
+          </div>
+          <div class="rh-title">WARFARE & DIRECTIVES</div>
+          <div class="rh-bar"><span class="rh-fill"></span></div>
+        ` : `
+          <div class="rh-top">
+            <span class="rh-tag">// WING-L //</span>
+            <span class="rh-status"><i class="rh-led"></i>ACTIVE</span>
+          </div>
+          <div class="rh-title">TIMELINE PROTOCOLS</div>
+          <div class="rh-bar"><span class="rh-fill"></span></div>
+        `;
+        railEl.appendChild(header);
 
-        const el = createSecButton(item, item.cardIdx);
-        el.style.setProperty('--i', String(position));
-        railL.appendChild(el);
-    });
+        // Body container for the 5 buttons
+        const body = document.createElement('div');
+        body.className = 'rail-body';
+        indices.forEach((navIndex, position) => {
+            const item = NAV_ITEMS[navIndex];
+            if (!item) return;
+            const el = createSecButton(item, item.cardIdx);
+            el.style.setProperty('--i', String(position));
+            body.appendChild(el);
+        });
+        railEl.appendChild(body);
 
-    RIGHT.forEach((navIndex, position) => {
-        const item = NAV_ITEMS[navIndex];
-        if (!item || !railR) return;
+        // HUD Panel Footer
+        const footer = document.createElement('div');
+        footer.className = 'rail-footer';
+        footer.setAttribute('aria-hidden', 'true');
+        footer.innerHTML = isRight ? `
+          <div class="rf-metric"><span>ORBIT</span><b>LOCKED</b></div>
+          <div class="rf-divider"></div>
+          <div class="rf-metric"><span>THREAT</span><b>SECURED</b></div>
+        ` : `
+          <div class="rf-metric"><span>LATENCY</span><b>0.14ms</b></div>
+          <div class="rf-divider"></div>
+          <div class="rf-metric"><span>CHRONO</span><b>SYNC 100%</b></div>
+        `;
+        railEl.appendChild(footer);
+    }
 
-        const el = createSecButton(item, item.cardIdx);
-        el.style.setProperty('--i', String(position));
-        railR.appendChild(el);
-    });
+    buildRailWing(railL, LEFT, false);
+    buildRailWing(railR, RIGHT, true);
 
     // live hex-noise refresh behind the labels
     const noiseReduce = window.matchMedia('(prefers-reduced-motion: reduce)');
@@ -955,7 +995,10 @@ function createSecButton(item, idx) {
         const imgLeft = vw / 2 - HAND.PALM.x * imgW;
         const imgTop = 0.08 * vh - HAND.EYES_Y * imgH;
         const palmY = imgTop + HAND.REST_Y * imgH;
-        const sphereCenterY = palmY - D / 2;
+        const palmX = vw / 2;
+        // Elevated slightly so the sphere hovers rested on top of the volumetric light cone
+        const floatGap = isMobile ? D * 0.10 : D * 0.16;
+        const sphereCenterY = palmY - D / 2 - floatGap;
         const D0 = Math.max(1, 2 * R);
         const sphereScale = D / D0;
         const offsetY = sphereCenterY - (vh / 2);
@@ -963,6 +1006,25 @@ function createSecButton(item, idx) {
             worldEl.style.setProperty('--world-x', '0px');
             worldEl.style.setProperty('--world-y', `${offsetY.toFixed(2)}px`);
             worldEl.style.setProperty('--world-scale', `${sphereScale.toFixed(4)}`);
+            worldEl.style.setProperty('--cone-h', `${(palmY - sphereCenterY).toFixed(2)}px`);
+        }
+        if (incursionConeEl) {
+            const coneTop = sphereCenterY + D * 0.16;
+            const coneHeight = Math.max(50, palmY - coneTop);
+            const coneWidth = D * 0.90;
+            const coneLeft = palmX - coneWidth / 2;
+
+            incursionConeEl.style.setProperty('--cone-x', `${coneLeft.toFixed(2)}px`);
+            incursionConeEl.style.setProperty('--cone-y', `${coneTop.toFixed(2)}px`);
+            incursionConeEl.style.setProperty('--cone-w', `${coneWidth.toFixed(2)}px`);
+            incursionConeEl.style.setProperty('--cone-h', `${coneHeight.toFixed(2)}px`);
+            incursionConeEl.style.setProperty('--cone-palm-y', `${palmY.toFixed(2)}px`);
+            incursionConeEl.style.setProperty('--cone-top-y', `${coneTop.toFixed(2)}px`);
+
+            incursionConeEl.style.left = `${coneLeft.toFixed(2)}px`;
+            incursionConeEl.style.top = `${coneTop.toFixed(2)}px`;
+            incursionConeEl.style.width = `${coneWidth.toFixed(2)}px`;
+            incursionConeEl.style.height = `${coneHeight.toFixed(2)}px`;
         }
         if (doomHandEl) {
             doomHandEl.style.width = `${imgW.toFixed(2)}px`;
@@ -1004,6 +1066,38 @@ function createSecButton(item, idx) {
             wristHudEl.style.setProperty('--wh-rot', `${WRIST.rot}deg`);
         }
     }
+
+    let hasEmergenceTriggered = false;
+    function triggerSphereEmergence(force = false) {
+        if (hasEmergenceTriggered && !force) return;
+        hasEmergenceTriggered = true;
+
+        if (incursionConeEl) {
+            incursionConeEl.classList.remove('cone-active');
+            incursionConeEl.classList.remove('cone-emerging');
+            void incursionConeEl.offsetWidth;
+            incursionConeEl.classList.add('cone-emerging');
+        }
+        if (worldEl) {
+            worldEl.classList.remove('sphere-resting');
+            worldEl.classList.remove('sphere-emerging');
+            void worldEl.offsetWidth;
+            worldEl.classList.add('sphere-emerging');
+        }
+
+        setTimeout(() => {
+            if (incursionConeEl) {
+                incursionConeEl.classList.remove('cone-emerging');
+                incursionConeEl.classList.add('cone-active');
+            }
+            if (worldEl) {
+                worldEl.classList.remove('sphere-emerging');
+                worldEl.classList.add('sphere-resting');
+            }
+        }, 2400);
+    }
+    window.__replayEmergence = () => triggerSphereEmergence(true);
+
     function layoutSphere() {
         computeLayoutDimensions();
         cardsData.forEach(c => {
@@ -1112,7 +1206,12 @@ function createSecButton(item, idx) {
             window.scrollTo(0, maxScroll);
         }
         const p = maxScroll > 0 ? Math.min(1, Math.max(0, window.scrollY / maxScroll)) : 0;
-        document.body.classList.toggle('deep', p > 0.06);
+        const isDeep = p > 0.06;
+        const wasDeep = document.body.classList.contains('deep');
+        document.body.classList.toggle('deep', isDeep);
+        if (isDeep && !wasDeep) {
+            triggerSphereEmergence();
+        }
         const sx = tilt + dragY;
         const sy = spin + dragX;
         if (worldEl)

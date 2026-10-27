@@ -170,7 +170,9 @@ body.hover { background-color: var(--body-lift); }
 /* 6. Grid view (#grid): same button, one column, larger ------------------- */
 #grid .rows { grid-template-columns: 1fr; max-width: 520px; gap: 1.1rem; }
 #grid .sec  { --bw: 100%; --bh: 92px; --cut: 20px; }
-#grid .sec-label { font-size: 0.95rem; letter-spacing: 0.2125rem; }
+#grid .sec-meta { display: flex; align-items: center; justify-content: center; gap: 8px; margin-bottom: 2px; }
+#grid .sec-label { font-size: 0.95rem; letter-spacing: 0.2125rem; text-align: center; }
+#grid .sec-desc { display: block; font: 500 9.5px var(--mono); color: #7d90a0; margin-top: 3px; text-align: center; }
 #grid .sec .mask { width: 12.5rem; height: 12rem; margin-top: -6rem; transform: translate3d(-120%, -1rem, 0) rotate3d(0, 0, 1, 45deg); }
 #grid .sec:hover .mask, #grid .sec:focus-visible .mask { transform: translate3d(180%, -6rem, 0) rotate3d(0, 0, 1, 90deg); }
 
@@ -1566,6 +1568,8 @@ body.revealed.deep:not(.lit):not(.gridview) #incursionCone {
 
   /* 2. HUD Panel Headers */
   .rail-header {
+    width: 100% !important;
+    box-sizing: border-box !important;
     display: flex;
     flex-direction: column;
     gap: 4px;
@@ -1653,10 +1657,10 @@ body.revealed.deep:not(.lit):not(.gridview) #incursionCone {
     flex-direction: column;
     justify-content: center;
     align-items: stretch;
-    gap: clamp(10px, 1.6vh, 16px);
+    gap: clamp(8px, 1.4vh, 14px);
     width: 100%;
     flex: 1 1 auto;
-    margin: clamp(8px, 1.5vh, 14px) 0;
+    margin: clamp(6px, 1.2vh, 12px) 0;
   }
 
   /* 4. Individual Button Structure */
@@ -1664,7 +1668,7 @@ body.revealed.deep:not(.lit):not(.gridview) #incursionCone {
   .rail-body .sec-wrap {
     width: 100% !important;
     max-width: 100% !important;
-    height: clamp(58px, 8.5vh, 74px);
+    height: clamp(60px, 8.8vh, 76px);
     margin: 0 !important;
     display: flex !important;
     align-items: center;
@@ -1719,7 +1723,7 @@ body.revealed.deep:not(.lit):not(.gridview) #incursionCone {
   }
   .rail.left .sec-in {
     clip-path: polygon(14px 0, calc(100% - 24px) 0, 100% 24px, 100% calc(100% - 24px), calc(100% - 24px) 100%, 14px 100%, 0 calc(100% - 14px), 0 14px);
-    padding: 8px clamp(50px, 3.8vw, 64px) 8px 20px !important;
+    padding: 8px clamp(46px, 3.6vw, 58px) 8px 18px !important;
     align-items: flex-start !important;
     text-align: left !important;
   }
@@ -1730,7 +1734,7 @@ body.revealed.deep:not(.lit):not(.gridview) #incursionCone {
   }
   .rail.right .sec-in {
     clip-path: polygon(24px 0, calc(100% - 14px) 0, 100% 14px, 100% calc(100% - 14px), calc(100% - 14px) 100%, 24px 100%, 0 calc(100% - 24px), 0 24px);
-    padding: 8px 20px 8px clamp(50px, 3.8vw, 64px) !important;
+    padding: 8px 18px 8px clamp(46px, 3.6vw, 58px) !important;
     align-items: flex-end !important;
     text-align: right !important;
   }
@@ -1740,9 +1744,9 @@ body.revealed.deep:not(.lit):not(.gridview) #incursionCone {
     position: static !important;
     display: flex !important;
     align-items: center !important;
-    gap: 8px !important;
+    gap: 7px !important;
     width: 100% !important;
-    margin: 0 0 3px 0 !important;
+    margin: 0 0 2px 0 !important;
     line-height: 1 !important;
   }
   .rail.left .sec-meta {
@@ -1763,10 +1767,11 @@ body.revealed.deep:not(.lit):not(.gridview) #incursionCone {
     gap: 5px !important;
     margin: 0 !important;
     padding: 0 !important;
-    font: 700 10px var(--mono) !important;
+    font: 700 9.5px var(--mono) !important;
     letter-spacing: 0.14em !important;
     color: var(--emerald) !important;
     text-shadow: 0 0 6px rgba(0, 255, 136, 0.7) !important;
+    white-space: nowrap !important;
   }
 
   .rail .sec-code::after,
@@ -1789,24 +1794,63 @@ body.revealed.deep:not(.lit):not(.gridview) #incursionCone {
   .rail .sec-sub {
     font: 600 8.5px var(--mono) !important;
     letter-spacing: 0.12em !important;
-    color: #8a99a8 !important;
+    color: #b0c2d2 !important;
     text-transform: uppercase !important;
-    opacity: 0.85 !important;
+    opacity: 0.95 !important;
     white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
   }
 
   .rail .sec-label {
     position: static !important;
-    margin: 0 !important;
+    margin: 0 0 2px 0 !important;
     padding: 0 !important;
     display: block !important;
-    font: 800 clamp(0.78rem, 0.98vw, 1.05rem) var(--display) !important;
-    letter-spacing: 0.16em !important;
+    font: 800 clamp(0.76rem, 0.92vw, 0.98rem) var(--display) !important;
+    letter-spacing: 0.14em !important;
     text-transform: uppercase !important;
-    color: #e3e9ee !important;
-    line-height: 1.2 !important;
+    color: #f0f4f8 !important;
+    line-height: 1.15 !important;
     text-shadow: 0 1px 3px rgba(0, 0, 0, 0.95), 0 0 8px rgba(255, 255, 255, 0.15) !important;
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    max-width: 100% !important;
     transition: color 0.3s ease;
+  }
+
+  .rail .sec-desc {
+    display: block !important;
+    position: static !important;
+    margin: 2px 0 0 0 !important;
+    padding: 0 !important;
+    font: 500 clamp(8px, 0.68vw, 9.5px) var(--mono) !important;
+    letter-spacing: 0.06em !important;
+    color: #9cb0c0 !important;
+    line-height: 1.15 !important;
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    max-width: 100% !important;
+    opacity: 0.95 !important;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.8) !important;
+    transition: color 0.25s ease, opacity 0.25s ease;
+  }
+
+  .rail.left .sec-desc {
+    text-align: left !important;
+  }
+
+  .rail.right .sec-desc {
+    text-align: right !important;
+  }
+
+  .rail .sec:hover .sec-desc,
+  .rail .sec:focus-visible .sec-desc {
+    color: #00ff88 !important;
+    opacity: 1 !important;
+    text-shadow: 0 0 8px rgba(0, 255, 136, 0.5) !important;
   }
 
   /* Left Rail Arrow (points right toward sphere) */
@@ -1886,36 +1930,46 @@ body.revealed.deep:not(.lit):not(.gridview) #incursionCone {
 
   /* 6. HUD Panel Footers */
   .rail-footer {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 12px 14px 4px 14px;
-    border-top: 1px solid rgba(138, 153, 168, 0.18);
-    font: 600 9.5px var(--mono);
-    letter-spacing: 0.14em;
-    color: #8a99a8;
-    pointer-events: none;
+    width: 100% !important;
+    box-sizing: border-box !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    padding: 10px 14px 2px 14px !important;
+    border-top: 1px solid rgba(138, 153, 168, 0.18) !important;
+    font: 600 9.5px var(--mono) !important;
+    letter-spacing: 0.14em !important;
+    color: #8a99a8 !important;
+    pointer-events: none !important;
   }
 
   .rf-metric {
-    display: flex;
-    flex-direction: column;
-    gap: 3px;
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 3px !important;
+    min-width: 60px !important;
   }
+  .rail.left .rf-metric:first-child,
+  .rail.right .rf-metric:first-child {
+    align-items: flex-start !important;
+    text-align: left !important;
+  }
+  .rail.left .rf-metric:last-child,
   .rail.right .rf-metric:last-child {
-    text-align: right;
+    align-items: flex-end !important;
+    text-align: right !important;
   }
 
   .rf-metric span {
-    font-size: 8px;
-    letter-spacing: 0.16em;
-    color: #718292;
+    font-size: 8px !important;
+    letter-spacing: 0.16em !important;
+    color: #718292 !important;
   }
 
   .rf-metric b {
-    color: #00ff88;
-    font-weight: 700;
-    text-shadow: 0 0 6px rgba(0, 255, 136, 0.5);
+    color: #00ff88 !important;
+    font-weight: 700 !important;
+    text-shadow: 0 0 6px rgba(0, 255, 136, 0.5) !important;
   }
 
   .rf-divider {

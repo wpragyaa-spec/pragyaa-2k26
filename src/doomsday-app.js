@@ -17,7 +17,7 @@ export const ITEMS = [
     {
         code: "SEC-01",
         title: "Junior Scientist",
-        subtitle: "INC-001 // PROTO-LAB",
+        subtitle: "INC-001 // INNOVATION EXPO",
         desc: "Igniting next-generation intellect before timeline collapse. School students from across the country exhibit quantum models, automated rovers, and breakthrough bio-mechanical proofs under Doctor Doom's scrutiny.",
         id: "hf_20260922_194349_26ffdbfd-ac5e-49e9-a07d-c06d3f7cb4cb",
         threat: "CAT-3 // STABLE",
@@ -33,7 +33,7 @@ export const ITEMS = [
     {
         code: "SEC-02",
         title: "About",
-        subtitle: "INC-002 // CODEX LATVERIA",
+        subtitle: "INC-002 // SYMPOSIUM CODEX",
         desc: "PRAGYAA 2027 is SGGS IE&T's flagship national technical symposium, re-engineered as an incursion battleground where code, steel, and intellect forge the future of the multiverse.",
         id: "hf_20260922_194350_5546ea3d-6336-42c7-a59f-06165c5802be",
         threat: "CAT-1 // ARCHIVE",
@@ -49,7 +49,7 @@ export const ITEMS = [
     {
         code: "SEC-03",
         title: "Events",
-        subtitle: "INC-003 // THE ARENA",
+        subtitle: "INC-003 // WARFARE & ARENAS",
         desc: "Combat zones across software, mechanical warfare, avionics, and quantum cryptography. High-stakes competition with massive bounty pools and national glory.",
         id: "hf_20260922_194349_b4533691-cb49-41d4-b56c-51f0fdcbe250",
         threat: "CAT-5 // HOSTILE",
@@ -66,7 +66,7 @@ export const ITEMS = [
     {
         code: "SEC-04",
         title: "Team",
-        subtitle: "INC-004 // INNER SANCTUM",
+        subtitle: "INC-004 // CORE DIRECTORATE",
         desc: "The high council executing the festival protocols. Engineers, coordinators, and directors maintaining timeline integrity across all sectors.",
         id: "hf_20260922_194349_e588abd3-1bfa-4918-894f-05632cc51ccc",
         threat: "CAT-2 // COMMAND",
@@ -98,7 +98,7 @@ export const ITEMS = [
     {
         code: "SEC-06",
         title: "Gallery",
-        subtitle: "INC-006 // VISUAL SURVEILLANCE",
+        subtitle: "INC-006 // VISUAL ARCHIVES",
         desc: "Declassified photographic archives and footage from previous editions of PRAGYA and live feeds from the current staging zones.",
         id: "hf_20260922_194349_04e89718-4214-4aff-bac5-490462bbfe2f",
         threat: "CAT-1 // INTEL",
@@ -114,7 +114,7 @@ export const ITEMS = [
     {
         code: "SEC-07",
         title: "eVenture",
-        subtitle: "INC-007 // VENTURE CATALYST",
+        subtitle: "INC-007 // STARTUP CATALYST",
         desc: "The entrepreneurial epicenter connecting student startups, visionary founders, seed investors, and venture capitalists.",
         id: "hf_20260922_194417_2c031e22-2fad-4c81-a544-83cd6bba1c33",
         threat: "CAT-3 // COMMERCIAL",
@@ -130,7 +130,7 @@ export const ITEMS = [
     {
         code: "SEC-08",
         title: "FAQ",
-        subtitle: "INC-008 // QUERY INTERFACE",
+        subtitle: "INC-008 // INTEL & GUIDELINES",
         desc: "Operational briefs, registration guidelines, accommodation protocols, and rules of engagement for all participants.",
         id: "hf_20260922_194349_a39c3226-7848-4b15-b840-98ad8aec467b",
         threat: "CAT-1 // GUIDELINES",
@@ -146,7 +146,7 @@ export const ITEMS = [
     {
         code: "SEC-09",
         title: "Sponsors",
-        subtitle: "INC-009 // SYNDICATE ALLIANCE",
+        subtitle: "INC-009 // SYNDICATE ALLIES",
         desc: "Industry leaders, cloud computing titans, and global hardware conglomerates fueling the PRAGYA 2027 ecosystem.",
         id: "hf_20260922_194417_555e4d90-f35f-4a1a-8c75-def1e8b71988",
         threat: "CAT-2 // ALLIED",
@@ -162,7 +162,7 @@ export const ITEMS = [
     {
         code: "SEC-10",
         title: "Guests",
-        subtitle: "INC-010 // DIGNITARIES",
+        subtitle: "INC-010 // KEYNOTE DIGNITARIES",
         desc: "Distinguished scientists, defense technologists, aerospace engineers, and visionaries addressing the convocation.",
         id: "hf_20260922_194417_e525a243-03c8-454b-83b4-60f541baf70a",
         threat: "CAT-1 // DIGNITARY",
@@ -446,16 +446,16 @@ export const ITEMS = [
 
 // Navigation buttons ONLY — independent of sphere cards
 const NAV_ITEMS = [
-    { code: "SEC-01", title: "Junior Scientist", cardIdx: 0 },
-    { code: "SEC-02", title: "About",            cardIdx: 1 },
-    { code: "SEC-03", title: "Events",           cardIdx: 2 },
-    { code: "SEC-04", title: "Team",             cardIdx: 3 },
-    { code: "SEC-05", title: "Schedule",         cardIdx: 4 },
-    { code: "SEC-06", title: "Gallery",          cardIdx: 5 },
-    { code: "SEC-07", title: "eVenture",         cardIdx: 6 },
-    { code: "SEC-08", title: "FAQ",              cardIdx: 7 },
-    { code: "SEC-09", title: "Sponsors",         cardIdx: 8 },
-    { code: "SEC-10", title: "Guests",           cardIdx: 9 }
+    { code: "SEC-01", title: "Junior Scientist", badge: "INNOVATION EXPO",      desc: "Robo-Junior • Quantum Sparks • Gliders", cardIdx: 0 },
+    { code: "SEC-02", title: "About",            badge: "SYMPOSIUM CODEX",      desc: "40+ Yrs Legacy • SGGSIE&T Nanded",      cardIdx: 1 },
+    { code: "SEC-03", title: "Events",           badge: "WARFARE & ARENAS",     desc: "RoboWars • 36h Hack • Drone FPV",       cardIdx: 2 },
+    { code: "SEC-04", title: "Team",             badge: "CORE DIRECTORATE",     desc: "Convenors • Tech Leads • Operations",   cardIdx: 3 },
+    { code: "SEC-05", title: "Schedule",         badge: "TEMPORAL MATRIX",     desc: "Day 01–03 Keynotes & Final Battles",   cardIdx: 4 },
+    { code: "SEC-06", title: "Gallery",          badge: "VISUAL ARCHIVES",      desc: "Arena Action • Stills • Aerial Trails", cardIdx: 5 },
+    { code: "SEC-07", title: "eVenture",         badge: "STARTUP CATALYST",     desc: "Pitch Arena • ₹25L Seed • IPL Auction", cardIdx: 6 },
+    { code: "SEC-08", title: "FAQ",              badge: "INTEL & GUIDELINES",   desc: "Eligibility • Lodging • Rulebooks",   cardIdx: 7 },
+    { code: "SEC-09", title: "Sponsors",         badge: "SYNDICATE ALLIES",     desc: "Title Partners • Hardware • Cloud",     cardIdx: 8 },
+    { code: "SEC-10", title: "Guests",           badge: "KEYNOTE DIGNITARIES",  desc: "DRDO Technologists • AI Leaders",    cardIdx: 9 }
 ];
 
 export function initDoomsdayPortal() {
@@ -812,11 +812,12 @@ function createSecButton(item, idx) {
     btn.type = 'button';
     btn.className = 'sec';
     btn.dataset.cardIdx = String(idx);
-    btn.setAttribute('aria-label', item.title);
 
     const txt = hexNoise(110);
     const fullItem = (typeof ITEMS !== 'undefined' && ITEMS[idx]) ? ITEMS[idx] : item;
-    const sub = (fullItem && fullItem.subtitle) ? fullItem.subtitle : `SEC-0${idx + 1} // LATVERIA`;
+    const badge = item.badge || (fullItem && fullItem.subtitle ? fullItem.subtitle.split('//')[1]?.trim() : `SEC-0${idx + 1}`);
+    const desc = item.desc || (fullItem && fullItem.blurb ? fullItem.blurb : '');
+    btn.setAttribute('aria-label', `${item.title} — ${badge}: ${desc}`);
 
     btn.innerHTML = `
       <span class="sec-in">
@@ -824,9 +825,10 @@ function createSecButton(item, idx) {
         <span class="glyph lit" aria-hidden="true">${txt}</span>
         <span class="sec-meta">
           <span class="sec-code"><i></i>${item.code}</span>
-          <span class="sec-sub">${sub}</span>
+          <span class="sec-sub">${badge}</span>
         </span>
         <span class="sec-label">${item.title}</span>
+        <span class="sec-desc">${desc}</span>
         <span class="sec-arrow" aria-hidden="true"></span>
         <span class="mask"></span>
       </span>`;

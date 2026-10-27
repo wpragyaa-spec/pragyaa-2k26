@@ -15,7 +15,9 @@ export default function App() {
   useEffect(() => {
     if (booted) return;
     booted = true;
-    document.body.classList.add('locked');
+    if (!document.documentElement.classList.contains('intro-seen')) {
+      document.body.classList.add('locked');
+    }
     initDossier();
     initDoomsdayPortal();
   }, []);

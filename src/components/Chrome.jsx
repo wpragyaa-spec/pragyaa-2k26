@@ -49,9 +49,10 @@ function Chrome() {
 
   <div className="colophon chrome">Pragya 2027</div>
 
-  <button id="gridBtn" className="gridbtn" aria-label="Toggle grid view">
-    <b></b><b></b><b></b><b></b>
-  </button>
+  <div className="stage-hint" aria-hidden="true">
+    <span>Swipe up for sections</span>
+    <i></i>
+  </div>
 
   <div className="cue chrome">
     <span>Drag to rotate the multiverse</span>

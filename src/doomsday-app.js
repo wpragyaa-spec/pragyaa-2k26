@@ -1181,6 +1181,80 @@ function createSecButton(item, idx) {
     const pitchLimit = 32;
     let focusedIndex = -1;
     let isDragging = false;
+    let lastStage3 = false;
+    // Small screens use a stepped stage model (not native scroll):
+    // 0 = PRAGYA hero, 1 = Doom hand + sphere, 2 = section buttons.
+    let stageIdx = 0;
+    let stageP = 0;
+    let stageLockUntil = 0;
+    function goStage(n) {
+        stageIdx = Math.max(0, Math.min(2, n));
+        stageLockUntil = performance.now() + 650;
+    }
+    function stepStage(dir) {
+        const now = performance.now();
+        if (now < stageLockUntil) {
+            stageLockUntil = Math.max(stageLockUntil, now + 180);
+            return;
+        }
+        const n = Math.max(0, Math.min(2, stageIdx + dir));
+        if (n !== stageIdx)
+            goStage(n);
+    }
+    function stageGesturesActive() {
+        const b = document.body;
+        return isCompactNav() && b.classList.contains('revealed') && !b.classList.contains('locked')
+            && !b.classList.contains('lit') && !b.classList.contains('gridview') && !b.classList.contains('navopen');
+    }
+    {
+        let gY = null;
+        let gX = null;
+        let gDone = false;
+        window.addEventListener('touchstart', (e) => {
+            if (!stageGesturesActive() || e.touches.length !== 1) {
+                gY = null;
+                return;
+            }
+            gY = e.touches[0].clientY;
+            gX = e.touches[0].clientX;
+            gDone = false;
+        }, { passive: true });
+        window.addEventListener('touchmove', (e) => {
+            if (gY === null || gDone)
+                return;
+            const dy = e.touches[0].clientY - gY;
+            const dx = e.touches[0].clientX - gX;
+            if (Math.abs(dy) > 38 && Math.abs(dy) > Math.abs(dx) * 1.2) {
+                gDone = true;
+                stepStage(dy < 0 ? 1 : -1);
+                if (e.cancelable)
+                    e.preventDefault();
+            }
+        }, { passive: false });
+        window.addEventListener('touchend', () => { gY = null; }, { passive: true });
+        window.addEventListener('wheel', (e) => {
+            if (!stageGesturesActive() || Math.abs(e.deltaY) < 8)
+                return;
+            stepStage(e.deltaY > 0 ? 1 : -1);
+            if (e.cancelable)
+                e.preventDefault();
+        }, { passive: false });
+        window.addEventListener('keydown', (e) => {
+            if (!stageGesturesActive())
+                return;
+            if (['ArrowDown', 'PageDown', ' '].includes(e.key)) {
+                stepStage(1);
+                e.preventDefault();
+            }
+            else if (['ArrowUp', 'PageUp'].includes(e.key)) {
+                stepStage(-1);
+                e.preventDefault();
+            }
+        });
+    }
+    function isCompactNav() {
+        return window.matchMedia('(max-width: 900px)').matches;
+    }
     function renderFrame() {
         const isLit = document.body.classList.contains('lit');
         if (!isDragging && !isLit) {
@@ -1201,16 +1275,44 @@ function createSecButton(item, idx) {
                 velY = 0;
             }
         }
-        const maxScroll = window.innerHeight * 0.16;
-        if (window.scrollY > maxScroll) {
-            window.scrollTo(0, maxScroll);
+        // Desktop: 0 = hero, 1 = sphere + rails (native scroll).
+        // Phones/tablets (<= 900px): stepped stages, see stageIdx above.
+        const stepPx = window.innerHeight * 0.16;
+        const compactNav = isCompactNav();
+        let p;
+        if (compactNav) {
+            if (window.scrollY !== 0)
+                window.scrollTo(0, 0);
+            stageP += ((stageIdx >= 1 ? 1 : 0) - stageP) * 0.14;
+            if (Math.abs(stageP - (stageIdx >= 1 ? 1 : 0)) < 0.002)
+                stageP = stageIdx >= 1 ? 1 : 0;
+            p = stageP;
+            const isDeep = stageIdx >= 1;
+            const wasDeep = document.body.classList.contains('deep');
+            document.body.classList.toggle('deep', isDeep);
+            if (isDeep && !wasDeep) {
+                triggerSphereEmergence();
+            }
+            const s3 = stageIdx === 2;
+            if (s3 !== lastStage3) {
+                lastStage3 = s3;
+                setNavOpen(s3, true);
+            }
         }
-        const p = maxScroll > 0 ? Math.min(1, Math.max(0, window.scrollY / maxScroll)) : 0;
-        const isDeep = p > 0.06;
-        const wasDeep = document.body.classList.contains('deep');
-        document.body.classList.toggle('deep', isDeep);
-        if (isDeep && !wasDeep) {
-            triggerSphereEmergence();
+        else {
+            if (window.scrollY > stepPx) {
+                window.scrollTo(0, stepPx);
+            }
+            p = stepPx > 0 ? Math.min(1, Math.max(0, window.scrollY / stepPx)) : 0;
+            const isDeep = p > 0.06;
+            const wasDeep = document.body.classList.contains('deep');
+            document.body.classList.toggle('deep', isDeep);
+            if (isDeep && !wasDeep) {
+                triggerSphereEmergence();
+            }
+            lastStage3 = false;
+            stageIdx = p > 0.06 ? 1 : 0;
+            stageP = p;
         }
         const sx = tilt + dragY;
         const sy = spin + dragX;
@@ -1609,6 +1711,10 @@ function createSecButton(item, idx) {
     const heroScrollBtn = document.getElementById('heroScroll');
     if (heroScrollBtn) {
         heroScrollBtn.addEventListener('click', () => {
+            if (isCompactNav()) {
+                goStage(1);
+                return;
+            }
             window.scrollTo({ top: window.innerHeight * 0.16, behavior: 'smooth' });
         });
     }
@@ -1620,8 +1726,12 @@ function createSecButton(item, idx) {
     }
     const navBtn = document.getElementById('navBtn');
     const railsM = document.querySelector('.rails-m');
-    function setNavOpen(open) {
+    function setNavOpen(open, fromScroll = false) {
         document.body.classList.toggle('navopen', open);
+        // Closing the buttons panel on small screens also steps the page back to the hand stage.
+        if (!open && !fromScroll && isCompactNav() && stageIdx === 2) {
+            goStage(1);
+        }
         if (navBtn) {
             navBtn.setAttribute('aria-expanded', String(open));
             navBtn.setAttribute('aria-label', open ? 'Close sections' : 'Open sections');
@@ -1631,7 +1741,13 @@ function createSecButton(item, idx) {
     }
     if (navBtn) {
         navBtn.addEventListener('click', () => {
-            setNavOpen(!document.body.classList.contains('navopen'));
+            const open = document.body.classList.contains('navopen');
+            if (isCompactNav()) {
+                // On small screens the panel is driven by scroll position (stage 3).
+                goStage(open ? 1 : 2);
+                return;
+            }
+            setNavOpen(!open);
         });
     }
     if (railsM) {
@@ -1639,6 +1755,28 @@ function createSecButton(item, idx) {
             if (e.target.closest('.sec'))
                 setNavOpen(false);
         });
+    }
+    if (railsM) {
+        let navTouchY = null;
+        let navTouchTop = 0;
+        railsM.addEventListener('touchstart', (e) => {
+            navTouchY = e.touches[0].clientY;
+            navTouchTop = railsM.scrollTop;
+        }, { passive: true });
+        railsM.addEventListener('touchend', (e) => {
+            if (navTouchY === null)
+                return;
+            const dy = e.changedTouches[0].clientY - navTouchY;
+            navTouchY = null;
+            if (isCompactNav() && document.body.classList.contains('navopen') && navTouchTop <= 0 && dy > 70) {
+                setNavOpen(false);
+            }
+        }, { passive: true });
+        railsM.addEventListener('wheel', (e) => {
+            if (isCompactNav() && document.body.classList.contains('navopen') && railsM.scrollTop <= 0 && e.deltaY < -20) {
+                setNavOpen(false);
+            }
+        }, { passive: true });
     }
     if (stageEl) {
         stageEl.addEventListener('click', (e) => {
@@ -2811,10 +2949,29 @@ function createSecButton(item, idx) {
             }
         }, 1750));
     }
-    function startCountdownScene() {
+    function startCountdownScene(force = false) {
         if (sceneStarted)
             return;
         sceneStarted = true;
+        // Returning visitor: skip countdown + glass break, reveal the site instantly.
+        if (!force && hasSeenIntro()) {
+            revealTriggered = true;
+            if (introEl) {
+                introEl.classList.add('gone');
+                introEl.style.display = 'none';
+            }
+            document.body.classList.remove('locked', 'deep');
+            document.documentElement.style.overflow = '';
+            window.scrollTo(0, 0);
+            layoutSphere();
+            requestAnimationFrame(() => {
+                layoutSphere();
+                document.body.classList.add('revealed');
+            });
+            return;
+        }
+        // First visit: remember it right away so a refresh mid-intro counts as seen.
+        markIntroSeen();
         if (smokeCanvas) {
             if (smokeCtrl)
                 smokeCtrl.destroy();
@@ -2850,7 +3007,7 @@ function createSecButton(item, idx) {
                 triggerReveal();
             }
         }, 6500);
-        if (hasSeenIntro())
+        if (force)
             enableIntroSkip();
     }
     function resumeAudioContext(context) {
@@ -2894,6 +3051,7 @@ function createSecButton(item, idx) {
             clearTimeout(countdownAutoTimer);
         tickTimeouts.forEach(clearTimeout);
         tickTimeouts = [];
+        document.documentElement.classList.remove('intro-seen');
         document.body.classList.remove('revealed');
         document.body.classList.add('locked');
         document.documentElement.style.overflow = 'hidden';
@@ -2911,6 +3069,6 @@ function createSecButton(item, idx) {
             if (gCtx)
                 gCtx.clearRect(0, 0, gCanvas.width, gCanvas.height);
         }
-        startCountdownScene();
+        startCountdownScene(true);
     };
 }

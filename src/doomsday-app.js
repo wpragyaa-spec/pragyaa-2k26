@@ -1092,19 +1092,22 @@ function createSecButton(item, idx) {
     let stageIdx = 0;
     let stageP = 0;
     let stageLockUntil = 0;
+    let stageLastDir = 0;
     function maxStage() {
         return isCompactNav() ? 2 : 1;
     }
     function goStage(n) {
         stageIdx = Math.max(0, Math.min(maxStage(), n));
-        stageLockUntil = performance.now() + 650;
+        stageLockUntil = performance.now() + 450;
     }
     function stepStage(dir) {
         const now = performance.now();
         if (now < stageLockUntil) {
-            stageLockUntil = Math.max(stageLockUntil, now + 180);
+            if (dir === stageLastDir)
+                stageLockUntil = Math.max(stageLockUntil, now + 120);
             return;
         }
+        stageLastDir = dir;
         const n = Math.max(0, Math.min(maxStage(), stageIdx + dir));
         if (n !== stageIdx)
             goStage(n);
@@ -1118,6 +1121,8 @@ function createSecButton(item, idx) {
         let gY = null;
         let gX = null;
         let gDone = false;
+        let wheelAcc = 0;
+        let wheelAt = 0;
         window.addEventListener('touchstart', (e) => {
             if (!stageGesturesActive() || e.touches.length !== 1) {
                 gY = null;
@@ -1141,11 +1146,20 @@ function createSecButton(item, idx) {
         }, { passive: false });
         window.addEventListener('touchend', () => { gY = null; }, { passive: true });
         window.addEventListener('wheel', (e) => {
-            if (!stageGesturesActive() || Math.abs(e.deltaY) < 8)
+            if (!stageGesturesActive() || !e.deltaY)
                 return;
-            stepStage(e.deltaY > 0 ? 1 : -1);
             if (e.cancelable)
                 e.preventDefault();
+            const now = performance.now();
+            const dy = e.deltaMode === 1 ? e.deltaY * 16 : e.deltaY;
+            if (now - wheelAt > 220 || Math.sign(dy) !== Math.sign(wheelAcc))
+                wheelAcc = 0;
+            wheelAt = now;
+            wheelAcc += dy;
+            if (Math.abs(wheelAcc) >= 20) {
+                stepStage(wheelAcc > 0 ? 1 : -1);
+                wheelAcc = 0;
+            }
         }, { passive: false });
         window.addEventListener('keydown', (e) => {
             if (!stageGesturesActive())
@@ -1190,7 +1204,7 @@ function createSecButton(item, idx) {
             stageIdx = maxStage();
         if (window.scrollY !== 0)
             window.scrollTo(0, 0);
-        stageP += ((stageIdx >= 1 ? 1 : 0) - stageP) * 0.14;
+        stageP += ((stageIdx >= 1 ? 1 : 0) - stageP) * 0.18;
         if (Math.abs(stageP - (stageIdx >= 1 ? 1 : 0)) < 0.002)
             stageP = stageIdx >= 1 ? 1 : 0;
         const p = stageP;

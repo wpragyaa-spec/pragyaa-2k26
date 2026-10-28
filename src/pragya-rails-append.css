@@ -1364,7 +1364,6 @@ body.revealed .bio.chrome {
     height: 100dvh;
     overscroll-behavior: none;
   }
-
   #scrolltrack { display: none; }
 
   /* hint shown only on the hand stage */

@@ -1,4 +1,5 @@
 import { initBilateralSmokeSimulation } from './doomsday-smoke';
+import { applyRegistrationTarget, handleRegisterClick } from './registration/eventMap';
 const CDN = "https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/";
 export const HAND = {
     IMG_AR: 16 / 9, // 1.7778 for broad widescreen desktop coverage
@@ -1452,9 +1453,16 @@ function createSecButton(item, idx) {
         animateThreatBar(targetThreat);
         if (litActionBtnText)
             litActionBtnText.textContent = sub.actionText || 'REGISTER / DEPLOY';
+        // Registrable events: point the button at the real registration page.
+        applyRegistrationTarget(sub.name);
     }
     if (litActionBtn) {
-        litActionBtn.addEventListener('click', () => {
+        litActionBtn.addEventListener('click', (e) => {
+            // Registrable event: open the real registration page in a new tab (no fake success).
+            if (handleRegisterClick(litActionBtn)) {
+                e.stopPropagation();
+                return;
+            }
             if (dzToast) {
                 dzToast.classList.add('show');
                 setTimeout(() => dzToast.classList.remove('show'), 2400);

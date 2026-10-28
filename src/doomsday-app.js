@@ -1093,29 +1093,37 @@ function createSecButton(item, idx) {
     let stageIdx = 0;
     let stageP = 0;
     let stageLockUntil = 0;
+    let stageLastDir = 0;
+    function maxStage() {
+        return isCompactNav() ? 2 : 1;
+    }
     function goStage(n) {
-        stageIdx = Math.max(0, Math.min(2, n));
-        stageLockUntil = performance.now() + 650;
+        stageIdx = Math.max(0, Math.min(maxStage(), n));
+        stageLockUntil = performance.now() + 450;
     }
     function stepStage(dir) {
         const now = performance.now();
         if (now < stageLockUntil) {
-            stageLockUntil = Math.max(stageLockUntil, now + 180);
+            if (dir === stageLastDir)
+                stageLockUntil = Math.max(stageLockUntil, now + 120);
             return;
         }
-        const n = Math.max(0, Math.min(2, stageIdx + dir));
+        stageLastDir = dir;
+        const n = Math.max(0, Math.min(maxStage(), stageIdx + dir));
         if (n !== stageIdx)
             goStage(n);
     }
     function stageGesturesActive() {
         const b = document.body;
-        return isCompactNav() && b.classList.contains('revealed') && !b.classList.contains('locked')
+        return b.classList.contains('revealed') && !b.classList.contains('locked')
             && !b.classList.contains('lit') && !b.classList.contains('gridview') && !b.classList.contains('navopen');
     }
     {
         let gY = null;
         let gX = null;
         let gDone = false;
+        let wheelAcc = 0;
+        let wheelAt = 0;
         window.addEventListener('touchstart', (e) => {
             if (!stageGesturesActive() || e.touches.length !== 1) {
                 gY = null;
@@ -1139,11 +1147,20 @@ function createSecButton(item, idx) {
         }, { passive: false });
         window.addEventListener('touchend', () => { gY = null; }, { passive: true });
         window.addEventListener('wheel', (e) => {
-            if (!stageGesturesActive() || Math.abs(e.deltaY) < 8)
+            if (!stageGesturesActive() || !e.deltaY)
                 return;
-            stepStage(e.deltaY > 0 ? 1 : -1);
             if (e.cancelable)
                 e.preventDefault();
+            const now = performance.now();
+            const dy = e.deltaMode === 1 ? e.deltaY * 16 : e.deltaY;
+            if (now - wheelAt > 220 || Math.sign(dy) !== Math.sign(wheelAcc))
+                wheelAcc = 0;
+            wheelAt = now;
+            wheelAcc += dy;
+            if (Math.abs(wheelAcc) >= 20) {
+                stepStage(wheelAcc > 0 ? 1 : -1);
+                wheelAcc = 0;
+            }
         }, { passive: false });
         window.addEventListener('keydown', (e) => {
             if (!stageGesturesActive())
@@ -1183,17 +1200,17 @@ function createSecButton(item, idx) {
         }
         // Desktop: 0 = hero, 1 = sphere + rails (native scroll).
         // Phones/tablets (<= 900px): stepped stages, see stageIdx above.
-        const stepPx = window.innerHeight * 0.16;
         const compactNav = isCompactNav();
-        let p;
+        if (stageIdx > maxStage())
+            stageIdx = maxStage();
+        if (window.scrollY !== 0)
+            window.scrollTo(0, 0);
+        stageP += ((stageIdx >= 1 ? 1 : 0) - stageP) * 0.18;
+        if (Math.abs(stageP - (stageIdx >= 1 ? 1 : 0)) < 0.002)
+            stageP = stageIdx >= 1 ? 1 : 0;
+        const p = stageP;
+        document.body.classList.toggle('deep', stageIdx >= 1);
         if (compactNav) {
-            if (window.scrollY !== 0)
-                window.scrollTo(0, 0);
-            stageP += ((stageIdx >= 1 ? 1 : 0) - stageP) * 0.14;
-            if (Math.abs(stageP - (stageIdx >= 1 ? 1 : 0)) < 0.002)
-                stageP = stageIdx >= 1 ? 1 : 0;
-            p = stageP;
-            document.body.classList.toggle('deep', stageIdx >= 1);
             const s3 = stageIdx === 2;
             if (s3 !== lastStage3) {
                 lastStage3 = s3;
@@ -1201,14 +1218,7 @@ function createSecButton(item, idx) {
             }
         }
         else {
-            if (window.scrollY > stepPx) {
-                window.scrollTo(0, stepPx);
-            }
-            p = stepPx > 0 ? Math.min(1, Math.max(0, window.scrollY / stepPx)) : 0;
-            document.body.classList.toggle('deep', p > 0.06);
             lastStage3 = false;
-            stageIdx = p > 0.06 ? 1 : 0;
-            stageP = p;
         }
         const sx = tilt + dragY;
         const sy = spin + dragX;
@@ -1614,11 +1624,7 @@ function createSecButton(item, idx) {
     const heroScrollBtn = document.getElementById('heroScroll');
     if (heroScrollBtn) {
         heroScrollBtn.addEventListener('click', () => {
-            if (isCompactNav()) {
-                goStage(1);
-                return;
-            }
-            window.scrollTo({ top: window.innerHeight * 0.16, behavior: 'smooth' });
+            goStage(1);
         });
     }
     if (gridBtn) {
@@ -2832,6 +2838,8 @@ function createSecButton(item, idx) {
         document.body.classList.remove('locked');
         document.documentElement.style.overflow = '';
         window.scrollTo(0, 0);
+        stageIdx = 0;
+        stageP = 0;
         document.body.classList.remove('deep');
         layoutSphere();
         requestAnimationFrame(() => layoutSphere());

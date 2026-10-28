@@ -29,9 +29,11 @@ function Stage() {
       <div className="dh-glow"></div>
     </div>
 
-    <div id="world">
-      <div id="orb"></div>
-      <h1 id="headline"><span className="inner"><span style={{'--i': 0}}>Every</span> <span style={{'--i': 1}}>Timeline</span> <span style={{'--i': 2}}>Bows</span> <span style={{'--i': 3}}>to</span> <span style={{'--i': 4}}>Doom</span></span></h1>
+    <div className="world-fade">
+      <div id="world">
+        <div id="orb"></div>
+        <h1 id="headline"><span className="inner"><span style={{'--i': 0}}>Every</span> <span style={{'--i': 1}}>Timeline</span> <span style={{'--i': 2}}>Bows</span> <span style={{'--i': 3}}>to</span> <span style={{'--i': 4}}>Doom</span></span></h1>
+      </div>
     </div>
     <div className="corner tl" aria-hidden="true"><svg><use href="#hud"/></svg></div>
     <div className="corner tr" aria-hidden="true"><svg><use href="#hud"/></svg></div>

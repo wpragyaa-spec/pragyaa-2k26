@@ -48,7 +48,6 @@ function Chrome() {
   </div>
 
   <div className="colophon chrome">Pragya 2027</div>
-
   <div className="stage-hint" aria-hidden="true">
     <span>Swipe up for sections</span>
     <i></i>

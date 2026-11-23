@@ -1187,29 +1187,15 @@ function createSecButton(item, idx) {
     let lastStage3 = false;
     // Small screens use a stepped stage model (not native scroll):
     // 0 = PRAGYA hero, 1 = Doom hand + sphere, 2 = section buttons.
-    // The green hero (stage 0) is shown only once: after the visitor scrolls
-    // past it, it doesn't come back for the rest of the browser session.
-    let heroDone = false;
-    try { heroDone = sessionStorage.getItem('pragya_hero_done') === '1'; } catch (e) { /* storage unavailable */ }
-    function markHeroDone() {
-        if (heroDone) return;
-        heroDone = true;
-        try { sessionStorage.setItem('pragya_hero_done', '1'); } catch (e) { /* storage unavailable */ }
-    }
-    function minStage() {
-        return heroDone ? 1 : 0;
-    }
-    let stageIdx = heroDone ? 1 : 0;
-    let stageP = heroDone ? 1 : 0;
+    let stageIdx = 0;
+    let stageP = 0;
     let stageLockUntil = 0;
     let stageLastDir = 0;
     function maxStage() {
         return isCompactNav() ? 2 : 1;
     }
     function goStage(n) {
-        stageIdx = Math.max(minStage(), Math.min(maxStage(), n));
-        if (stageIdx >= 1)
-            markHeroDone();
+        stageIdx = Math.max(0, Math.min(maxStage(), n));
         stageLockUntil = performance.now() + 450;
     }
     function stepStage(dir) {
@@ -1220,7 +1206,7 @@ function createSecButton(item, idx) {
             return;
         }
         stageLastDir = dir;
-        const n = Math.max(minStage(), Math.min(maxStage(), stageIdx + dir));
+        const n = Math.max(0, Math.min(maxStage(), stageIdx + dir));
         if (n !== stageIdx)
             goStage(n);
     }
@@ -1613,11 +1599,6 @@ function createSecButton(item, idx) {
         const item = ITEMS[idx];
         if (!item)
             return;
-        // The Team section has its own page (team.html)
-        if (item.title === 'Team') {
-            window.location.href = '/team.html';
-            return;
-        }
                 focusedIndex = from === 'rail' ? -1 : idx;
                 sourceCardElement = sourceElem || getCard(idx)?.dom || null;
         clearTimeout(plateTimer);
@@ -2959,10 +2940,9 @@ function createSecButton(item, idx) {
         document.body.classList.remove('locked');
         document.documentElement.style.overflow = '';
         window.scrollTo(0, 0);
-        stageIdx = minStage();
-        stageP = stageIdx;
-        if (!stageIdx)
-            document.body.classList.remove('deep');
+        stageIdx = 0;
+        stageP = 0;
+        document.body.classList.remove('deep');
         layoutSphere();
         requestAnimationFrame(() => layoutSphere());
         tickTimeouts.push(setTimeout(() => {

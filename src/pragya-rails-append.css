@@ -1522,10 +1522,7 @@ body.revealed.deep:not(.lit):not(.gridview) #incursionCone {
     backdrop-filter: blur(14px);
     pointer-events: auto;
     transform: none;
-    /* !important keeps this separate from `transform` when minified: the CSS
-       minifier otherwise merges both into `transform: translate(0,0)` and
-       drops it, letting the old `translate: 0 -50%` push the rails off-screen. */
-    translate: none !important;
+    translate: none;
     transition: opacity .5s var(--btn-ease), transform .6s var(--btn-ease), visibility 0s linear .9s;
   }
 

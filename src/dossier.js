@@ -713,7 +713,7 @@ export function initDossier() {
           code: "SEC-10",
           title: "Guests",
           subtitle: "INC-010 // KEYNOTE DIGNITARIES",
-          codename: "KEYNOTE DIGNITARIES",
+          codename: "KEYNOTE DIGNITARY",
           threat: "CAT-1 // DIGNITARY",
           statusWord: "DIGNITARY",
           desc: "Distinguished scientists, defense technologists, aerospace engineers, and visionaries addressing the convocation.",

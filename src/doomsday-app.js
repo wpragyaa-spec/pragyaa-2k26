@@ -163,7 +163,7 @@ export const ITEMS = [
     {
         code: "SEC-10",
         title: "Guests",
-        subtitle: "INC-010 // KEYNOTE DIGNITARIES",
+        subtitle: "INC-010 // KEYNOTE DIGNITARY",
         desc: "Distinguished scientists, defense technologists, aerospace engineers, and visionaries addressing the convocation.",
         id: "hf_20260922_194417_e525a243-03c8-454b-83b4-60f541baf70a",
         threat: "CAT-1 // DIGNITARY",

@@ -4,7 +4,7 @@ name: Deploy PRAGYAA Frontend
 on:
   push:
     branches:
-      - main
+      - data
   workflow_dispatch:
 
 jobs:

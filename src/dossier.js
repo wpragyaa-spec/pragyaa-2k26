@@ -1,4 +1,6 @@
 // Schedule dossier modal logic (ported verbatim from the inline script in index.html)
+import { applyRegistrationTarget, handleRegisterClick } from './registration/eventMap';
+
 export function initDossier() {
       // 10 Festival Sections Data Model with subs and rich blocks
       const DOSSIER_ITEMS = [
@@ -958,6 +960,9 @@ export function initDossier() {
           }
         }
 
+        // Registrable events: point the action button at the real registration page.
+        applyRegistrationTarget(sub.name);
+
         // Render info cards stack for this sub
         renderCardsStack(sub);
 
@@ -1094,6 +1099,7 @@ export function initDossier() {
       // Transmit warning button toast action
       document.addEventListener('click', (e) => {
         const btn = e.target.closest('#litActionBtn');
+        if (btn && handleRegisterClick(btn)) return;
         if (btn) {
           const toast = document.getElementById('dzToast');
           if (toast) {

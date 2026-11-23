@@ -1151,3 +1151,54 @@
     white-space: normal;
   }
 }
+
+/* ---- Registration: keep REGISTER NOW visible ----
+   The action row is the last child of the scrolling .dz2-body, so it used to sit below the fold.
+   When the active event is registrable (JS sets data-reg-slug on #litActionBtn), pin that row to the
+   bottom of the lightbox and give the button a filled call-to-action style. Other rows/buttons unchanged. */
+#lit .dz2-utilities-row:has(#litActionBtn[data-reg-slug]) {
+  position: sticky;
+  bottom: 0;
+  z-index: 20;
+  padding-top: 12px;
+  padding-bottom: 12px;
+  background: linear-gradient(180deg, rgba(5, 6, 7, 0) 0, rgba(5, 6, 7, 0.96) 28%, #050607 100%);
+  border-top: 1px solid rgba(0, 255, 136, 0.25);
+}
+
+#lit .dz2-util-btn[data-reg-slug] {
+  background: var(--emerald, #00ff88);
+  border-color: var(--emerald, #00ff88);
+  color: #021a0e;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  box-shadow: 0 0 14px rgba(0, 255, 136, 0.35);
+}
+
+#lit .dz2-util-btn[data-reg-slug] .dz2-green-bullet {
+  color: #021a0e;
+}
+
+#lit .dz2-util-btn[data-reg-slug]:hover,
+#lit .dz2-util-btn[data-reg-slug]:focus-visible {
+  background: #ffffff;
+  border-color: #ffffff;
+  color: #021a0e;
+  box-shadow: 0 0 18px rgba(255, 255, 255, 0.35);
+}
+
+@media (max-width: 640px) {
+  #lit .dz2-utilities-row:has(#litActionBtn[data-reg-slug]) .dz2-util-links {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  #lit .dz2-utilities-row:has(#litActionBtn[data-reg-slug]) #litActionBtn {
+    grid-column: 1 / -1;
+  }
+
+  #lit .dz2-utilities-row:has(#litActionBtn[data-reg-slug]) .dz2-util-link,
+  #lit .dz2-utilities-row:has(#litActionBtn[data-reg-slug]) .dz2-util-btn:not([data-reg-slug]) {
+    justify-content: center;
+    padding: 8px 6px;
+  }
+}

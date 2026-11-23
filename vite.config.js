@@ -16,6 +16,15 @@ export default defineConfig(() => {
         plugins: [],
       },
     },
+    build: {
+      // Two entry pages: the main site and the dedicated registration page (register.html).
+      rollupOptions: {
+        input: {
+          main: path.resolve(import.meta.dirname, 'index.html'),
+          register: path.resolve(import.meta.dirname, 'register.html'),
+        },
+      },
+    },
     server: {
       // HMR is disabled in AI Studio via DISABLE_HMR env var.
       // Do not modify—file watching is disabled to prevent flickering during agent edits.

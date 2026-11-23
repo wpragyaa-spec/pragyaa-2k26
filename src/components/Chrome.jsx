@@ -54,7 +54,7 @@ function Chrome() {
   </div>
 
   <div className="cue chrome">
-    <span>Drag to rotate the multiverse</span>
+    <span>Drag to rotate multiverse</span>
   </div>
     </>
   );

@@ -679,7 +679,7 @@ export function initDossier() {
           desc: "Industry leaders, cloud computing titans, and global hardware conglomerates fueling the PRAGYA 2027 ecosystem.",
           subs: [
             {
-              name: "Syndicate Alliance Partners",
+              name: "Syndicate Alliance Partner",
               tag: "PARTNERS",
               timeOrSpecs: "TITLE & PLATINUM PATRONS",
               secSpec: "GLOBAL TECH ECOSYSTEM",

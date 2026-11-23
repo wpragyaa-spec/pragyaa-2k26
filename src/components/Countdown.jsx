@@ -15,7 +15,6 @@ function remaining() {
     ],
   };
 }
-
 function Countdown({ style }) {
   const [t, setT] = useState(remaining);
 

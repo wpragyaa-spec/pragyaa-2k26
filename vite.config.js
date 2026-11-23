@@ -17,12 +17,14 @@ export default defineConfig(() => {
       },
     },
     build: {
-      // Entry pages: the main site, the registration page (register.html) and the core team page (team.html).
+      // Entry pages: the main site, registration (register.html), core team (team.html)
+      // and Junior Scientist (junior-scientist.html).
       rollupOptions: {
         input: {
           main: path.resolve(import.meta.dirname, 'index.html'),
           register: path.resolve(import.meta.dirname, 'register.html'),
           team: path.resolve(import.meta.dirname, 'team.html'),
+          juniorScientist: path.resolve(import.meta.dirname, 'junior-scientist.html'),
         },
       },
     },

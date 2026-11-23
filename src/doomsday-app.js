@@ -1613,9 +1613,10 @@ function createSecButton(item, idx) {
         const item = ITEMS[idx];
         if (!item)
             return;
-        // The Team section has its own page (team.html)
-        if (item.title === 'Team') {
-            window.location.href = '/team.html';
+        // Sections that have their own page instead of the popup
+        const OWN_PAGE = { 'Team': '/team.html', 'Junior Scientist': '/junior-scientist.html' };
+        if (OWN_PAGE[item.title]) {
+            window.location.href = OWN_PAGE[item.title];
             return;
         }
                 focusedIndex = from === 'rail' ? -1 : idx;

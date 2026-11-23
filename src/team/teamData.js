@@ -4,7 +4,7 @@
 //   name      – full name
 //   role      – position shown under the name (e.g. "Head", "Co-Head")
 //   photo     – image path, e.g. "/team/gauri.jpg" (put the file in public/team/).
-//               Leave empty to show the placeholder silhouette.
+//               Leave empty to show a "Photos coming soon" frame.
 //               Portrait photos with a plain/dark background look best (approx. 3:4).
 //   linkedin, instagram, email – leave empty to hide that icon.
 
@@ -13,7 +13,7 @@
 const slot = () => ({
   name: 'Saloni Tarone',
   role: 'Head',
-  photo: '/team/saloni-tarone.jpg',
+  photo: '', // empty = "Photos coming soon" frame
   linkedin: '',
   instagram: '',
   email: '',

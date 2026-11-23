@@ -1,18 +1,5 @@
 import { COMMITTEES, TEAM_TITLE, TEAM_SUBTITLE } from './teamData';
 
-// Placeholder portrait (head + shoulders) until real photos are added
-const PLACEHOLDER = `data:image/svg+xml,${encodeURIComponent(`
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 380">
-  <defs>
-    <linearGradient id="g" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0" stop-color="#3a4654"/>
-      <stop offset="1" stop-color="#151a20"/>
-    </linearGradient>
-  </defs>
-  <circle cx="150" cy="135" r="62" fill="url(#g)"/>
-  <path d="M30 380c0-80 52-140 120-140s120 60 120 140z" fill="url(#g)"/>
-</svg>`)}`;
-
 const ICONS = {
   linkedin: (
     <svg viewBox="0 0 24 24" aria-hidden="true">
@@ -72,12 +59,17 @@ function MemberCard({ member, code }) {
         <span className="tm-code">{code}</span>
         <span className="tm-plus">+</span>
       </div>
-      <img
-        className={`tm-photo${member.photo ? '' : ' is-placeholder'}`}
-        src={member.photo || PLACEHOLDER}
-        alt={member.photo ? member.name : ''}
-        loading="lazy"
-      />
+      {member.photo ? (
+        <img className="tm-photo" src={member.photo} alt={member.name} loading="lazy" />
+      ) : (
+        <div className="tm-photo-ph">
+          <svg viewBox="0 0 64 64" aria-hidden="true">
+            <circle cx="32" cy="24" r="11" />
+            <path d="M12 56c2-11 10-18 20-18s18 7 20 18" />
+          </svg>
+          <span>Photos coming soon</span>
+        </div>
+      )}
       <div className="tm-info">
         <h4 className="tm-name">{member.name}</h4>
         <p className="tm-role">{member.role}</p>

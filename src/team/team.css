@@ -303,7 +303,42 @@ body::before {
   mask-image: linear-gradient(180deg, #000 82%, transparent 100%);
   transition: scale .6s var(--ease, ease);
 }
-.tm-photo.is-placeholder { width: 64%; height: 58%; object-fit: contain; opacity: .9; }
+/* "Photos coming soon" frame, shown while a member has no photo */
+.tm-photo-ph {
+  position: absolute;
+  left: 50%;
+  bottom: 30%;
+  z-index: 1;
+  width: 70%;
+  height: 50%;
+  translate: -50% 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  border-radius: 14px;
+  border: 1px dashed rgba(0, 255, 136, .35);
+  background:
+    radial-gradient(circle, rgba(0, 255, 136, .12) 1px, transparent 1.4px) 0 0 / 14px 14px,
+    radial-gradient(ellipse at 50% 40%, rgba(0, 255, 136, .1), transparent 70%);
+  text-align: center;
+}
+.tm-photo-ph svg {
+  width: 34%;
+  fill: none;
+  stroke: rgba(0, 255, 136, .75);
+  stroke-width: 2.4;
+  stroke-linecap: round;
+  filter: drop-shadow(0 0 8px rgba(0, 255, 136, .45));
+}
+.tm-photo-ph span {
+  padding: 0 10px;
+  font: 600 clamp(9px, .8vw, 11px)/1.4 'JetBrains Mono', monospace;
+  letter-spacing: .24em;
+  text-transform: uppercase;
+  color: rgba(210, 218, 226, .65);
+}
 .tm-card:hover .tm-photo { scale: 1.03; }
 
 /* Info panel */

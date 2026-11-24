@@ -31,6 +31,7 @@ jobs:
       - name: Deploy frontend to Hostinger
         uses: SamKirkland/FTP-Deploy-Action@v4.3.5
         with:
+          log-level: verbose
           server: ${{ secrets.HOSTINGER_FTP_SERVER }}
           username: ${{ secrets.HOSTINGER_FTP_USERNAME }}
           password: ${{ secrets.HOSTINGER_FTP_PASSWORD }}

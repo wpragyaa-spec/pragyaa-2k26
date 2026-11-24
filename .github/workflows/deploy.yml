@@ -36,7 +36,7 @@ jobs:
           username: ${{ secrets.HOSTINGER_FTP_USERNAME }}
           password: ${{ secrets.HOSTINGER_FTP_PASSWORD }}
           local-dir: ./dist/
-          server-dir: ./
+          server-dir: domains/pragyaa.org/public_html/
           dangerous-clean-slate: false
           exclude: |
             **/.htaccess

@@ -4,6 +4,7 @@ import './index.css';
 import './pragya-rails-append.css';
 import './dossier.css';
 import './motion/motion.css';
+import './sec-beam.css';
 import App from './App.jsx';
 
 // Returning visitors skip the countdown + glass-break intro entirely.

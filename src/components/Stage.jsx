@@ -29,26 +29,6 @@ function Stage() {
       <div className="dh-glow"></div>
     </div>
 
-    {/* Volumetric Holographic Light Cone emerging from Dr Doom's palm */}
-    <div id="incursionCone" className="incursion-cone" aria-hidden="true">
-      <div className="cone-beam-wrap">
-        <div className="cone-beam-core"></div>
-        <div className="cone-beam-rays"></div>
-        <div className="cone-beam-scanlines"></div>
-        <div className="cone-beam-glimmer"></div>
-      </div>
-      <div className="cone-cradle-wrap">
-        <div className="cone-cradle-ring ring-outer"></div>
-        <div className="cone-cradle-ring ring-inner"></div>
-        <div className="cone-cradle-glow"></div>
-      </div>
-      <div className="palm-emitter-root">
-        <div className="palm-emitter-flare"></div>
-        <div className="palm-emitter-ring"></div>
-        <div className="palm-emitter-core"></div>
-      </div>
-    </div>
-
     <div className="world-fade">
       <div id="world">
         <div id="orb"></div>

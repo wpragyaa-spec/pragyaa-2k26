@@ -2216,3 +2216,67 @@ body.revealed.deep:not(.lit):not(.gridview) #incursionCone {
   /* no extra dark layer on top of the stage while the panel is open */
   body.navopen #stage::after { background: transparent; }
 }
+/* ==========================================================================
+   WINGS WITHOUT PANELS
+   The "TIMELINE PROTOCOLS" and "WARFARE & DIRECTIVES" panels (heading,
+   status, background, borders, corner brackets, footer) are removed; the
+   header/footer are no longer built (doomsday-app.js). Each column keeps its
+   width and side margin and spans the full screen height; its five buttons
+   are spaced evenly: the gap above the first, between each pair and below
+   the last is the same.
+   ========================================================================== */
+@media (min-width: 901px) {
+  .rail.rail--bare {
+    top: var(--safe-top);
+    bottom: var(--safe-bottom);
+    height: calc(100vh - var(--safe-top) - var(--safe-bottom));
+    height: calc(100dvh - var(--safe-top) - var(--safe-bottom));
+    padding-top: 0;
+    padding-bottom: 0;
+    justify-content: stretch;
+    background: none;
+    border-color: transparent;
+    border-radius: 0;
+    box-shadow: none;
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+  }
+  .rail.rail--bare::before,
+  .rail.rail--bare::after {
+    display: none;
+  }
+  .rail.rail--bare .rail-body {
+    flex: 1 1 auto;
+    justify-content: space-evenly;
+    gap: 0;
+    margin: 0;
+  }
+}
+
+/* ==========================================================================
+   COUNTDOWN AT THE BOTTOM OF THE SCREEN
+   The wrist countdown (#wristHud) is no longer pinned to the Doom hand's
+   wrist: it sits level, centred along the bottom edge. Width still comes
+   from JS (--wh-w), so its size is unchanged.
+   ========================================================================== */
+.wrist-hud {
+  top: auto;
+  left: 50%;
+  bottom: calc(14px + var(--safe-bottom, 0px));
+  transform: translateX(-50%);
+}
+/* the "drag to rotate" hint sits centred just above the countdown, so the two
+   never overlap (it used to be pinned bottom-right, where the timer now sits) */
+.cue {
+  left: 50%;
+  right: auto;
+  bottom: calc(14px + var(--safe-bottom, 0px) + 84px);
+  transform: translateX(-50%);
+  justify-content: center;
+}
+/* phones: the "swipe up for sections" hint likewise sits just above the countdown */
+@media (max-width: 900px) {
+  .stage-hint {
+    bottom: calc(14px + var(--safe-bottom, 0px) + 84px);
+  }
+}

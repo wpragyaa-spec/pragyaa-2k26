@@ -807,12 +807,12 @@ if (orbEl) {
     
 function createSecButton(item, idx) {
     const wrap = document.createElement('div');
-    wrap.className = 'sec-wrap';
+    wrap.className = 'sec-wrap CCTheme';
     wrap.style.setProperty('--o', String(idx));
 
     const btn = document.createElement('button');
     btn.type = 'button';
-    btn.className = 'sec';
+    btn.className = 'sec CCButton CCBeam';   // Coyote Lab border beam (src/sec-beam.css)
     btn.dataset.cardIdx = String(idx);
 
     const txt = hexNoise(110);
@@ -876,30 +876,12 @@ function createSecButton(item, idx) {
     const LEFT = [0, 5, 6, 7, 8];
     const RIGHT = [1, 2, 3, 9, 4];
 
-    function buildRailWing(railEl, indices, isRight) {
+    // Each wing is just its 5 buttons: the "TIMELINE PROTOCOLS" and
+    // "WARFARE & DIRECTIVES" panels (header, status, footer) were removed.
+    function buildRailWing(railEl, indices) {
         if (!railEl) return;
         railEl.innerHTML = '';
-
-        // HUD Panel Header
-        const header = document.createElement('div');
-        header.className = 'rail-header';
-        header.setAttribute('aria-hidden', 'true');
-        header.innerHTML = isRight ? `
-          <div class="rh-top">
-            <span class="rh-status"><i class="rh-led"></i>ONLINE</span>
-            <span class="rh-tag">// WING-R //</span>
-          </div>
-          <div class="rh-title">WARFARE & DIRECTIVES</div>
-          <div class="rh-bar"><span class="rh-fill"></span></div>
-        ` : `
-          <div class="rh-top">
-            <span class="rh-tag">// WING-L //</span>
-            <span class="rh-status"><i class="rh-led"></i>ACTIVE</span>
-          </div>
-          <div class="rh-title">TIMELINE PROTOCOLS</div>
-          <div class="rh-bar"><span class="rh-fill"></span></div>
-        `;
-        railEl.appendChild(header);
+        railEl.classList.add('rail--bare');
 
         // Body container for the 5 buttons
         const body = document.createElement('div');
@@ -912,25 +894,10 @@ function createSecButton(item, idx) {
             body.appendChild(el);
         });
         railEl.appendChild(body);
-
-        // HUD Panel Footer
-        const footer = document.createElement('div');
-        footer.className = 'rail-footer';
-        footer.setAttribute('aria-hidden', 'true');
-        footer.innerHTML = isRight ? `
-          <div class="rf-metric"><span>ORBIT</span><b>LOCKED</b></div>
-          <div class="rf-divider"></div>
-          <div class="rf-metric"><span>THREAT</span><b>SECURED</b></div>
-        ` : `
-          <div class="rf-metric"><span>LATENCY</span><b>0.14ms</b></div>
-          <div class="rf-divider"></div>
-          <div class="rf-metric"><span>CHRONO</span><b>SYNC 100%</b></div>
-        `;
-        railEl.appendChild(footer);
     }
 
-    buildRailWing(railL, LEFT, false);
-    buildRailWing(railR, RIGHT, true);
+    buildRailWing(railL, LEFT);
+    buildRailWing(railR, RIGHT);
 
     // live hex-noise refresh behind the labels
     const noiseReduce = window.matchMedia('(prefers-reduced-motion: reduce)');
@@ -1064,10 +1031,8 @@ function createSecButton(item, idx) {
         }
         if (wristHudEl) {
             const whW = Math.max(240, Math.min(WRIST.w * imgW, isMobile ? vw * 0.86 : 340));
+            // size only: the countdown sits at the bottom centre of the screen (pragya-rails-append.css)
             wristHudEl.style.setProperty('--wh-w', `${whW.toFixed(1)}px`);
-            wristHudEl.style.setProperty('--wh-x', `${(imgLeft + WRIST.x * imgW).toFixed(1)}px`);
-            wristHudEl.style.setProperty('--wh-y', `${Math.min(imgTop + WRIST.y * imgH, vh - 140).toFixed(1)}px`);
-            wristHudEl.style.setProperty('--wh-rot', `${WRIST.rot}deg`);
         }
     }
 

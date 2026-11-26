@@ -1,0 +1,467 @@
+/* ==========================================================================
+   Homepage section buttons: Coyote Lab "Border Beam" (CCTheme / CCButton / CCBeam)
+   Loaded last (src/main.jsx). Buttons are built in createSecButton()
+   (src/doomsday-app.js): .sec-wrap.CCTheme > button.sec.CCButton.CCBeam
+   ========================================================================== */
+
+/* Coyote Lab · Border Beam button: colours adapted to PRAGYA DOOMSDAY */
+
+.CCTheme {
+  --cc-accent: #ffffff;
+  --cc-accent-2: #aeb8c5;
+  --cc-bg: rgba(255, 255, 255, 0.055);
+  --cc-ink: #f4f6fa;
+  --cc-on-accent: #111318;
+  --cc-line: rgba(255, 255, 255, 0.22);
+  --cc-intensity: 0.65;
+  --cc-speed: 1;
+}
+
+
+.CCButton {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: .55em;
+  padding: .95em 1.55em;
+  border-radius: 999px;
+  border: 1px solid var(--cc-line);
+  background: var(--cc-bg);
+  color: var(--cc-ink);
+  font: inherit;
+  font-size: 15px;
+  font-weight: 600;
+  line-height: 1;
+  cursor: pointer;
+}
+.CCButton--solid { background: var(--cc-accent); border-color: var(--cc-accent); color: var(--cc-on-accent); }
+.CCButton:focus-visible { outline: 2px solid var(--cc-accent); outline-offset: 3px; }
+
+@property --cc-beam-angle { syntax: "<angle>"; initial-value: 0deg; inherits: false; }
+.CCBeam { position: relative; isolation: isolate; }
+.CCBeam::after {
+  content: "";
+  position: absolute;
+  inset: -1px;
+  padding: 1.5px;
+  border-radius: inherit;
+  pointer-events: none;
+  background: conic-gradient(from var(--cc-beam-angle),
+    transparent 0 68%, var(--cc-accent) 84%, var(--cc-accent-2) 90%, transparent 94%);
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  opacity: var(--cc-intensity);
+  animation: ccBeam calc(4s / var(--cc-speed)) linear infinite;
+}
+.CCBeam:hover::after { animation-duration: calc(2.2s / var(--cc-speed)); }
+@keyframes ccBeam { to { --cc-beam-angle: 360deg; } }
+@media (prefers-reduced-motion: reduce) {
+  .CCBeam::after { animation: none; background: linear-gradient(var(--cc-accent), var(--cc-accent-2)); }
+}
+
+/* ==========================================================================
+   Adapter: fit the existing section-button markup into the beam pill.
+   The older button styles (pragya-rails-append.css) use clip-path chamfers,
+   metal gradients and !important; these rules switch them off for .CCButton
+   and keep every text node, order and click handler untouched.
+   ========================================================================== */
+
+.sec.CCButton,
+.rail .sec.CCButton,
+.rails-m .sec.CCButton,
+#grid .sec.CCButton {
+  padding: 0 !important;
+  clip-path: none !important;
+  border-radius: 999px !important;
+  border: 1px solid var(--cc-line) !important;
+  background: var(--cc-bg) !important;
+  color: var(--cc-ink);
+  font: inherit;                        /* keep the buttons' existing type */
+  filter: none !important;
+  box-shadow: inset 0 1px 0 rgba(200, 255, 228, .06), 0 8px 22px rgba(0, 0, 0, .45);
+  transition: border-color .3s ease, box-shadow .3s ease;
+}
+.sec.CCButton:hover,
+.sec.CCButton:focus-visible {
+  border-color: color-mix(in srgb, var(--cc-accent) 38%, transparent) !important;
+  box-shadow: inset 0 1px 0 rgba(200, 255, 228, .08), 0 8px 22px rgba(0, 0, 0, .45), 0 0 18px rgba(0, 255, 136, .16);
+}
+.sec.CCButton:active { filter: brightness(.9) !important; }
+.sec.CCButton:focus-visible { outline: 2px solid var(--cc-accent) !important; outline-offset: 3px; }
+
+/* old top light strip */
+.sec.CCButton::before { display: none !important; }
+
+/* the beam replaces the old arrow pseudo-element, which the rails force off */
+.sec.CCBeam::after,
+.rail .sec.CCBeam::after,
+.rail-body .sec.CCBeam::after {
+  content: "" !important;
+  display: block !important;
+  position: absolute !important;
+  inset: -1px !important;
+  width: auto !important;
+  height: auto !important;
+  padding: 1.5px !important;
+  border-radius: inherit !important;
+  z-index: 6 !important;
+  clip-path: none !important;
+  box-shadow: none !important;
+  filter: none !important;
+  transform: none !important;
+  transition: none !important;
+  pointer-events: none !important;
+  background: conic-gradient(from var(--cc-beam-angle),
+    transparent 0 68%, var(--cc-accent) 84%, var(--cc-accent-2) 90%, transparent 94%) !important;
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0) !important;
+  -webkit-mask-composite: xor !important;
+  mask-composite: exclude !important;
+  opacity: var(--cc-intensity) !important;
+  animation: ccBeam calc(4s / var(--cc-speed)) linear infinite !important;
+  /* stagger the ten beams so they don't orbit in lock-step */
+  animation-delay: calc(var(--o, 0) * -0.4s) !important;
+}
+.sec.CCBeam:hover::after,
+.sec.CCBeam:focus-visible::after {
+  animation-duration: calc(2.2s / var(--cc-speed)) !important;
+}
+
+/* face: dark, with a faint metallic sheen and emerald under-light */
+.sec.CCButton .sec-in,
+.rail .sec.CCButton .sec-in {
+  clip-path: none !important;
+  border-radius: inherit !important;
+  overflow: hidden;
+  background:
+    radial-gradient(120% 140% at 50% 125%, rgba(0, 255, 136, .07), transparent 60%),
+    linear-gradient(180deg, #121b17 0%, #0a0f0d 58%, #070a09 100%) !important;
+  box-shadow: none !important;
+  transition: background .3s ease;
+}
+.sec.CCButton:hover .sec-in,
+.sec.CCButton:focus-visible .sec-in {
+  background:
+    radial-gradient(120% 140% at 50% 125%, rgba(0, 255, 136, .13), transparent 62%),
+    linear-gradient(180deg, #14201b 0%, #0b120f 58%, #070a09 100%) !important;
+}
+.sec.CCButton .sec-in::before {
+  inset: 0 !important;
+  clip-path: none !important;
+  border-radius: inherit;
+  background: linear-gradient(180deg, rgba(190, 235, 212, .06), transparent 42%) !important;
+  filter: none !important;
+}
+.sec.CCButton .sec-in::after { display: none !important; }
+
+/* metallic-green secondary text */
+.sec.CCButton .sec-sub { color: #b4d2c3 !important; }
+.sec.CCButton .sec-desc { color: #9db9ab !important; }
+
+/* ── desktop rails ─────────────────────────────────────────────────────── */
+@media (min-width: 901px) {
+  /* keep text clear of the pill's rounded ends */
+  .rail.left .sec.CCButton .sec-in  { padding: 8px 56px 8px 24px !important; }
+  .rail.right .sec.CCButton .sec-in { padding: 8px 24px 8px 56px !important; }
+
+  /* show every line in full: an old `.sec-label { height: 100% }` (doomsday.css)
+     squeezed the description to a sliver, and long descriptions were ellipsized.
+     The minimum height leaves room for a two-line description, so all ten
+     buttons stay the same size whether or not their description wraps. */
+  .rail .sec-wrap.CCTheme {
+    height: auto !important;
+    min-height: clamp(74px, 8.8vh, 80px);
+  }
+  .rail .sec.CCButton { height: auto !important; min-height: inherit; }
+  .rail .sec.CCButton .sec-in { min-height: inherit; }
+  .rail .sec.CCButton .sec-meta,
+  .rail .sec.CCButton .sec-label,
+  .rail .sec.CCButton .sec-desc {
+    flex: none !important;
+    height: auto !important;
+  }
+  .rail .sec.CCButton .sec-desc {
+    white-space: normal !important;
+    overflow: visible !important;
+    text-overflow: clip !important;
+    line-height: 1.3 !important;
+  }
+
+  /* arrow tab becomes a round chip inside the pill */
+  .rail.left .sec.CCButton .sec-arrow,
+  .rail.right .sec.CCButton .sec-arrow {
+    top: 50%;
+    bottom: auto;
+    width: 38px;
+    height: 38px;
+    margin-top: -19px;
+    clip-path: none;
+    border-radius: 999px;
+    border: 1px solid var(--cc-line);
+    box-shadow: inset 0 1px 0 rgba(200, 255, 228, .08);
+  }
+  .rail.left .sec.CCButton .sec-arrow  { right: 9px; left: auto; }
+  .rail.right .sec.CCButton .sec-arrow { left: 9px; right: auto; }
+  .rail.left .sec.CCButton .sec-arrow {
+    background:
+      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M9 5l7 7-7 7' fill='none' stroke='%2300ff88' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") 54% 50% / 42% no-repeat,
+      radial-gradient(circle at 50% 50%, rgba(0, 255, 136, .18), transparent 70%),
+      linear-gradient(180deg, #17221d, #0a0f0d);
+  }
+  .rail.right .sec.CCButton .sec-arrow {
+    background:
+      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M15 5l-7 7 7 7' fill='none' stroke='%2300ff88' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") 46% 50% / 42% no-repeat,
+      radial-gradient(circle at 50% 50%, rgba(0, 255, 136, .18), transparent 70%),
+      linear-gradient(180deg, #17221d, #0a0f0d);
+  }
+}
+
+/* ── phones / tablets: same stacked layout as the desktop rails ─────────── */
+@media (max-width: 900px) {
+  .rails-m .sec.CCButton,
+  .rails-m .rail.right .sec.CCButton {
+    height: auto !important;
+    min-height: 64px;
+  }
+  .rails-m .sec.CCButton .sec-in {
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: center !important;
+    align-items: flex-start !important;
+    gap: 2px;
+    width: 100%;
+    min-height: 64px;
+    padding: 9px 58px 9px 24px !important;
+    text-align: left !important;
+  }
+  .rails-m .sec.CCButton .sec-meta {
+    position: static !important;
+    display: flex !important;
+    align-items: center !important;
+    gap: 7px !important;
+    width: 100% !important;
+    margin: 0 !important;
+    transform: none !important;
+    line-height: 1.1 !important;
+  }
+  .rails-m .sec.CCButton .sec-code,
+  .rails-m .sec.CCButton .sec-sub,
+  .rails-m .sec.CCButton .sec-label,
+  .rails-m .sec.CCButton .sec-desc {
+    position: static !important;
+    inset: auto !important;
+    transform: none !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    max-width: 100% !important;
+    text-align: left !important;
+  }
+  .rails-m .sec.CCButton .sec-code {
+    display: inline-flex !important;
+    align-items: center;
+    gap: 5px;
+    font: 700 9.5px var(--mono) !important;
+    letter-spacing: .14em !important;
+    color: var(--cc-accent) !important;
+    text-shadow: 0 0 6px rgba(0, 255, 136, .6) !important;
+    white-space: nowrap !important;
+  }
+  .rails-m .sec.CCButton .sec-code::after { display: none !important; }
+  .rails-m .sec.CCButton .sec-code i {
+    display: inline-block !important;
+    width: 5px; height: 5px; border-radius: 50%;
+    background: var(--cc-accent);
+    box-shadow: 0 0 6px var(--cc-accent);
+  }
+  .rails-m .sec.CCButton .sec-sub {
+    display: inline !important;
+    font: 600 8.5px var(--mono) !important;
+    letter-spacing: .12em !important;
+    text-transform: uppercase;
+    white-space: nowrap !important;
+  }
+  .rails-m .sec.CCButton .sec-label {
+    display: block !important;
+    font: 800 .8rem var(--display) !important;
+    letter-spacing: .14em !important;
+    text-transform: uppercase;
+    line-height: 1.2 !important;
+    color: #f0f4f8 !important;
+    white-space: normal !important;
+  }
+  .rails-m .sec.CCButton .sec-desc {
+    display: block !important;
+    font: 500 9.5px var(--mono) !important;
+    letter-spacing: .06em !important;
+    line-height: 1.3 !important;
+    white-space: normal !important;
+    opacity: 1 !important;
+  }
+  .rails-m .sec.CCButton .sec-arrow {
+    display: block !important;
+    position: absolute !important;
+    top: 50% !important;
+    bottom: auto !important;
+    right: 10px !important;
+    left: auto !important;
+    width: 34px !important;
+    height: 34px !important;
+    margin-top: -17px !important;
+    transform: none !important;
+    clip-path: none !important;
+    border-radius: 999px !important;
+    border: 1px solid var(--cc-line) !important;
+    pointer-events: none;
+    background:
+      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M9 5l7 7-7 7' fill='none' stroke='%2300ff88' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") 54% 50% / 42% no-repeat,
+      radial-gradient(circle at 50% 50%, rgba(0, 255, 136, .18), transparent 70%),
+      linear-gradient(180deg, #17221d, #0a0f0d) !important;
+  }
+}
+
+/* ── reduced motion: static gradient border (from the Coyote Lab CSS) ───── */
+@media (prefers-reduced-motion: reduce) {
+  .sec.CCBeam::after,
+  .rail .sec.CCBeam::after,
+  .rail-body .sec.CCBeam::after {
+    animation: none !important;
+    background: linear-gradient(var(--cc-accent), var(--cc-accent-2)) !important;
+  }
+}
+
+/* ==========================================
+   SILVER GLASSMORPHISM BUTTON THEME
+   ========================================== */
+
+.CCTheme {
+  --cc-accent: #ffffff;
+  --cc-accent-2: #aeb8c5;
+  --cc-bg: rgba(255, 255, 255, 0.055);
+  --cc-ink: #f4f6fa;
+  --cc-on-accent: #111318;
+  --cc-line: rgba(255, 255, 255, 0.22);
+  --cc-intensity: 0.65;
+  --cc-speed: 1;
+}
+
+/* Main glass button */
+.sec.CCButton,
+.rail .sec.CCButton,
+.rails-m .sec.CCButton,
+#grid .sec.CCButton {
+  background: rgba(255, 255, 255, 0.045) !important;
+  border: 1px solid rgba(255, 255, 255, 0.24) !important;
+  color: #ffffff !important;
+  backdrop-filter: blur(14px) saturate(130%);
+  -webkit-backdrop-filter: blur(14px) saturate(130%);
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.12),
+    0 8px 25px rgba(0,0,0,0.22) !important;
+  transition: all 0.3s ease !important;
+}
+
+/* Glass button interior */
+.sec.CCButton .sec-in,
+.rail .sec.CCButton .sec-in {
+  background: rgba(255,255,255,0.045) !important;
+  backdrop-filter: blur(14px) saturate(130%);
+  -webkit-backdrop-filter: blur(14px) saturate(130%);
+  box-shadow: none !important;
+  transition: background 0.3s ease !important;
+}
+
+/* Subtle white glass highlight */
+.sec.CCButton .sec-in::before {
+  background: linear-gradient(
+    180deg,
+    rgba(255,255,255,0.10),
+    transparent 55%
+  ) !important;
+}
+
+/* Hover effect */
+.sec.CCButton:hover,
+.sec.CCButton:focus-visible {
+  border-color: rgba(255,255,255,0.55) !important;
+  background: rgba(255,255,255,0.10) !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.18),
+    0 8px 28px rgba(0,0,0,0.25),
+    0 0 15px rgba(255,255,255,0.09) !important;
+}
+
+.sec.CCButton:hover .sec-in,
+.sec.CCButton:focus-visible .sec-in {
+  background: rgba(255,255,255,0.07) !important;
+}
+
+/* White and silver text */
+.sec.CCButton .sec-sub,
+.sec.CCButton .sec-desc,
+.sec.CCButton .sec-code {
+  color: #d5dbe4 !important;
+  text-shadow: none !important;
+}
+
+/* Status indicator */
+.sec.CCButton .sec-code i {
+  background: #ffffff !important;
+  box-shadow: 0 0 6px rgba(255,255,255,0.55) !important;
+}
+
+/* Animated silver border beam */
+.sec.CCBeam::after,
+.rail .sec.CCBeam::after,
+.rail-body .sec.CCBeam::after {
+  background: conic-gradient(
+    from var(--cc-beam-angle),
+    transparent 0 68%,
+    #ffffff 84%,
+    #aeb8c5 90%,
+    transparent 94%
+  ) !important;
+  opacity: 0.65 !important;
+}
+
+/* Desktop arrow glass buttons */
+.rail.left .sec.CCButton .sec-arrow,
+.rail.right .sec.CCButton .sec-arrow {
+  border: 1px solid rgba(255,255,255,0.25) !important;
+  background-color: rgba(255,255,255,0.07) !important;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.12) !important;
+}
+
+/* Desktop arrow icons: white */
+.rail.left .sec.CCButton .sec-arrow {
+  background:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M9 5l7 7-7 7' fill='none' stroke='%23ffffff' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") 54% 50% / 42% no-repeat,
+    rgba(255,255,255,0.07) !important;
+}
+
+.rail.right .sec.CCButton .sec-arrow {
+  background:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M15 5l-7 7 7 7' fill='none' stroke='%23ffffff' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") 46% 50% / 42% no-repeat,
+    rgba(255,255,255,0.07) !important;
+}
+
+/* Mobile arrow buttons */
+.rails-m .sec.CCButton .sec-arrow {
+  border: 1px solid rgba(255,255,255,0.25) !important;
+  background:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M9 5l7 7-7 7' fill='none' stroke='%23ffffff' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") 54% 50% / 42% no-repeat,
+    rgba(255,255,255,0.07) !important;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.12) !important;
+}
+
+/* Solid button variant */
+.CCButton--solid {
+  background: rgba(255,255,255,0.12) !important;
+  border-color: rgba(255,255,255,0.35) !important;
+  color: #ffffff !important;
+}
+

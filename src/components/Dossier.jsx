@@ -22,7 +22,7 @@ function Dossier() {
       
       <header className="dz2-header">
         <div className="dz2-header-left">
-          <div className="dz2-brand">PRAGYA<span className="dz2-neon">2027</span></div>
+          <div className="dz2-brand"><span className="dz2-brand-main">PRAGYA</span><span className="dz2-neon">2027</span></div>
           <div className="dz2-divider"></div>
           <div className="dz2-badge">
             <span className="dz2-pulse-dot"></span>

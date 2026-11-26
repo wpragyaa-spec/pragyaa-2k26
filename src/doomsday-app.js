@@ -1894,7 +1894,7 @@ function createSecButton(item, idx) {
         decodedBlobUrls[index] = thumbUrl;
                 const cardImg = getCard(index)?.imgDom;
         if (cardImg) {
-            cardImg.onerror = () => { cardImg.src = '/doom/doom_sphere_bg.jpg'; };
+            cardImg.onerror = () => { cardImg.src = '/doom/doom-hand-v2.jpg'; };
             cardImg.src = thumbUrl;
             cardImg.onload = () => cardImg.classList.add('in');
             if (cardImg.complete)

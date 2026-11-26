@@ -22,7 +22,7 @@ function Stage() {
     
     <div id="doomHand" className="doom-hand-layer" aria-hidden="true">
       <div className="dh-crop">
-        <img className="dh-art" src="/doom/doom-hand.jpg" alt="" />
+        <img className="dh-art" src="/doom/doom-hand-v2.jpg" alt="" />
       </div>
       <div className="dh-mist"></div>
       <div className="dh-shadow"></div>
@@ -48,7 +48,7 @@ function Stage() {
     
     <div id="doomHandFront" className="doom-hand-front" aria-hidden="true">
       <div className="dh-crop">
-        <img className="dh-art" src="/doom/doom-hand.jpg" alt="" />
+        <img className="dh-art" src="/doom/doom-hand-v2.jpg" alt="" />
       </div>
     </div>
 

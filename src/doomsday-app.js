@@ -1617,7 +1617,10 @@ function createSecButton(item, idx) {
         // Sections that have their own page instead of the popup
         const OWN_PAGE = { 'Team': '/team.html', 'Junior Scientist': '/junior-scientist.html' };
         if (OWN_PAGE[item.title]) {
-            window.location.href = OWN_PAGE[item.title];
+            if (window.PragyaLoader)
+                window.PragyaLoader.navigate(OWN_PAGE[item.title]);
+            else
+                window.location.href = OWN_PAGE[item.title];
             return;
         }
                 focusedIndex = from === 'rail' ? -1 : idx;
@@ -1888,58 +1891,67 @@ function createSecButton(item, idx) {
             dotEl.classList.remove('wide');
         }
     });
-    // Assets Loader & Splash
+    // Assets Loader: real progress goes to the Sakuga page loader (public/sakuga-vfx/loader.js);
+    // the countdown scene starts once it fires sakuga:done.
+    const pageLoader = window.PragyaLoader;
     let loadedCount = 0;
     const totalAssets = ITEMS.length + 1;
     let splashDismissed = false;
-    const splashBirth = Date.now();
+    if (pageLoader)
+        pageLoader.add(totalAssets);
     function assetReported() {
         loadedCount++;
-        const prog = Math.min(1, loadedCount / totalAssets);
+        if (pageLoader)
+            pageLoader.done();
         if (barEl) {
-            barEl.style.transform = `scaleX(${prog})`;
+            barEl.style.transform = `scaleX(${Math.min(1, loadedCount / totalAssets)})`;
         }
         if (loadedCount >= totalAssets) {
             finishSplash();
         }
     }
-    function finishSplash() {
+    function finishSplash(force = false) {
         if (splashDismissed)
             return;
         splashDismissed = true;
-        const elapsed = Date.now() - splashBirth;
-        const remaining = Math.max(0, 1150 - elapsed);
-        setTimeout(() => {
-            if (barEl)
-                barEl.style.transform = 'scaleX(1)';
-            setTimeout(() => {
-                if (splashEl) {
-                    splashEl.classList.add('out');
-                    setTimeout(() => splashEl.remove(), 950);
-                }
-                startCountdownScene();
-            }, 200);
-        }, remaining);
+        if (splashEl)
+            splashEl.remove();
+        if (!pageLoader) {
+            startCountdownScene();
+            return;
+        }
+        if (force)
+            pageLoader.finish();
+        pageLoader.whenDone(() => startCountdownScene());
     }
     setTimeout(() => {
-        finishSplash();
+        finishSplash(true);
     }, 9000);
     ITEMS.forEach((item, index) => {
         const thumbUrl = getItemImgSrc(item);
         decodedBlobUrls[index] = thumbUrl;
                 const cardImg = getCard(index)?.imgDom;
+        let reported = false;
+        const reportOnce = () => { if (!reported) { reported = true; assetReported(); } };
         if (cardImg) {
-            cardImg.onerror = () => { cardImg.src = '/doom/doom_sphere_bg.jpg'; };
+            cardImg.onerror = () => {
+                if (cardImg.src.endsWith('/doom/doom_sphere_bg.jpg')) { reportOnce(); return; }
+                cardImg.src = '/doom/doom_sphere_bg.jpg';
+            };
             cardImg.src = thumbUrl;
-            cardImg.onload = () => cardImg.classList.add('in');
-            if (cardImg.complete)
+            cardImg.onload = () => { cardImg.classList.add('in'); reportOnce(); };
+            if (cardImg.complete && cardImg.naturalWidth) {
                 cardImg.classList.add('in');
+                reportOnce();
+            }
+        }
+        else {
+            reportOnce();
         }
         const gridImg = document.querySelector(`#grid figure[data-idx="${index}"] img`);
         if (gridImg) {
             gridImg.src = thumbUrl;
         }
-        assetReported();
     });
     // Ember Backdrop in Sphere Stage
     function initEmberBackdrop() {

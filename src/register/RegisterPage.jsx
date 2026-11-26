@@ -73,7 +73,9 @@ export default function RegisterPage() {
     let alive = true;
     (async () => {
       try {
-        const [events, pay] = await Promise.all([fetchEvents(), fetchPaymentInfo()]);
+        const data = Promise.all([fetchEvents(), fetchPaymentInfo()]);
+        window.PragyaLoader?.track(data);   // the page loader waits for the event data
+        const [events, pay] = await data;
         if (!alive) return;
         const ev = events.find((e) => e.slug === slug) || null;
         setPayment(pay);

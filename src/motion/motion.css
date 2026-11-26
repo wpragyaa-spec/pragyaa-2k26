@@ -1,0 +1,454 @@
+/* ==========================================================================
+   PRAGYA 2027 — motion layer styles (GSAP drives the values; see src/motion)
+   Uses CSS variables feeding individual `translate` / `scale` properties and
+   filter-opacity so it composes with the site's existing transform-based
+   animations instead of replacing them.
+   ========================================================================== */
+
+/* ---------------------------------------------------------------------------
+   1. Intro — cinematic opening (motion/introMotion.js)
+   --dolly: slow camera push while the scene builds (0..1)
+   --dive : scroll progress into the breach (0..1)
+   --amb  : ambient green light level (0..1)
+   ------------------------------------------------------------------------- */
+#intro.cine {
+  --doom-w: min(30vh, 48vw);
+}
+
+#intro.cine .countdown-bg {
+  scale: calc(1 + var(--dolly, 0) * .07 + var(--dive, 0) * .26);
+}
+
+#intro.cine .intro-camera {
+  translate: 0 calc(var(--dive, 0) * -4vh);
+}
+
+#intro.cine .green-ambient-glow,
+#intro.cine .god-rays {
+  filter: opacity(var(--amb, 1));
+}
+
+/* the old status line is replaced by the scroll cue */
+#intro.cine .intro-controls { display: none; }
+
+#intro.cine .countdown-container {
+  top: 68%;
+  translate: 0 calc(var(--dive, 0) * -9vh);
+  filter: opacity(calc(1 - var(--dive, 0) * 2));
+}
+
+/* floating energy motes */
+.cine-motes {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+  opacity: 0;
+  overflow: hidden;
+}
+.cine-motes i {
+  position: absolute;
+  bottom: -12px;
+  width: var(--s);
+  height: var(--s);
+  border-radius: 50%;
+  background: #5effc0;
+  box-shadow: 0 0 6px #00ff96, 0 0 14px rgba(0, 255, 150, .5);
+  opacity: 0;
+  animation: cineMote var(--t) linear var(--d) infinite;
+}
+@keyframes cineMote {
+  0%   { transform: translate3d(0, 0, 0); opacity: 0; }
+  12%  { opacity: .85; }
+  75%  { opacity: .45; }
+  100% { transform: translate3d(34px, -105vh, 0); opacity: 0; }
+}
+
+/* Doom's mask */
+.cine-doom-plane {
+  position: absolute;
+  left: 50%;
+  top: 6vh;
+  width: var(--doom-w, 30vh);
+  aspect-ratio: 300 / 360;
+  z-index: 2; /* under the smoke canvas (3) so fog drifts in front of him */
+  pointer-events: none;
+  translate: -50% calc(var(--dive, 0) * -16vh);
+  scale: calc(1 + var(--dive, 0) * .55);
+  filter: opacity(calc(1 - var(--dive, 0) * 1.4));
+}
+.cine-doom {
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+}
+.cine-doom-svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  filter: drop-shadow(0 0 2px rgba(110, 255, 200, .5)) drop-shadow(0 0 26px rgba(0, 255, 150, .22));
+}
+.cine-eyes {
+  opacity: 0;
+  animation: cineEyes 3.2s ease-in-out infinite;
+}
+@keyframes cineEyes {
+  0%, 100% { filter: brightness(1); }
+  50%      { filter: brightness(1.7); }
+}
+.cine-sheen {
+  transform-box: fill-box;
+  animation: cineSheen 6.5s ease-in-out 5s infinite;
+}
+@keyframes cineSheen {
+  0%        { transform: translateX(0); }
+  35%, 100% { transform: translateX(380px); }
+}
+
+/* PRAGYA 2027 title */
+.cine-title-plane {
+  position: absolute;
+  left: 50%;
+  top: calc(6vh + var(--doom-w, 30vh) * 1.2 + 2vh);
+  z-index: 10;
+  text-align: center;
+  pointer-events: none;
+  translate: -50% calc(var(--dive, 0) * -22vh);
+  filter: opacity(calc(1 - var(--dive, 0) * 1.8));
+}
+.cine-word {
+  display: flex;
+  justify-content: center;
+  font: 900 clamp(34px, 6.4vw, 96px) / 1 var(--display);
+  letter-spacing: .14em;
+  margin-right: -.14em;
+  filter: drop-shadow(0 4px 14px rgba(0, 0, 0, .9)) drop-shadow(0 0 22px rgba(0, 255, 136, .12));
+}
+.cine-l {
+  display: inline-block;
+  opacity: 0;
+  background: linear-gradient(180deg, #ffffff 0%, #e3e9ee 40%, #8a99a8 66%, #f4f7fa 100%);
+  -webkit-background-clip: text;
+          background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+.cine-year {
+  margin-top: .45em;
+  font: 800 clamp(14px, 1.8vw, 26px) / 1 var(--display);
+  letter-spacing: .55em;
+  margin-right: -.55em;
+  color: #00ff88;
+  text-shadow: 0 0 16px rgba(0, 255, 136, .55);
+  opacity: 0;
+}
+
+/* scroll cue */
+.cine-cue {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: calc(26px + env(safe-area-inset-bottom, 0px));
+  width: max-content;
+  margin: 0 auto;
+  z-index: 15;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  min-height: 44px;
+  padding: 6px 16px;
+  border: 0;
+  background: none;
+  color: rgba(226, 240, 234, .92);
+  font: 600 10px / 1 var(--display);
+  letter-spacing: .42em;
+  text-transform: uppercase;
+  text-shadow: 0 0 12px rgba(0, 255, 136, .45), 0 1px 6px rgba(0, 0, 0, .9);
+  cursor: pointer;
+  opacity: 0;
+}
+#intro:not(.cine) .cine-cue { display: none; }
+.cine-cue-text { margin-right: -.42em; animation: cineCuePulse 2.6s ease-in-out 7.4s infinite; }
+.cine-cue:focus-visible { outline: 1px solid rgba(0, 255, 136, .7); outline-offset: 4px; border-radius: 4px; }
+.cine-mouse {
+  position: relative;
+  width: 18px;
+  height: 28px;
+  border: 1.5px solid rgba(94, 234, 212, .75);
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 255, 136, .3);
+}
+.cine-mouse i {
+  position: absolute;
+  left: 50%;
+  top: 5px;
+  width: 3px;
+  height: 6px;
+  margin-left: -1.5px;
+  border-radius: 2px;
+  background: #5eead4;
+  box-shadow: 0 0 6px #00ff88;
+  animation: cineWheel 1.8s ease-in-out infinite;
+}
+@keyframes cineWheel { 0% { opacity: 0; transform: translateY(0); } 25% { opacity: 1; } 80%, 100% { opacity: 0; transform: translateY(9px); } }
+@keyframes cineCuePulse { 50% { opacity: .5; } }
+
+/* the breach takes over: cinematic layers get out of its way */
+#intro.shattering .cine-doom-plane,
+#intro.shattering .cine-title-plane,
+#intro.shattering .cine-cue,
+#intro.shattering .cine-motes {
+  opacity: 0 !important;
+  transition: opacity .35s ease;
+}
+
+/* ---------------------------------------------------------------------------
+   2. Hero — kinetic typography (motion/heroMotion.js)
+   ------------------------------------------------------------------------- */
+/* GSAP owns these now: drop the old CSS stagger on the hero's children */
+.hero.hero--kinetic > * {
+  transition: none;
+  opacity: 1;
+  transform: none;
+}
+
+.hk-plane {
+  display: flex;
+  justify-content: center;
+  will-change: transform, opacity;
+}
+
+.hk-plane--cue {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+.hk-plane--cue .hero-scroll { pointer-events: auto; }
+
+.hero-titlewrap {
+  perspective: 900px;
+  perspective-origin: 50% 60%;
+}
+
+/* letters carry their own metal so they can move independently */
+.hero-title.hero-title--split {
+  display: flex;
+  justify-content: center;
+  background: none;
+  -webkit-background-clip: border-box;
+          background-clip: border-box;
+  -webkit-text-fill-color: currentColor;
+  animation: none;
+  filter: none;
+  transform-style: preserve-3d;
+}
+
+.hl {
+  position: relative;
+  display: inline-block;
+  transform-style: preserve-3d;
+}
+
+.hl-face {
+  position: relative;
+  display: block;
+  background:
+    linear-gradient(105deg, transparent 0 42%, rgba(255, 255, 255, .95) 50%, transparent 58%) 160% 0 / 250% 100% no-repeat,
+    linear-gradient(180deg, #ffffff 0%, #e3e9ee 38%, #8a99a8 62%, #f4f7fa 100%);
+  -webkit-background-clip: text;
+          background-clip: text;
+  -webkit-text-fill-color: transparent;
+  filter: drop-shadow(0 6px 18px rgba(0, 0, 0, .85));
+  /* the glint travels letter to letter */
+  animation: hlShine 7s ease-in-out calc(3.4s + var(--i, 0) * .11s) infinite;
+}
+@keyframes hlShine {
+  0%, 70% { background-position: 160% 0, 0 0; }
+  100%    { background-position: -60% 0, 0 0; }
+}
+
+/* extruded depth layer: parallaxes against the face when the title tilts */
+.hl-depth {
+  position: absolute;
+  inset: 0;
+  color: #0a1712;
+  -webkit-text-fill-color: #0a1712;
+  text-shadow: 0 0 .32em rgba(0, 255, 136, .24);
+  transform: translate3d(.025em, .04em, -26px);
+  pointer-events: none;
+}
+
+/* 2027: per-digit emerald metal */
+.hero-year {
+  background: none;
+  -webkit-text-fill-color: currentColor;
+}
+.hy-d {
+  display: inline-block;
+  background: linear-gradient(180deg, #c9ffe8 0%, #00ff88 55%, #00a85a 100%);
+  -webkit-background-clip: text;
+          background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+.hero-year.is-glitch .hy-d { animation: heroGlitch .5s steps(2, end) 1; }
+@keyframes heroGlitch {
+  0%   { translate: 0 0; filter: none; }
+  20%  { translate: -3px 1px; filter: drop-shadow(-2px 0 rgba(255, 40, 90, .7)) drop-shadow(2px 0 rgba(0, 255, 220, .7)); }
+  40%  { translate: 3px -1px; }
+  60%  { translate: -1px 0; filter: drop-shadow(2px 0 rgba(255, 40, 90, .6)); }
+  100% { translate: 0 0; filter: none; }
+}
+
+/* one-shot scanning line over the hero */
+.hero-scan {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  height: 10vh;
+  z-index: 1;
+  pointer-events: none;
+  opacity: 0;
+  mix-blend-mode: screen;
+  background: linear-gradient(to bottom, transparent, rgba(0, 255, 136, .05) 60%, rgba(150, 255, 215, .32) 97%, transparent);
+}
+
+/* ---------------------------------------------------------------------------
+   3. Victor von Doom — classified dossier card
+   ------------------------------------------------------------------------- */
+.bio.bio--dossier {
+  /* GSAP drives transform/opacity on scroll: keep only the reveal fade */
+  transition: opacity 1.2s var(--ease) .15s;
+}
+/* pragya-rails-append.css hides the bio once the site is revealed (and with
+   display:none on desktop, to make room for the corner HUD frames, which only
+   appear on the sphere stage). On desktop the hero stage shows the dossier
+   card again; phones keep the original behaviour (hidden). */
+@media (min-width: 901px) {
+  body.revealed:not(.deep) .bio.bio--dossier { display: block; }
+  body.revealed:not(.deep):not(.lit):not(.gridview) .bio.chrome.bio--dossier {
+    opacity: 1 !important;
+    visibility: visible;
+    pointer-events: auto;
+  }
+}
+.bio--dossier::before {
+  border-color: rgba(0, 255, 136, .18);
+  box-shadow: inset 0 0 24px rgba(0, 255, 136, .04);
+}
+.bio-tag {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 10px;
+  font: 600 9px / 1 var(--mono);
+  letter-spacing: .3em;
+  text-transform: uppercase;
+  color: #00ff88;
+  text-shadow: 0 0 8px rgba(0, 255, 136, .5);
+}
+.bio-tag i {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #00ff88;
+  box-shadow: 0 0 8px #00ff88;
+  animation: heroPulse 2.4s ease-in-out infinite;
+}
+.bio-id {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.bio-name .m-ch { display: inline-block; }
+.bio-sub {
+  font: 500 10px / 1 var(--mono);
+  letter-spacing: .22em;
+  text-transform: uppercase;
+  color: #7f8e9c;
+}
+.m-line { display: block; overflow: hidden; }
+.m-line-in { display: block; }
+
+/* green light that drifts across the card (clipped to the scrim area) */
+.bio-scan {
+  position: absolute;
+  inset: -14px -18px;
+  border-radius: 8px;
+  overflow: hidden;
+  pointer-events: none;
+  z-index: -1;
+}
+.bio-scan::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 45%;
+  left: -45%;
+  background: linear-gradient(90deg, transparent, rgba(0, 255, 136, .09), transparent);
+  animation: bioDrift 9s ease-in-out 6s infinite;
+}
+@keyframes bioDrift {
+  0%        { translate: 0 0; }
+  45%, 100% { translate: 330% 0; }
+}
+
+/* ---------------------------------------------------------------------------
+   4. Stage camera — subtle mouse parallax (motion/ambient.js)
+   Never applied to the sphere (#world) so drag-to-rotate is untouched.
+   ------------------------------------------------------------------------- */
+#stageBackdrop {
+  translate: calc(var(--cam-x, 0) * -16px) calc(var(--cam-y, 0) * -10px);
+  scale: 1.04;
+}
+.doom-hand-layer,
+.doom-hand-front {
+  translate: calc(var(--cam-x, 0) * 9px) calc(var(--cam-y, 0) * 6px);
+}
+
+/* ---------------------------------------------------------------------------
+   5. Magnetic buttons (motion/ambient.js)
+   ------------------------------------------------------------------------- */
+.is-magnetic {
+  translate: calc(var(--mag-base-x, 0px) + var(--mag-x, 0px)) calc(var(--mag-base-y, 0px) + var(--mag-y, 0px));
+}
+#heroScroll { --mag-base-x: -50%; }
+.is-magnetic-hot { filter: drop-shadow(0 0 10px rgba(0, 255, 136, .35)); }
+
+/* ---------------------------------------------------------------------------
+   6. Dossier opening scan beam (motion/ambient.js)
+   ------------------------------------------------------------------------- */
+.dz-scanbeam {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  height: 4%;
+  z-index: 30;
+  pointer-events: none;
+  opacity: 0;
+  mix-blend-mode: screen;
+  background: linear-gradient(to bottom, transparent, rgba(0, 255, 136, .08) 70%, rgba(150, 255, 215, .55) 100%);
+  box-shadow: 0 3px 16px rgba(0, 255, 136, .35);
+}
+
+/* ---------------------------------------------------------------------------
+   Reduced motion: keep the composition, drop the movement
+   ------------------------------------------------------------------------- */
+@media (prefers-reduced-motion: reduce) {
+  .cine-motes i,
+  .cine-eyes,
+  .cine-sheen,
+  .cine-cue-text,
+  .cine-mouse i,
+  .hl-face,
+  .hero-year.is-glitch .hy-d,
+  .bio-scan::after {
+    animation: none !important;
+  }
+  #stageBackdrop,
+  .doom-hand-layer,
+  .doom-hand-front { translate: none; }
+}

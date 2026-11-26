@@ -1,4 +1,5 @@
 import { initBilateralSmokeSimulation } from './doomsday-smoke';
+import { initIntroCinematic } from './motion/introMotion';
 import { applyRegistrationTarget, handleRegisterClick } from './registration/eventMap';
 const CDN = "https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/";
 export const HAND = {
@@ -2893,6 +2894,7 @@ function createSecButton(item, idx) {
     }
     // Reveal & Transition Timing
     let countdownAutoTimer = null;
+    let introCine = null;
     let tickTimeouts = [];
     if ('scrollRestoration' in history)
         history.scrollRestoration = 'manual';
@@ -2942,6 +2944,8 @@ function createSecButton(item, idx) {
         if (revealTriggered)
             return;
         revealTriggered = true;
+        if (introCine)
+            introCine.release();
         disableIntroSkip();
         markIntroSeen();
         if (countdownAutoTimer)
@@ -3036,11 +3040,17 @@ function createSecButton(item, idx) {
             }, delay);
             tickTimeouts.push(tid);
         });
-        countdownAutoTimer = setTimeout(() => {
-            if (!revealTriggered) {
-                triggerReveal();
-            }
-        }, 6500);
+        // Cinematic opening: builds the scene, then waits for the visitor to
+        // scroll ("Scroll to enter"); scrolling dives the camera in and fires
+        // the glass breach below (replaces the old 6.5s automatic breach).
+        if (introCine)
+            introCine.destroy();
+        introCine = initIntroCinematic({
+            onEnter: () => {
+                if (!revealTriggered)
+                    triggerReveal();
+            },
+        });
         if (force)
             enableIntroSkip();
     }

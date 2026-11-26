@@ -1,4 +1,5 @@
 import { memo } from 'react';
+import ScreenFrame from './ScreenFrame';
 
 function Stage() {
   return (
@@ -18,6 +19,9 @@ function Stage() {
       <div className="stage-scanlines"></div>
       <div className="stage-grain"></div>
     </div>
+
+    {/* HUD screen frame: above the background art, below every button and the countdown */}
+    <ScreenFrame />
 
     
     <div id="doomHand" className="doom-hand-layer" aria-hidden="true">

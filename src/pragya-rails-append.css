@@ -2280,3 +2280,9 @@ body.revealed.deep:not(.lit):not(.gridview) #incursionCone {
     bottom: calc(14px + var(--safe-bottom, 0px) + 84px);
   }
 }
+/* 641-900px also shows the "drag to rotate" hint in that spot: stack the swipe hint above it */
+@media (min-width: 641px) and (max-width: 900px) {
+  .stage-hint {
+    bottom: calc(14px + var(--safe-bottom, 0px) + 84px + 26px);
+  }
+}

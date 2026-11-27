@@ -2072,11 +2072,9 @@ function createSecButton(item, idx) {
     let sceneStarted = false;
     let revealTriggered = false;
     let smokeCtrl = null;
-    // Background probe
-    const avengersBgProbe = new Image();
-    avengersBgProbe.onload = () => assetReported();
-    avengersBgProbe.onerror = () => assetReported();
-    avengersBgProbe.src = '/avengers_bg.jpg';
+    // The intro background (/avengers_bg.jpg, 3 MB) used to be preloaded here before the
+    // site revealed. The intro is no longer shown, so don't make visitors wait for it.
+    assetReported();
     // Live Countdown calculation
     // Live Countdown calculation with true Avengers: Doomsday release date
     const RELEASE = new Date('2026-12-29T00:00:00+05:30');
@@ -2867,14 +2865,6 @@ function createSecButton(item, idx) {
     const INTRO_SEEN_KEY = 'pragya_intro_seen';
     const introControlsText = document.querySelector('.intro-controls span');
     const introDefaultText = introControlsText ? introControlsText.textContent : '';
-    function hasSeenIntro() {
-        try {
-            return localStorage.getItem(INTRO_SEEN_KEY) === '1';
-        }
-        catch {
-            return false;
-        }
-    }
     function markIntroSeen() {
         try {
             localStorage.setItem(INTRO_SEEN_KEY, '1');
@@ -2956,8 +2946,10 @@ function createSecButton(item, idx) {
         if (sceneStarted)
             return;
         sceneStarted = true;
-        // Returning visitor: skip countdown + glass break, reveal the site instantly.
-        if (!force && hasSeenIntro()) {
+        // No intro for anyone (first-time visitors included): skip the cinematic
+        // countdown + glass break and reveal the site instantly. `force` (the unused
+        // openTeaserCountdown replay) is the only way into the old intro.
+        if (!force) {
             revealTriggered = true;
             if (introEl) {
                 introEl.classList.add('gone');

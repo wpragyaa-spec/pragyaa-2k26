@@ -101,7 +101,8 @@ export function handleRegisterClick(btn) {
     const textEl = document.getElementById('litActionBtnText');
     if (textEl && !btn.dataset.popupWarn) {
       btn.dataset.popupWarn = '1';
-      const orig = textEl.textContent;
+      // data-enc-text holds the real label if it is mid-decrypt (dossier-encrypt)
+      const orig = textEl.dataset.encText || textEl.textContent;
       textEl.textContent = 'POP-UP BLOCKED // ALLOW POP-UPS';
       setTimeout(() => { textEl.textContent = orig; delete btn.dataset.popupWarn; }, 3000);
     }

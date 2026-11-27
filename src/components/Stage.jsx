@@ -1,4 +1,5 @@
 import { memo } from 'react';
+import ScreenFrame from './ScreenFrame';
 
 function Stage() {
   return (
@@ -19,34 +20,17 @@ function Stage() {
       <div className="stage-grain"></div>
     </div>
 
+    {/* HUD screen frame: above the background art, below every button and the countdown */}
+    <ScreenFrame />
+
     
     <div id="doomHand" className="doom-hand-layer" aria-hidden="true">
       <div className="dh-crop">
-        <img className="dh-art" src="/doom/doom-hand.jpg" alt="" />
+        <img className="dh-art" src="/doom/doom-hand-v2.jpg" alt="" />
       </div>
       <div className="dh-mist"></div>
       <div className="dh-shadow"></div>
       <div className="dh-glow"></div>
-    </div>
-
-    {/* Volumetric Holographic Light Cone emerging from Dr Doom's palm */}
-    <div id="incursionCone" className="incursion-cone" aria-hidden="true">
-      <div className="cone-beam-wrap">
-        <div className="cone-beam-core"></div>
-        <div className="cone-beam-rays"></div>
-        <div className="cone-beam-scanlines"></div>
-        <div className="cone-beam-glimmer"></div>
-      </div>
-      <div className="cone-cradle-wrap">
-        <div className="cone-cradle-ring ring-outer"></div>
-        <div className="cone-cradle-ring ring-inner"></div>
-        <div className="cone-cradle-glow"></div>
-      </div>
-      <div className="palm-emitter-root">
-        <div className="palm-emitter-flare"></div>
-        <div className="palm-emitter-ring"></div>
-        <div className="palm-emitter-core"></div>
-      </div>
     </div>
 
     <div className="world-fade">
@@ -68,7 +52,7 @@ function Stage() {
     
     <div id="doomHandFront" className="doom-hand-front" aria-hidden="true">
       <div className="dh-crop">
-        <img className="dh-art" src="/doom/doom-hand.jpg" alt="" />
+        <img className="dh-art" src="/doom/doom-hand-v2.jpg" alt="" />
       </div>
     </div>
 

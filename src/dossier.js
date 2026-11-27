@@ -2,6 +2,8 @@
 import { applyRegistrationTarget, handleRegisterClick } from './registration/eventMap';
 import { ITEMS } from './doomsday-app';
 import { EVENT_LEVELS } from './eventLevels';
+// Aceternity <EncryptedText> decrypt reveals (src/dossier-encrypt.tsx)
+import { encryptText, encryptAll, sweepEncrypted } from './dossier-encrypt';
 
 export function initDossier() {
       // 10 Festival Sections Data Model with subs and rich blocks
@@ -812,6 +814,55 @@ export function initDossier() {
       }
       let typewriterTimer = null;
       let threatBarTimer = null;
+      // Stagger offset for the decrypt reveals: when a dossier first opens the
+      // sub-section waits for the header/heading; switching tabs starts at 0.
+      let encryptBase = 0;
+
+      // ---- Encrypted-text reveals (run after dossier.js has written the text) ----
+      function encryptDossierHeader() {
+        const plate = document.getElementById('litPlate');
+        if (!plate) return;
+        sweepEncrypted();
+        // header / branding (static text → replay on every open)
+        encryptAll(plate, '.dz2-brand-main', { start: 0, duration: 520, variant: 'title', restart: true });
+        encryptAll(plate, '.dz2-brand .dz2-neon, .dz2-badge-status', { start: 90, step: 80, duration: 360, restart: true });
+        encryptText(document.getElementById('litHeroCode'), { delay: 140, duration: 320 });
+        encryptText(document.getElementById('litHeroSub'), { delay: 200, duration: 620 });
+        // page heading
+        encryptText(document.getElementById('litHeroSubCodename'), { delay: 220, duration: 520 });
+        encryptText(document.getElementById('litHeroTitle'), { delay: 280, duration: 900, variant: 'title' });
+        // event category
+        encryptText(document.getElementById('litHeroThreat'), { delay: 440, duration: 480 });
+        encryptText(document.getElementById('litMasterTag'), { delay: 500, duration: 420 });
+        encryptAll(plate, '.dz2-directive-tag, .dz2-selector-lbl, .dz2-intel-hdr-title', { start: 420, step: 90, duration: 420, restart: true });
+        // event details
+        encryptText(document.getElementById('litMasterDesc'), { delay: 560, duration: 1300, variant: 'body' });
+        encryptText(document.getElementById('litPhaseCount'), { delay: 620, duration: 420 });
+        // navigation: vector tabs
+        encryptAll(document.getElementById('litSubList'), '.dz2-tab-status, .dz2-tab-title, .dz2-tab-sub', { start: 660, step: 45, duration: 460 });
+      }
+
+      function encryptSubDetail(base) {
+        sweepEncrypted();
+        // tab statuses that selectSub just rewrote (unchanged ones keep their reveal)
+        encryptAll(document.getElementById('litSubList'), '.dz2-tab-status', { start: base, step: 40, duration: 380 });
+        encryptText(document.getElementById('litDetailTag'), { delay: base + 40, duration: 420 });
+        encryptText(document.getElementById('litDetailName'), { delay: base + 90, duration: 760, variant: 'title' });
+        encryptText(document.getElementById('litDetailSpecsSec'), { delay: base + 160, duration: 480 });
+        // CTA
+        encryptText(document.getElementById('litActionBtnText'), { delay: base + 520, duration: 620, variant: 'cta' });
+      }
+
+      function encryptCards(stackEl, base) {
+        if (!stackEl) return;
+        sweepEncrypted();
+        stackEl.querySelectorAll('.dz2-card').forEach((card, idx) => {
+          const s = base + idx * 140;
+          encryptAll(card, '.dz2-spec-badge, .dz2-card-meta, .dz2-tag-chip, .dz2-access-lvl, .dz2-card-status', { start: s, step: 40, duration: 380 });
+          encryptText(card.querySelector('.dz2-card-title'), { delay: s + 120, duration: 620, variant: 'title' });
+          encryptText(card.querySelector('.dz2-card-desc, .dz2-accordion-body'), { delay: s + 220, duration: 1000, variant: 'body' });
+        });
+      }
 
       // Typewriter utility for spec pill
       function typeSpecText(element, text) {
@@ -869,7 +920,7 @@ export function initDossier() {
       }
 
       // Render info cards stack for the selected sub
-      function renderCardsStack(sub) {
+      function renderCardsStack(sub, revealBase = 0) {
         const stackEl = document.getElementById('litDetailDossier');
         if (!stackEl) return;
 
@@ -947,6 +998,8 @@ export function initDossier() {
           });
 
           stackEl.classList.remove('dz2-glitch-fade');
+          // event cards: staggered decrypt, card by card
+          encryptCards(stackEl, revealBase);
         }, 150);
       }
 
@@ -1019,8 +1072,12 @@ export function initDossier() {
         // Registrable events: point the action button at the real registration page.
         applyRegistrationTarget(sub.name);
 
+        // Decrypt the sub-section heading, category chips and CTA
+        const revealBase = encryptBase;
+        encryptSubDetail(revealBase);
+
         // Render info cards stack for this sub
-        renderCardsStack(sub);
+        renderCardsStack(sub, revealBase + 180);
 
         // Animate threat bar with consistent seeded calculation
         const targetThreat = 45 + ((activeSectionIdx * 19 + subIdx * 27) % 52);
@@ -1098,8 +1155,13 @@ export function initDossier() {
           }
         }
 
-        // Trigger Sub 0
+        // Trigger Sub 0 (its reveals wait for the header/heading to decrypt)
+        encryptBase = 760;
         selectSub(0);
+        encryptBase = 0;
+
+        // Decrypt header, heading, category, details and navigation
+        encryptDossierHeader();
 
         // Header and Body Staggered Entrance
         const bodyEl = document.querySelector('.dz2-body');
@@ -1166,7 +1228,8 @@ export function initDossier() {
           const textEl = document.getElementById('litActionBtnText');
           if (textEl && !btn.dataset.busy) {
             btn.dataset.busy = '1';
-            const orig = textEl.textContent;
+            // data-enc-text holds the real label if it is mid-decrypt
+            const orig = textEl.dataset.encText || textEl.textContent;
             textEl.textContent = 'ACCESS GRANTED // TRANSMISSION SENT';
             setTimeout(() => {
               textEl.textContent = orig;

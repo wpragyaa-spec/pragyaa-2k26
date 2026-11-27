@@ -23,7 +23,7 @@ body::before {
   background:
     radial-gradient(ellipse 80% 60% at 50% 0%, rgba(0, 255, 136, .08), transparent 60%),
     linear-gradient(180deg, rgba(5, 6, 7, .82), rgba(5, 6, 7, .96) 45%, #050607),
-    url('/doom/doom_sphere_bg.jpg') center top / cover no-repeat;
+    url('/doom/doom-hand-v2.jpg') center top / cover no-repeat;
 }
 ::selection { background: #00ff88; color: #000; }
 

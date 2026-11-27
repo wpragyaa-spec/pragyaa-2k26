@@ -132,7 +132,7 @@ body.gridview #stage {
   overflow: hidden;
   background-image: 
     radial-gradient(ellipse 85% 75% at 50% 50%, rgba(2, 8, 5, 0.3) 0%, rgba(2, 8, 5, 0.88) 100%),
-    url('/doom/doom_sphere_bg.jpg');
+    url('/doom/doom-hand-v2.jpg');
   background-position: center 46%;
   background-size: cover;
   background-repeat: no-repeat;

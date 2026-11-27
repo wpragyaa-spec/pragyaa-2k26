@@ -1,0 +1,67 @@
+/* ==========================================================================
+   Dossier encrypted-text reveals (src/dossier-encrypt.tsx)
+   Aceternity <EncryptedText> renders in normal text flow; the dossier is
+   typeset in JetBrains Mono (monospace), so cipher glyphs occupy exactly the
+   same space as the real characters — no layout shift, identical wrapping.
+   Styling: Avengers: Doomsday-inspired — metallic silver-green titles,
+   emerald cipher glyphs, soft shadows on the dossier's black plate.
+   ========================================================================== */
+
+.enc-host {
+  display: inline;
+}
+
+/* waiting for its stagger slot: a faint static cipher */
+.enc-wait {
+  color: #00ff88;
+  -webkit-text-fill-color: currentColor;
+  opacity: .28;
+  text-shadow: 0 0 6px rgba(0, 255, 136, .35);
+}
+
+/* scrambling glyphs: emerald cipher light */
+.enc-scr {
+  color: #3dffa3;
+  -webkit-text-fill-color: currentColor;
+  text-shadow: 0 0 .35em rgba(0, 255, 136, .75);
+  opacity: .9;
+}
+
+/* each character flashes as it locks in */
+.enc-rev {
+  animation: encLock .45s ease-out both;
+}
+@keyframes encLock {
+  from { text-shadow: 0 0 .55em rgba(0, 255, 136, .95), 0 0 .15em rgba(200, 255, 228, .9); }
+  to   { text-shadow: none; }
+}
+
+/* ---- variants ---------------------------------------------------------- */
+
+/* titles: metallic silver-green with a dark horizon band (per character) */
+.enc-host--title .enc-rev {
+  background: linear-gradient(180deg, #f6fbf8 0%, #dbe7e1 22%, #a8bbb2 44%, #4f685d 51%, #22352c 55%, #6e8c80 70%, #cfe0d8 88%, #f0f8f4 100%);
+  -webkit-background-clip: text;
+          background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+}
+.enc-host--title {
+  filter:
+    drop-shadow(0 0 1px rgba(0, 0, 0, .9))
+    drop-shadow(0 0 .22em rgba(0, 255, 136, .18))
+    drop-shadow(0 .12em .2em rgba(0, 0, 0, .75));
+}
+
+/* body copy: quieter cipher so paragraphs don't shout */
+.enc-host--body .enc-scr { opacity: .55; text-shadow: 0 0 .25em rgba(0, 255, 136, .45); }
+.enc-host--body .enc-wait { opacity: .16; }
+
+/* CTA: brighter lock-in pulse */
+.enc-host--cta .enc-rev { animation-duration: .7s; }
+.enc-host--cta .enc-scr { color: #7dffc4; }
+
+@media (prefers-reduced-motion: reduce) {
+  /* dossier-encrypt.tsx leaves text plain; this guards any in-flight nodes */
+  .enc-rev { animation: none; }
+}

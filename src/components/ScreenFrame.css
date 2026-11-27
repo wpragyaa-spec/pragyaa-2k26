@@ -1,0 +1,118 @@
+/* PRAGYA 2027 - HUD screen frame (components/ScreenFrame.jsx)
+   Lives inside #stage at z-index 4: above the background (0), Doom hand (1, 3) and
+   floating cards (2); below the countdown (5), the section buttons (25) and every
+   other UI layer. pointer-events: none, so it never blocks clicks, taps or dragging. */
+
+.pragya-screen-frame {
+  --psf-line: rgba(196, 224, 238, 0.5);
+  --psf-bright: rgba(226, 244, 255, 0.85);
+  --psf-glow: rgba(140, 220, 255, 0.5);
+
+  position: absolute;
+  inset: 8px;
+  z-index: 4;
+  pointer-events: none;
+}
+
+.psf-svg {
+  position: absolute;
+  inset: 0;
+  overflow: visible;
+  /* a faint metallic halo on every line */
+  filter: drop-shadow(0 0 2px rgba(140, 215, 255, 0.18));
+}
+
+.psf-svg path {
+  fill: none;
+  stroke-linejoin: miter;
+  stroke-linecap: square;
+}
+
+/* thin silver-cyan perimeter, ticks */
+.psf-line {
+  stroke: var(--psf-line);
+  stroke-width: 1;
+}
+
+/* inner line of the double-line centre accents */
+.psf-dim {
+  stroke: rgba(196, 224, 238, 0.45);
+}
+
+/* corner brackets, side segments, bottom bars */
+.psf-bright {
+  stroke: var(--psf-bright);
+  stroke-width: 1.6;
+}
+
+/* glowing centre highlights */
+.psf-glow {
+  stroke: rgba(236, 249, 255, 0.9);
+  stroke-width: 1.6;
+  filter: drop-shadow(0 0 3px var(--psf-glow));
+}
+
+/* small diagonal stripes beside "MULTIVERSE SYSTEM" */
+.psf-svg .psf-stripes {
+  fill: rgba(220, 240, 252, 0.75);
+  stroke: none;
+}
+
+/* tiny technical labels */
+.psf-label {
+  position: absolute;
+  top: 9px;
+  font-family: var(--mono, "Share Tech Mono"), monospace;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  line-height: 1;
+  color: rgba(220, 235, 245, 0.78);
+  /* dark first, so the labels stay readable over bright art (the planet, top right) */
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.9), 0 0 6px rgba(140, 215, 255, 0.18);
+  white-space: nowrap;
+}
+
+/* clear of the corner bracket (left) and the diagonal stripes (right) */
+.psf-label-left {
+  left: 58px;
+}
+
+.psf-label-right {
+  right: 92px;
+}
+
+/* Up to 900px the menu button (.navbtn: 46px square, 14px from the top-left)
+   sits in the top-left corner: the left label moves just past it, centred on it. */
+@media (max-width: 900px) {
+  .psf-label {
+    font-size: 8px;
+    letter-spacing: 0.14em;
+  }
+  .psf-label-left {
+    left: calc(60px + 10px + var(--safe-left, 0px) - 8px);
+    top: calc(14px + 23px + var(--safe-top, 0px) - 8px - 4px);
+  }
+  .psf-label-right {
+    right: 56px;
+    top: calc(14px + 23px + var(--safe-top, 0px) - 8px - 4px);
+  }
+}
+
+@media (max-width: 600px) {
+  .pragya-screen-frame {
+    inset: 5px;
+  }
+  .psf-label {
+    font-size: 7px;
+    letter-spacing: 0.1em;
+  }
+  .psf-label-left {
+    left: calc(60px + 10px + var(--safe-left, 0px) - 5px);
+    top: calc(14px + 23px + var(--safe-top, 0px) - 5px - 4px);
+  }
+  .psf-label-right {
+    right: 40px;
+    top: calc(14px + 23px + var(--safe-top, 0px) - 5px - 4px);
+  }
+}

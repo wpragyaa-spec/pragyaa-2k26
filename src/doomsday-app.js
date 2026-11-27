@@ -1,4 +1,5 @@
 import { initBilateralSmokeSimulation } from './doomsday-smoke';
+import { initIntroCinematic } from './motion/introMotion';
 import { applyRegistrationTarget, handleRegisterClick } from './registration/eventMap';
 import { EVENT_LEVELS, EVENT_LEVEL_ORDER } from './eventLevels';
 const CDN = "https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/";
@@ -807,12 +808,12 @@ if (orbEl) {
     
 function createSecButton(item, idx) {
     const wrap = document.createElement('div');
-    wrap.className = 'sec-wrap';
+    wrap.className = 'sec-wrap CCTheme';
     wrap.style.setProperty('--o', String(idx));
 
     const btn = document.createElement('button');
     btn.type = 'button';
-    btn.className = 'sec';
+    btn.className = 'sec CCButton CCBeam';   // Coyote Lab border beam (src/sec-beam.css)
     btn.dataset.cardIdx = String(idx);
 
     const txt = hexNoise(110);
@@ -876,30 +877,12 @@ function createSecButton(item, idx) {
     const LEFT = [0, 5, 6, 7, 8];
     const RIGHT = [1, 2, 3, 9, 4];
 
-    function buildRailWing(railEl, indices, isRight) {
+    // Each wing is just its 5 buttons: the "TIMELINE PROTOCOLS" and
+    // "WARFARE & DIRECTIVES" panels (header, status, footer) were removed.
+    function buildRailWing(railEl, indices) {
         if (!railEl) return;
         railEl.innerHTML = '';
-
-        // HUD Panel Header
-        const header = document.createElement('div');
-        header.className = 'rail-header';
-        header.setAttribute('aria-hidden', 'true');
-        header.innerHTML = isRight ? `
-          <div class="rh-top">
-            <span class="rh-status"><i class="rh-led"></i>ONLINE</span>
-            <span class="rh-tag">// WING-R //</span>
-          </div>
-          <div class="rh-title">WARFARE & DIRECTIVES</div>
-          <div class="rh-bar"><span class="rh-fill"></span></div>
-        ` : `
-          <div class="rh-top">
-            <span class="rh-tag">// WING-L //</span>
-            <span class="rh-status"><i class="rh-led"></i>ACTIVE</span>
-          </div>
-          <div class="rh-title">TIMELINE PROTOCOLS</div>
-          <div class="rh-bar"><span class="rh-fill"></span></div>
-        `;
-        railEl.appendChild(header);
+        railEl.classList.add('rail--bare');
 
         // Body container for the 5 buttons
         const body = document.createElement('div');
@@ -912,25 +895,10 @@ function createSecButton(item, idx) {
             body.appendChild(el);
         });
         railEl.appendChild(body);
-
-        // HUD Panel Footer
-        const footer = document.createElement('div');
-        footer.className = 'rail-footer';
-        footer.setAttribute('aria-hidden', 'true');
-        footer.innerHTML = isRight ? `
-          <div class="rf-metric"><span>ORBIT</span><b>LOCKED</b></div>
-          <div class="rf-divider"></div>
-          <div class="rf-metric"><span>THREAT</span><b>SECURED</b></div>
-        ` : `
-          <div class="rf-metric"><span>LATENCY</span><b>0.14ms</b></div>
-          <div class="rf-divider"></div>
-          <div class="rf-metric"><span>CHRONO</span><b>SYNC 100%</b></div>
-        `;
-        railEl.appendChild(footer);
     }
 
-    buildRailWing(railL, LEFT, false);
-    buildRailWing(railR, RIGHT, true);
+    buildRailWing(railL, LEFT);
+    buildRailWing(railR, RIGHT);
 
     // live hex-noise refresh behind the labels
     const noiseReduce = window.matchMedia('(prefers-reduced-motion: reduce)');
@@ -1064,10 +1032,8 @@ function createSecButton(item, idx) {
         }
         if (wristHudEl) {
             const whW = Math.max(240, Math.min(WRIST.w * imgW, isMobile ? vw * 0.86 : 340));
+            // size only: the countdown sits at the bottom centre of the screen (pragya-rails-append.css)
             wristHudEl.style.setProperty('--wh-w', `${whW.toFixed(1)}px`);
-            wristHudEl.style.setProperty('--wh-x', `${(imgLeft + WRIST.x * imgW).toFixed(1)}px`);
-            wristHudEl.style.setProperty('--wh-y', `${Math.min(imgTop + WRIST.y * imgH, vh - 140).toFixed(1)}px`);
-            wristHudEl.style.setProperty('--wh-rot', `${WRIST.rot}deg`);
         }
     }
 
@@ -2054,7 +2020,7 @@ function createSecButton(item, idx) {
         decodedBlobUrls[index] = thumbUrl;
                 const cardImg = getCard(index)?.imgDom;
         if (cardImg) {
-            cardImg.onerror = () => { cardImg.src = '/doom/doom_sphere_bg.jpg'; };
+            cardImg.onerror = () => { cardImg.src = '/doom/doom-hand-v2.jpg'; };
             cardImg.src = thumbUrl;
             cardImg.onload = () => cardImg.classList.add('in');
             if (cardImg.complete)
@@ -2232,11 +2198,9 @@ function createSecButton(item, idx) {
     let sceneStarted = false;
     let revealTriggered = false;
     let smokeCtrl = null;
-    // Background probe
-    const avengersBgProbe = new Image();
-    avengersBgProbe.onload = () => assetReported();
-    avengersBgProbe.onerror = () => assetReported();
-    avengersBgProbe.src = '/avengers_bg.jpg';
+    // The intro background (/avengers_bg.jpg, 3 MB) used to be preloaded here before the
+    // site revealed. The intro is no longer shown, so don't make visitors wait for it.
+    assetReported();
     // Live Countdown calculation
     // Live Countdown calculation with true Avengers: Doomsday release date
     const RELEASE = new Date('2026-12-29T00:00:00+05:30');
@@ -3019,6 +2983,7 @@ function createSecButton(item, idx) {
     }
     // Reveal & Transition Timing
     let countdownAutoTimer = null;
+    let introCine = null;
     let tickTimeouts = [];
     if ('scrollRestoration' in history)
         history.scrollRestoration = 'manual';
@@ -3026,14 +2991,6 @@ function createSecButton(item, idx) {
     const INTRO_SEEN_KEY = 'pragya_intro_seen';
     const introControlsText = document.querySelector('.intro-controls span');
     const introDefaultText = introControlsText ? introControlsText.textContent : '';
-    function hasSeenIntro() {
-        try {
-            return localStorage.getItem(INTRO_SEEN_KEY) === '1';
-        }
-        catch {
-            return false;
-        }
-    }
     function markIntroSeen() {
         try {
             localStorage.setItem(INTRO_SEEN_KEY, '1');
@@ -3068,6 +3025,8 @@ function createSecButton(item, idx) {
         if (revealTriggered)
             return;
         revealTriggered = true;
+        if (introCine)
+            introCine.release();
         disableIntroSkip();
         markIntroSeen();
         if (countdownAutoTimer)
@@ -3113,8 +3072,10 @@ function createSecButton(item, idx) {
         if (sceneStarted)
             return;
         sceneStarted = true;
-        // Returning visitor: skip countdown + glass break, reveal the site instantly.
-        if (!force && hasSeenIntro()) {
+        // No intro for anyone (first-time visitors included): skip the cinematic
+        // countdown + glass break and reveal the site instantly. `force` (the unused
+        // openTeaserCountdown replay) is the only way into the old intro.
+        if (!force) {
             revealTriggered = true;
             if (introEl) {
                 introEl.classList.add('gone');
@@ -3162,11 +3123,17 @@ function createSecButton(item, idx) {
             }, delay);
             tickTimeouts.push(tid);
         });
-        countdownAutoTimer = setTimeout(() => {
-            if (!revealTriggered) {
-                triggerReveal();
-            }
-        }, 6500);
+        // Cinematic opening: builds the scene, then waits for the visitor to
+        // scroll ("Scroll to enter"); scrolling dives the camera in and fires
+        // the glass breach below (replaces the old 6.5s automatic breach).
+        if (introCine)
+            introCine.destroy();
+        introCine = initIntroCinematic({
+            onEnter: () => {
+                if (!revealTriggered)
+                    triggerReveal();
+            },
+        });
         if (force)
             enableIntroSkip();
     }

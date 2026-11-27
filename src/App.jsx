@@ -8,6 +8,8 @@ import Intro from './components/Intro';
 import Cursor from './components/Cursor';
 import { initDossier } from './dossier';
 import { initDoomsdayPortal } from './doomsday-app';
+import { initHeroMotion } from './motion/heroMotion';
+import { initMagnetic, initStageCamera, initDossierReveal } from './motion/ambient';
 
 let booted = false;
 
@@ -20,6 +22,12 @@ export default function App() {
     }
     initDossier();
     initDoomsdayPortal();
+    // Motion layer (GSAP). Runs after the engine so its capture-phase
+    // listeners and DOM hooks see the final markup.
+    initHeroMotion();
+    initMagnetic();
+    initStageCamera();
+    initDossierReveal();
   }, []);
 
   return (

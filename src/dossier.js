@@ -1,5 +1,7 @@
 // Schedule dossier modal logic (ported verbatim from the inline script in index.html)
 import { applyRegistrationTarget, handleRegisterClick } from './registration/eventMap';
+import { ITEMS } from './doomsday-app';
+import { EVENT_LEVELS } from './eventLevels';
 
 export function initDossier() {
       // 10 Festival Sections Data Model with subs and rich blocks
@@ -754,6 +756,60 @@ export function initDossier() {
       // Active state
       let activeSectionIdx = 4; // Schedule (SEC-05) default
       let activeSubIdx = 0;
+      let activeItem = null;
+
+      // Site sections (ITEMS in doomsday-app.js) use a simpler sub format:
+      // { name, tag, timeOrSpecs, details, actionText }. Convert them for the popup.
+      function siteSubToDossier(sub, sectionTitle) {
+        return {
+          name: sub.name,
+          tag: sub.tag,
+          timeOrSpecs: sub.timeOrSpecs,
+          secSpec: String(sectionTitle || '').toUpperCase(),
+          summary: sub.details,
+          actionText: sub.actionText,
+        };
+      }
+      function dossierFromSite(siteItem) {
+        return {
+          code: siteItem.code,
+          title: siteItem.title,
+          subtitle: siteItem.subtitle,
+          codename: (siteItem.subtitle || '').split('// ')[1] || siteItem.title,
+          threat: siteItem.threat || 'CONFIRMED',
+          desc: siteItem.desc,
+          subs: (siteItem.subs || []).map((sb) => siteSubToDossier(sb, siteItem.title)),
+        };
+      }
+      // Events → Department / Institute level: all events of the level's sections as tabs
+      function dossierForLevel(levelKey) {
+        const cfg = EVENT_LEVELS[levelKey];
+        if (!cfg) return null;
+        const sections = cfg.sections
+          .map((t) => ITEMS.find((it) => it.title === t))
+          .filter(Boolean);
+        if (!sections.length) return null;
+        return {
+          code: 'SEC-03',
+          title: cfg.label,
+          subtitle: `INC-003 // EVENTS // ${cfg.label.toUpperCase()}`,
+          codename: `EVENTS // ${cfg.label.toUpperCase()}`,
+          threat: `${sections.reduce((n, it) => n + (it.subs || []).length, 0)} EVENTS`,
+          desc: cfg.desc,
+          subs: sections.flatMap((it) => (it.subs || []).map((sb) => siteSubToDossier(sb, it.title))),
+        };
+      }
+      function getDossierItem(sectionIdx) {
+        const level = document.body.dataset.litLevel;
+        const levelItem = level ? dossierForLevel(level) : null;
+        if (levelItem) return levelItem;
+        if (DOSSIER_ITEMS[sectionIdx]) return DOSSIER_ITEMS[sectionIdx];
+        // Sections that exist only on the sphere (Flagship, Departmental, Creative, ...)
+        if (ITEMS[sectionIdx] && ITEMS[sectionIdx].subs && ITEMS[sectionIdx].subs.length) {
+          return dossierFromSite(ITEMS[sectionIdx]);
+        }
+        return DOSSIER_ITEMS[4];
+      }
       let typewriterTimer = null;
       let threatBarTimer = null;
 
@@ -896,7 +952,7 @@ export function initDossier() {
 
       // Select a sub tab
       function selectSub(subIdx) {
-        const item = DOSSIER_ITEMS[activeSectionIdx];
+        const item = activeItem;
         if (!item || !item.subs || !item.subs[subIdx]) return;
         activeSubIdx = subIdx;
         const sub = item.subs[subIdx];
@@ -973,10 +1029,11 @@ export function initDossier() {
 
       // Render the complete Schedule Dossier reference inside #litPlate
       function renderScheduleDossier(sectionIdx) {
-        if (sectionIdx < 0 || sectionIdx >= DOSSIER_ITEMS.length) sectionIdx = 4;
+        if (!(sectionIdx >= 0)) sectionIdx = 4;
         activeSectionIdx = sectionIdx;
         activeSubIdx = 0;
-        const item = DOSSIER_ITEMS[sectionIdx];
+        const item = getDossierItem(sectionIdx);
+        activeItem = item;
 
         // 1. Pinned Header
         const heroCode = document.getElementById('litHeroCode');
@@ -1082,7 +1139,7 @@ export function initDossier() {
                    if (document.body.classList.contains('lit') && window.__railOpen) return;
         if (e.target.closest && e.target.closest('input, textarea, select, [contenteditable="true"]')) return;
         if (!window.__railOpen) return;
-        const item = DOSSIER_ITEMS[activeSectionIdx];
+        const item = activeItem;
         if (!item || !item.subs || item.subs.length <= 1) return;
 
         if (e.key === 'ArrowRight' || e.key === 'ArrowDown') {

@@ -1,5 +1,6 @@
 import { initBilateralSmokeSimulation } from './doomsday-smoke';
 import { applyRegistrationTarget, handleRegisterClick } from './registration/eventMap';
+import { EVENT_LEVELS, EVENT_LEVEL_ORDER } from './eventLevels';
 const CDN = "https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/";
 export const HAND = {
     IMG_AR: 16 / 9, // 1.7778 for broad widescreen desktop coverage
@@ -1608,7 +1609,7 @@ function createSecButton(item, idx) {
             }, 2000);
         });
     }
-    function openLightbox(idx, sourceElem , from) {
+    function openLightbox(idx, sourceElem , from, opts = {}) {
         hideCallout();
         const item = ITEMS[idx];
         if (!item)
@@ -1619,6 +1620,16 @@ function createSecButton(item, idx) {
             window.location.href = OWN_PAGE[item.title];
             return;
         }
+        // "Events" opens a small dropdown: Department Level / Institute Level
+        if (item.title === 'Events' && !opts.level) {
+            toggleEventLevels(sourceElem || getCard(idx)?.dom || null);
+            return;
+        }
+        // dossier.js reads this to show the chosen level's events as tabs
+        if (opts.level)
+            document.body.dataset.litLevel = opts.level;
+        else
+            delete document.body.dataset.litLevel;
                 focusedIndex = from === 'rail' ? -1 : idx;
                 sourceCardElement = sourceElem || getCard(idx)?.dom || null;
         clearTimeout(plateTimer);
@@ -1703,9 +1714,114 @@ function createSecButton(item, idx) {
             }
         }
     }
+    // ----- Events: Department Level / Institute Level dropdown -----
+    // A small panel that pops out next to the Events button (like a dropdown
+    // menu). Not a separate page or popup.
+    let evFlyout = null;
+    let evAnchor = null;
+    function buildEventFlyout() {
+        const el = document.createElement('div');
+        el.id = 'evFlyout';
+        el.className = 'ev-flyout';
+        el.setAttribute('role', 'menu');
+        el.setAttribute('aria-label', 'Event levels');
+        el.innerHTML = EVENT_LEVEL_ORDER.map((key) => `
+          <button type="button" class="ev-flyout-item" role="menuitem" data-level="${key}">
+            <span>${EVENT_LEVELS[key].label}</span>
+            <small>${EVENT_LEVELS[key].hint}</small>
+          </button>`).join('');
+        el.addEventListener('click', (e) => {
+            const btn = e.target.closest('.ev-flyout-item');
+            if (!btn)
+                return;
+            const level = btn.dataset.level;
+            closeEventFlyout(false);
+            openEventLevel(level, evAnchor);
+        });
+        document.body.appendChild(el);
+        // Close on outside click, scroll or resize
+        document.addEventListener('pointerdown', (e) => {
+            if (!document.body.classList.contains('evlevels'))
+                return;
+            if (el.contains(e.target) || (evAnchor && evAnchor.contains(e.target)))
+                return;
+            closeEventFlyout(false);
+        }, true);
+        window.addEventListener('resize', () => closeEventFlyout(false));
+        document.addEventListener('scroll', () => closeEventFlyout(false), true);
+        return el;
+    }
+    function placeEventFlyout(anchor) {
+        const vw = window.innerWidth;
+        const vh = window.innerHeight;
+        const pad = 12;
+        const r = anchor && anchor.getBoundingClientRect ? anchor.getBoundingClientRect() : null;
+        const fw = evFlyout.offsetWidth;
+        const fh = evFlyout.offsetHeight;
+        let left;
+        let top;
+        if (!r || !r.width) {
+            left = (vw - fw) / 2;
+            top = (vh - fh) / 2;
+        }
+        else if (isCompactNav()) {
+            // Phone menu: drop down right under the Events button
+            left = r.left + 24;
+            top = r.bottom + 8;
+            if (top + fh > vh - pad)
+                top = r.top - fh - 8;
+        }
+        else {
+            // Desktop: open on the side facing the middle of the screen
+            left = (r.left + r.width / 2 > vw / 2) ? r.left - fw - 14 : r.right + 14;
+            top = r.top;
+        }
+        left = Math.max(pad, Math.min(left, vw - fw - pad));
+        top = Math.max(pad, Math.min(top, vh - fh - pad));
+        evFlyout.style.left = `${Math.round(left)}px`;
+        evFlyout.style.top = `${Math.round(top)}px`;
+    }
+    function openEventFlyout(anchor) {
+        if (!evFlyout)
+            evFlyout = buildEventFlyout();
+        evAnchor = anchor || null;
+        if (evAnchor && evAnchor.setAttribute)
+            evAnchor.setAttribute('aria-expanded', 'true');
+        document.body.classList.add('evlevels');
+        placeEventFlyout(evAnchor);
+        requestAnimationFrame(() => evFlyout.querySelector('.ev-flyout-item')?.focus({ preventScroll: true }));
+    }
+    function closeEventFlyout(restoreFocus = true) {
+        if (!document.body.classList.contains('evlevels'))
+            return;
+        document.body.classList.remove('evlevels');
+        if (evAnchor && evAnchor.setAttribute)
+            evAnchor.setAttribute('aria-expanded', 'false');
+        if (restoreFocus && evAnchor && evAnchor.focus)
+            evAnchor.focus({ preventScroll: true });
+    }
+    function toggleEventLevels(anchor) {
+        if (document.body.classList.contains('evlevels') && evAnchor === anchor)
+            closeEventFlyout(false);
+        else
+            openEventFlyout(anchor);
+    }
+    function openEventLevel(level, sourceElem) {
+        const cfg = EVENT_LEVELS[level];
+        if (!cfg)
+            return;
+        // Open the popup on the level's first section; dossier.js fills in all its events
+        const idx = ITEMS.findIndex((it) => it.title === cfg.sections[0]);
+        if (document.body.classList.contains('navopen'))
+            setNavOpen(false);
+        if (idx >= 0)
+            openLightbox(idx, sourceElem || null, 'rail', { level });
+    }
+
     function closeLightbox() {
         if (!document.body.classList.contains('lit'))
             return;
+        delete document.body.dataset.litLevel;
         if (threatAnimId) {
             cancelAnimationFrame(threatAnimId);
             threatAnimId = null;
@@ -1783,8 +1899,14 @@ function createSecButton(item, idx) {
     }
     if (railsM) {
         railsM.addEventListener('click', (e) => {
-            if (e.target.closest('.sec'))
-                setNavOpen(false);
+            const sec = e.target.closest('.sec');
+            if (!sec)
+                return;
+            // Events keeps the menu open: its Department/Institute dropdown shows inside it
+            const evIdx = String(ITEMS.findIndex((it) => it.title === 'Events'));
+            if (sec.dataset.cardIdx === evIdx)
+                return;
+            setNavOpen(false);
         });
     }
     if (railsM) {
@@ -1821,6 +1943,10 @@ function createSecButton(item, idx) {
     });
     window.addEventListener('keydown', (e) => {
         if (e.key === 'Escape') {
+            if (document.body.classList.contains('evlevels')) {
+                closeEventFlyout();
+                return;
+            }
             if (document.body.classList.contains('navopen')) {
                 setNavOpen(false);
                 return;

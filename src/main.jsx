@@ -3,6 +3,7 @@ import './doomsday.css';
 import './index.css';
 import './pragya-rails-append.css';
 import './dossier.css';
+import './eventLevels.css';
 import App from './App.jsx';
 
 // Returning visitors skip the countdown + glass-break intro entirely.

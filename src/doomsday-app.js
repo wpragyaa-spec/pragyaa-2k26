@@ -39,6 +39,7 @@ export const ITEMS = [
         subtitle: "INC-002 // SYMPOSIUM CODEX",
         desc: "PRAGYAA 2027 is SGGS IE&T's flagship national technical symposium, re-engineered as an incursion battleground where code, steel, and intellect forge the future of the multiverse.",
         id: "hf_20260922_194350_5546ea3d-6336-42c7-a59f-06165c5802be",
+        img: "/sphere/aboutUs.png",
         threat: "CAT-1 // ARCHIVE",
         tip: "The mission behind Pragya",
         blurb: "Our mission, vision and values.",
@@ -55,6 +56,7 @@ export const ITEMS = [
         subtitle: "INC-003 // WARFARE & ARENAS",
         desc: "Combat zones across software, mechanical warfare, avionics, and quantum cryptography. High-stakes competition with massive bounty pools and national glory.",
         id: "hf_20260922_194349_b4533691-cb49-41d4-b56c-51f0fdcbe250",
+        img: "/sphere/events.png",
         threat: "CAT-5 // HOSTILE",
         tip: "Compete. Create. Conquer.",
         blurb: "Flagship, departmental and creative events. Rulebook inside.",
@@ -72,6 +74,7 @@ export const ITEMS = [
         subtitle: "INC-004 // CORE DIRECTORATE",
         desc: "The high council executing the festival protocols. Engineers, coordinators, and directors maintaining timeline integrity across all sectors.",
         id: "hf_20260922_194349_e588abd3-1bfa-4918-894f-05632cc51ccc",
+        img: "/sphere/team.png",
         threat: "CAT-2 // COMMAND",
         tip: "The council behind the chaos",
         blurb: "Secretaries, coordinators and the web committee.",
@@ -88,6 +91,7 @@ export const ITEMS = [
         subtitle: "INC-005 // TEMPORAL MATRIX",
         desc: "Three days of relentless innovation, hackathons, guest keynotes, and arena showdowns synchronized to the second across the campus.",
         id: "hf_20260922_194350_28d92c80-de66-41cb-911e-b3b44aebe1f5",
+        img: "/sphere/schedule.png",
         threat: "CAT-2 // SYNCHRONIZED",
         tip: "Three days. One timeline.",
         blurb: "Day-by-day timings so you never miss a moment.",
@@ -104,6 +108,7 @@ export const ITEMS = [
         subtitle: "INC-006 // VISUAL ARCHIVES",
         desc: "Declassified photographic archives and footage from previous editions of PRAGYA and live feeds from the current staging zones.",
         id: "hf_20260922_194349_04e89718-4214-4aff-bac5-490462bbfe2f",
+        img: "/sphere/gallery.png",
         threat: "CAT-1 // INTEL",
         tip: "Movements that define innovation",
         blurb: "Frames from past editions.",
@@ -120,6 +125,7 @@ export const ITEMS = [
         subtitle: "INC-007 // STARTUP CATALYST",
         desc: "The entrepreneurial epicenter connecting student startups, visionary founders, seed investors, and venture capitalists.",
         id: "hf_20260922_194417_2c031e22-2fad-4c81-a544-83cd6bba1c33",
+        img: "/sphere/eventure.png",
         threat: "CAT-3 // COMMERCIAL",
         tip: "Pitch. Fund. Disrupt.",
         blurb: "Startup Expo, Lightning Pitch and the IPL Auction.",
@@ -136,6 +142,7 @@ export const ITEMS = [
         subtitle: "INC-008 // INTEL & GUIDELINES",
         desc: "Operational briefs, registration guidelines, accommodation protocols, and rules of engagement for all participants.",
         id: "hf_20260922_194349_a39c3226-7848-4b15-b840-98ad8aec467b",
+        img: "/sphere/faq.png",
         threat: "CAT-1 // GUIDELINES",
         tip: "Questions answered",
         blurb: "Accommodation, registration and common queries.",
@@ -152,6 +159,7 @@ export const ITEMS = [
         subtitle: "INC-009 // SYNDICATE ALLIES",
         desc: "Industry leaders, cloud computing titans, and global hardware conglomerates fueling the PRAGYA 2027 ecosystem.",
         id: "hf_20260922_194417_555e4d90-f35f-4a1a-8c75-def1e8b71988",
+        img: "/sphere/sponsor.png",
         threat: "CAT-2 // ALLIED",
         tip: "Powered by visionaries",
         blurb: "Meet the five partners behind Pragya.",
@@ -168,6 +176,7 @@ export const ITEMS = [
         subtitle: "INC-010 // KEYNOTE DIGNITARY",
         desc: "Distinguished scientists, defense technologists, aerospace engineers, and visionaries addressing the convocation.",
         id: "hf_20260922_194417_e525a243-03c8-454b-83b4-60f541baf70a",
+        img: "/sphere/guests.png",
         threat: "CAT-1 // DIGNITARY",
         tip: "Voices from beyond",
         blurb: "Speakers and special guests of Pragya 2027.",
@@ -184,6 +193,7 @@ export const ITEMS = [
         subtitle: "INC-011 // PRIME DIRECTIVES",
         desc: "The signature battlegrounds of PRAGYA 2027. Three premier experiences engineered to challenge intelligence, creativity, and the limits of emerging technology.",
         id: "flagship-events",
+        img: "/sphere/flagship.png",
         threat: "CAT-5 // PRIORITY",
         tip: "The main event. The ultimate challenge.",
         blurb: "Innovers, Vision Edge and AI Bootcamp.",
@@ -218,6 +228,7 @@ export const ITEMS = [
         subtitle: "INC-012 // DEPARTMENTAL OPERATIONS",
         desc: "Every department opens its own competitive zone, bringing specialized challenges, technical showcases, and creative engineering experiences to the PRAGYA arena.",
         id: "departmental-events",
+        img: "/sphere/departmentalevents.png",
         threat: "CAT-4 // MULTI-SECTOR",
         tip: "Ten events. Multiple disciplines. One arena.",
         blurb: "Explore competitions organized by the different departments.",
@@ -301,6 +312,7 @@ export const ITEMS = [
         subtitle: "INC-013 // CREATIVE PROTOCOLS",
         desc: "A creative sector where imagination meets expression. Discover artistic challenges, interactive experiences, and unconventional ideas beyond traditional engineering.",
         id: "creative-events",
+        img: "/sphere/creativeEvent.png",
         threat: "CAT-3 // CREATIVE",
         tip: "Think differently. Create boldly.",
         blurb: "Math, E-Magic, FAR, Auth 6.0, Pragya Movie Night and more.",
@@ -383,6 +395,7 @@ export const ITEMS = [
         subtitle: "INC-015 // RAPID-FIRE VENTURES",
         desc: "A high-energy pitching arena where founders transform bold ideas into compelling opportunities through concise presentations and sharp thinking.",
         id: "lightning-pitch",
+        img: "/sphere/lightningPitch.png",
         threat: "CAT-4 // HIGH VELOCITY",
         tip: "One idea. One pitch. Make it count.",
         blurb: "Present your idea, impress the panel and stand out.",
@@ -782,6 +795,7 @@ export function initDoomsdayPortal() {
           </div>
           <div class="scanline-sweep"></div>
         </div>
+        <div class="card-back" aria-hidden="true"><span>${c.item.code}</span></div>
       </figure>
     `;
        c.dom = cardDiv;
@@ -912,6 +926,9 @@ function createSecButton(item, idx) {
     }, 320);
     // Layout Dimensions & Sphere Geometry
     let R = 320;
+    // Sphere diameter as a share of the hand-derived size D: lower = smaller radius.
+    // Cards keep their on-screen size, so they also sit closer together.
+    const SPHERE_SIZE = 0.86;
     let currentPerspective = 1150;
     let lastLayoutW = window.innerWidth;
     let lastLayoutH = window.innerHeight;
@@ -929,12 +946,14 @@ function createSecButton(item, idx) {
         Math.min(520, height * hr, width * wr)
     );
 
-    // Smaller cards = less overlap
-    const scale = width <= 380 ? 0.52
-                : width <= 640 ? 0.58
-                : 0.64;
+    // Card width relative to the sphere radius: larger = tighter gaps between cards
+    // (raised ~8% from 0.52 / 0.58 / 0.64 so the cards sit a little closer together)
+    const scale = width <= 380 ? 0.50
+                : width <= 640 ? 0.56
+                : 0.60;
 
-    const cw = Math.round(Math.max(76, R * scale));
+    // divided by SPHERE_SIZE so a smaller sphere keeps the same on-screen card size
+    const cw = Math.round(Math.max(76, (R * scale) / SPHERE_SIZE));
 
     currentPerspective = width <= 380 ? 640
                       : width <= 640 ? 780
@@ -954,7 +973,9 @@ function createSecButton(item, idx) {
         const vw = window.innerWidth;
         const vh = window.innerHeight;
         const isMobile = vw < 640;
+        // D sizes the hand; the sphere itself is SPHERE_SIZE of it (smaller radius, same hand)
         const D = isMobile ? Math.min(0.86 * vw, 0.52 * vh) : Math.min(0.50 * vh, 0.85 * vw);
+        const Ds = D * SPHERE_SIZE;
         let imgH = D / (HAND.REST_Y - HAND.EYES_Y - 0.04);
         if (!isMobile && imgH < vh * 1.02) {
             imgH = vh * 1.02;
@@ -970,9 +991,9 @@ function createSecButton(item, idx) {
         const palmX = vw / 2;
         // Elevated slightly so the sphere hovers rested on top of the volumetric light cone
         const floatGap = isMobile ? D * 0.10 : D * 0.16;
-        const sphereCenterY = palmY - D / 2 - floatGap;
+        const sphereCenterY = palmY - Ds / 2 - floatGap;
         const D0 = Math.max(1, 2 * R);
-        const sphereScale = D / D0;
+        const sphereScale = Ds / D0;
         const offsetY = sphereCenterY - (vh / 2);
         if (worldEl) {
             worldEl.style.setProperty('--world-x', '0px');
@@ -1354,6 +1375,12 @@ function createSecButton(item, idx) {
             if (c.lastInteractive !== interactive) {
                 c.dom.style.pointerEvents = interactive ? 'auto' : 'none';
                 c.lastInteractive = interactive;
+            }
+            // far side of the sphere: show the card's back panel instead of mirrored text (sphere-cards.css)
+            const back = zf < 0;
+            if (c.lastBack !== back) {
+                c.dom.classList.toggle('is-back', back);
+                c.lastBack = back;
             }
         }
         requestAnimationFrame(renderFrame);

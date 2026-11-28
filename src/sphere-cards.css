@@ -1,0 +1,220 @@
+/* ==========================================================================
+   Sphere cards: cleaner metallic glass (overrides doomsday.css "PREMIUM SCI-FI CARDS")
+   Markup: doomsday-app.js "Populate Orb Cards". Scoped to .card (the orb); the
+   grid view (#grid) has its own markup and is untouched.
+   - photo first: brighter, sharper image; a dark gradient only where text sits
+   - silver hairline frame with small chamfers, matching the homepage buttons
+   - code chip, kicker + title with a short emerald accent line
+   - depth shading from --d (set per frame by the sphere)
+   - far side (.is-back): a clean back panel with a readable code, no mirrored text
+   ========================================================================== */
+
+.card figure {
+  border-radius: 0;
+  background: #070b0e;
+  border: 1px solid rgba(214, 228, 236, 0.5);
+  clip-path: polygon(10px 0, calc(100% - 10px) 0, 100% 10px, 100% calc(100% - 10px),
+                     calc(100% - 10px) 100%, 10px 100%, 0 calc(100% - 10px), 0 10px);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.12),
+    inset 0 0 0 1px rgba(4, 8, 10, 0.6),
+    0 14px 34px rgba(0, 0, 0, 0.75);
+}
+
+.card:hover figure {
+  transform: scale(1.04);
+  filter: none;
+  border-color: rgba(236, 246, 252, 0.85);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.18),
+    inset 0 0 0 1px rgba(4, 8, 10, 0.6),
+    0 0 0 1px rgba(200, 235, 255, 0.18),
+    0 18px 40px rgba(0, 0, 0, 0.85);
+}
+
+/* photo: clearer and a little brighter than before */
+.card figure img {
+  filter: saturate(1.05) contrast(1.05) brightness(0.92);
+}
+.card figure img.in {
+  opacity: 1;
+}
+.card:hover figure img {
+  transform: scale(1.06);
+  filter: saturate(1.1) contrast(1.06) brightness(1);
+}
+
+/* dark only where the text is: a soft top shade for the chip, a deep bottom for the title */
+.card-overlay {
+  padding: 9px 11px 10px;
+  background:
+    linear-gradient(180deg,
+      rgba(3, 7, 9, 0.45) 0%,
+      transparent 26%,
+      transparent 46%,
+      rgba(3, 7, 9, 0.62) 68%,
+      rgba(3, 7, 9, 0.94) 100%);
+}
+/* lighter texture: faint scanlines, no grid */
+.card-overlay::before {
+  opacity: 0.18;
+}
+.card-overlay::after {
+  display: none;
+}
+
+/* depth shading from the sphere (--d: 0 near, ~1 far) */
+.card figure::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 4;
+  pointer-events: none;
+  background: #000;
+  opacity: calc(var(--d, 0) * 0.55);
+}
+
+/* corner ticks: small silver marks */
+.hud-corner {
+  width: 8px;
+  height: 8px;
+  filter: none;
+  opacity: 0.75;
+}
+.hud-corner.top-left,
+.hud-corner.top-right,
+.hud-corner.bottom-left,
+.hud-corner.bottom-right {
+  border-color: rgba(226, 240, 248, 0.9);
+  border-width: 1px;
+}
+.hud-corner.top-left     { top: 6px;    left: 6px; }
+.hud-corner.top-right    { top: 6px;    right: 6px; }
+.hud-corner.bottom-left  { bottom: 6px; left: 6px; }
+.hud-corner.bottom-right { bottom: 6px; right: 6px; }
+
+/* section code chip */
+.card-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  margin: 3px 0 0 3px;
+  padding: 3px 7px 3px 6px;
+  font-size: 9px;
+  letter-spacing: 0.14em;
+  color: #e9f1f6;
+  background: rgba(6, 10, 13, 0.72);
+  border: 1px solid rgba(220, 235, 245, 0.32);
+  border-radius: 3px;
+  text-shadow: none;
+  box-shadow: none;
+}
+.card-badge::before {
+  content: "";
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--emerald, #00ff88);
+  box-shadow: 0 0 6px rgba(0, 255, 136, 0.7);
+}
+
+/* status bar: a slim silver track with an emerald fill */
+.card-threat {
+  width: 30px;
+  height: 2px;
+  margin: -14px 3px 0 0;
+  background: rgba(220, 235, 245, 0.22);
+}
+.card-threat .bar-fill {
+  background: var(--emerald, #00ff88);
+  box-shadow: none;
+}
+
+/* title block */
+.card-info {
+  padding: 0 2px 1px;
+  border-left: 0;
+  background: none;
+}
+.card-info::before {
+  content: "";
+  display: block;
+  width: 26px;
+  height: 2px;
+  margin-bottom: 7px;
+  background: linear-gradient(90deg, var(--emerald, #00ff88), rgba(0, 255, 136, 0));
+  transition: width 0.4s ease;
+}
+.card:hover .card-info::before {
+  width: 52px;
+}
+
+.card-subtitle {
+  font-size: 8px;
+  letter-spacing: 0.16em;
+  color: rgba(214, 226, 234, 0.78);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.card-title {
+  margin-top: 2px;
+  font-size: clamp(13px, 1.45vw, 17px);
+  letter-spacing: 0.06em;
+  color: #ffffff;
+  text-shadow: 0 2px 6px rgba(0, 0, 0, 0.85);
+}
+
+/* hover title flash: silver only, no red */
+@keyframes rgbSplitSilver {
+  0%, 100% { text-shadow: 0 2px 6px rgba(0, 0, 0, 0.85); }
+  50% { text-shadow: -1px 0 rgba(200, 235, 255, 0.7), 1px 0 rgba(255, 255, 255, 0.5), 0 2px 6px rgba(0, 0, 0, 0.85); }
+}
+.card:hover .card-title {
+  animation: rgbSplitSilver 0.35s ease;
+}
+
+/* ---- far side of the sphere ---------------------------------------------- */
+.card-back {
+  position: absolute;
+  inset: 0;
+  z-index: 5;
+  display: grid;
+  place-items: center;
+  pointer-events: none;
+  opacity: 0;
+  /* translucent smoked glass, so the far side of the sphere stays airy */
+  background:
+    repeating-linear-gradient(135deg, rgba(220, 235, 245, 0.05) 0 1px, transparent 1px 7px),
+    linear-gradient(180deg, rgba(16, 24, 30, 0.42), rgba(6, 9, 11, 0.3));
+  transition: opacity 0.25s ease;
+}
+.card.is-back figure {
+  background: transparent;
+  border-color: rgba(214, 228, 236, 0.22);
+  box-shadow: none;
+}
+/* seen from behind, so flip it back to read correctly */
+.card-back span {
+  transform: scaleX(-1);
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.24em;
+  color: rgba(214, 228, 236, 0.55);
+}
+.card.is-back .card-back {
+  opacity: 1;
+}
+.card.is-back .card-overlay {
+  opacity: 0;
+}
+.card.is-back figure img {
+  opacity: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .card-info::before,
+  .card-back { transition: none; }
+  .card:hover .card-title { animation: none; }
+}

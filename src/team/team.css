@@ -27,51 +27,62 @@ body::before {
 }
 ::selection { background: #00ff88; color: #000; }
 
+/* Top bar: same as the Junior Scientist page (round Back pill + centred logo) */
 .tp-topbar {
-  position: sticky;
-  top: 0;
+  position: relative;
   z-index: 20;
-  display: flex;
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
   align-items: center;
-  justify-content: space-between;
-  gap: 16px;
-  padding: 14px clamp(16px, 3vw, 40px);
-  background: linear-gradient(180deg, rgba(5, 6, 7, .95), rgba(5, 6, 7, .75));
-  border-bottom: 1px solid rgba(138, 153, 168, .18);
-  -webkit-backdrop-filter: blur(10px);
-  backdrop-filter: blur(10px);
+  padding: clamp(18px, 3vw, 36px) clamp(16px, 4vw, 64px) 0;
 }
-.tp-brand {
-  font: 800 clamp(14px, 1.4vw, 18px)/1 'Orbitron', sans-serif;
-  letter-spacing: .18em;
-  color: #fff;
-  text-decoration: none;
-}
-.tp-brand span { color: #00ff88; text-shadow: 0 0 10px rgba(0, 255, 136, .5); }
 .tp-back {
+  justify-self: start;
   display: inline-flex;
   align-items: center;
-  gap: 8px;
-  min-height: 40px;
-  padding: 0 16px;
+  gap: 12px;
+  min-height: 48px;
+  padding: 0 24px 0 20px;
+  border-radius: 999px;
   border: 1px solid rgba(0, 255, 136, .45);
-  border-radius: 2px;
-  background: rgba(5, 6, 7, .7);
+  background: rgba(10, 14, 18, .85);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, .5), 0 0 18px rgba(0, 255, 136, .12);
   color: #fff;
-  font: 600 11px/1 'JetBrains Mono', monospace;
-  letter-spacing: .16em;
+  font: 700 13px/1 'JetBrains Mono', monospace;
+  letter-spacing: .28em;
   text-transform: uppercase;
   text-decoration: none;
-  transition: background .2s ease, box-shadow .2s ease, color .2s ease;
+  transition: background .25s ease, color .25s ease, box-shadow .25s ease, transform .25s ease;
 }
+.tp-back svg { width: 18px; height: 18px; fill: none; stroke: #00ff88; stroke-width: 2.4; stroke-linecap: round; stroke-linejoin: round; }
 .tp-back:hover,
 .tp-back:focus-visible {
   background: #00ff88;
   color: #000;
-  box-shadow: 0 0 16px rgba(0, 255, 136, .5);
+  box-shadow: 0 0 24px rgba(0, 255, 136, .55);
+  transform: translateX(-2px);
   outline: none;
 }
-.tp-back svg { width: 14px; height: 14px; }
+.tp-back:hover svg,
+.tp-back:focus-visible svg { stroke: #000; }
+
+.tp-logo {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  color: #fff;
+  text-decoration: none;
+}
+.tp-logo small { font: 500 9px/1 'JetBrains Mono', monospace; letter-spacing: .26em; text-transform: uppercase; color: #8a99a8; }
+.tp-logo strong { font: 900 clamp(18px, 2vw, 26px)/1 'Orbitron', sans-serif; letter-spacing: .08em; }
+.tp-logo strong span { color: #00ff88; text-shadow: 0 0 12px rgba(0, 255, 136, .6); }
+
+@media (max-width: 640px) {
+  .tp-topbar { gap: 10px; } /* keep 1fr auto 1fr so the logo stays centred */
+  .tp-back { min-height: 42px; padding: 0 16px 0 14px; letter-spacing: .18em; font-size: 12px; }
+  .tp-logo small { display: none; }
+}
 
 .tp-footer {
   padding: 36px 16px 44px;

@@ -1,0 +1,67 @@
+/* ==========================================================================
+   EVENTS DROPDOWN: Department Level / Institute Level
+   A small panel that pops out next to the "Events" button (like a dropdown
+   menu), in the site theme: gunmetal glass panel, neon green accents.
+   ========================================================================== */
+.ev-flyout {
+  position: fixed;
+  z-index: 400;
+  width: min(340px, calc(100vw - 24px));
+  padding: 10px 16px;
+  border: 1px solid rgba(138, 153, 168, .3);
+  border-radius: 16px;
+  background: linear-gradient(180deg, rgba(21, 26, 32, .96), rgba(8, 11, 14, .97));
+  box-shadow: 0 24px 60px rgba(0, 0, 0, .65), 0 0 0 1px rgba(0, 255, 136, .08), 0 0 26px rgba(0, 255, 136, .1);
+  -webkit-backdrop-filter: blur(14px);
+  backdrop-filter: blur(14px);
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-6px) scale(.98);
+  transform-origin: top center;
+  transition: opacity .22s ease, transform .25s cubic-bezier(.22, .61, .36, 1), visibility 0s linear .25s;
+}
+body.evlevels .ev-flyout {
+  opacity: 1;
+  visibility: visible;
+  transform: none;
+  transition: opacity .22s ease, transform .25s cubic-bezier(.22, .61, .36, 1), visibility 0s;
+}
+
+.ev-flyout-item {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  width: 100%;
+  padding: 16px 6px;
+  border: 0;
+  border-bottom: 1px solid rgba(138, 153, 168, .22);
+  background: none;
+  color: #e3e9ee;
+  text-align: left;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  transition: color .2s ease, padding-left .2s ease;
+}
+.ev-flyout-item:last-child { border-bottom: 0; }
+.ev-flyout-item span {
+  font: 600 15px/1.2 'Rajdhani', 'Share Tech Mono', sans-serif;
+  letter-spacing: .2em;
+  text-transform: uppercase;
+}
+.ev-flyout-item small {
+  font: 400 11px/1.4 'Share Tech Mono', monospace;
+  letter-spacing: .04em;
+  color: #8a99a8;
+}
+.ev-flyout-item:hover,
+.ev-flyout-item:focus-visible {
+  color: #00ff88;
+  padding-left: 12px;
+  outline: none;
+}
+.ev-flyout-item:hover span,
+.ev-flyout-item:focus-visible span { text-shadow: 0 0 10px rgba(0, 255, 136, .5); }
+
+@media (prefers-reduced-motion: reduce) {
+  .ev-flyout, body.evlevels .ev-flyout, .ev-flyout-item { transition: none; }
+}

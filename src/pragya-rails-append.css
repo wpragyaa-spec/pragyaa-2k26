@@ -1196,9 +1196,11 @@ body.revealed .bio.chrome {
   transition: opacity 0.6s var(--ease), visibility 0.6s;
 }
 
-body.revealed.deep:not(.lit):not(.gridview) #incursionCone {
-  opacity: 1;
-  visibility: visible;
+/* The green light beam above Doom's hand is turned off.
+   To bring it back, change display back to block and restore:
+   body.revealed.deep:not(.lit):not(.gridview) #incursionCone { opacity: 1; visibility: visible; } */
+#incursionCone {
+  display: none !important;
 }
 
 /* 1. Volumetric Beam Frustum */

@@ -83,13 +83,15 @@ export default function TeamPage() {
   return (
     <>
       <header className="tp-topbar">
-        <a className="tp-brand" href="/">PRAGYAA <span>2027</span></a>
         <a className="tp-back" href="/">
-          <svg viewBox="0 0 24 24" aria-hidden="true">
-            <path d="M15 5l-7 7 7 7" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="square" />
-          </svg>
-          Back to site
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 12H5M11 5l-7 7 7 7" /></svg>
+          Back
         </a>
+        <a className="tp-logo" href="/" aria-label="PRAGYAA 2027 home">
+          <small>SGGS IE&amp;T Nanded presents</small>
+          <strong>PRAGYAA<span>&rsquo;27</span></strong>
+        </a>
+        <span className="tp-topbar-spacer" aria-hidden="true" />
       </header>
 
       <main className="tp-page">

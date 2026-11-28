@@ -795,7 +795,6 @@ export function initDoomsdayPortal() {
           </div>
           <div class="scanline-sweep"></div>
         </div>
-        <div class="card-back" aria-hidden="true"><span>${c.item.code}</span></div>
       </figure>
     `;
        c.dom = cardDiv;
@@ -1376,7 +1375,7 @@ function createSecButton(item, idx) {
                 c.dom.style.pointerEvents = interactive ? 'auto' : 'none';
                 c.lastInteractive = interactive;
             }
-            // far side of the sphere: show the card's back panel instead of mirrored text (sphere-cards.css)
+            // far side of the sphere: flip the card's text so it doesn't read mirrored (sphere-cards.css)
             const back = zf < 0;
             if (c.lastBack !== back) {
                 c.dom.classList.toggle('is-back', back);

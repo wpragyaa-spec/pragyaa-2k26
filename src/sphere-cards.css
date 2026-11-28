@@ -6,7 +6,7 @@
    - silver hairline frame with small chamfers, matching the homepage buttons
    - code chip, kicker + title with a short emerald accent line
    - depth shading from --d (set per frame by the sphere)
-   - far side (.is-back): a clean back panel with a readable code, no mirrored text
+   - far side (.is-back): the card stays fully visible; its text is flipped to read correctly
    ========================================================================== */
 
 .card figure {
@@ -175,46 +175,15 @@
   animation: rgbSplitSilver 0.35s ease;
 }
 
-/* ---- far side of the sphere ---------------------------------------------- */
-.card-back {
-  position: absolute;
-  inset: 0;
-  z-index: 5;
-  display: grid;
-  place-items: center;
-  pointer-events: none;
-  opacity: 0;
-  /* translucent smoked glass, so the far side of the sphere stays airy */
-  background:
-    repeating-linear-gradient(135deg, rgba(220, 235, 245, 0.05) 0 1px, transparent 1px 7px),
-    linear-gradient(180deg, rgba(16, 24, 30, 0.42), rgba(6, 9, 11, 0.3));
-  transition: opacity 0.25s ease;
-}
-.card.is-back figure {
-  background: transparent;
-  border-color: rgba(214, 228, 236, 0.22);
-  box-shadow: none;
-}
-/* seen from behind, so flip it back to read correctly */
-.card-back span {
-  transform: scaleX(-1);
-  font-family: var(--mono);
-  font-size: 11px;
-  letter-spacing: 0.24em;
-  color: rgba(214, 228, 236, 0.55);
-}
-.card.is-back .card-back {
-  opacity: 1;
-}
+/* ---- far side of the sphere ----------------------------------------------
+   Cards facing away stay fully visible (picture included, dimmed by --d like
+   before). Only the text layer is flipped, so titles and codes read the right
+   way round instead of mirrored. */
 .card.is-back .card-overlay {
-  opacity: 0;
-}
-.card.is-back figure img {
-  opacity: 0;
+  transform: scaleX(-1);
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .card-info::before,
-  .card-back { transition: none; }
+  .card-info::before { transition: none; }
   .card:hover .card-title { animation: none; }
 }
